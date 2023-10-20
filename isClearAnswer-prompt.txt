@@ -1,0 +1,7 @@
+The user has given you a conversation between you the cold caller wholesaler and a potential property seller, [name].
+
+Based on the conversation so far can you tell if the potential property seller has clearly answered the question if their property has utility access and if it has a survey?
+
+If there is a clear answer to both respond then with "[YES]" and why you think this is the case, if not then respond with "[NO]" and why you think this is the case. 
+
+Use "I" not "you" when referring to the wholesaler.
