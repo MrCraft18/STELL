@@ -1,0 +1,538 @@
+/************************************************/
+/* New Login - 2FA Updates included *************/
+/************************************************/
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+/*****************************/
+/* End Root Colors to Update */
+/*****************************/
+:root {
+    /* Values to copy into Agency CSS Box From Root Colours */
+    --pmg-login-style-a-main-font: "Poppins", sans-serif;
+    --pmg-login-style-a-primary-color: #305bb1;
+    --pmg-login-style-a-main-background: #3760ba00;
+    --pmg-login-style-a-background-gradient-color-1: #3760ba00;
+    --pmg-login-style-a-background-gradient-color-2: #2c51a200;
+    --pmg-login-style-a-background-image: url(https://titanbluehost.com/ghl/pmg-textures/black-twill.pngg)
+        repeat;
+    --pmg-login-style-a-secondary-bg-tone: #305bb100;
+    --pmg-login-style-a-inner-login-background: #fff;
+    --pmg-login-style-a-logo: url() !important;
+    --pmg-login-style-a-heading-font-color: #262626;
+    --pmg-login-style-a-input-color: #262626;
+    --pmg-login-style-a-input-bg: #0000;
+    --pmg-login-style-a-input-border: #cccccc00;
+    --pmg-login-style-a-error-font-color: #b13030;
+    --pmg-login-style-a-button-background: #262626;
+    --pmg-login-style-a-button-font-color: #fff;
+    --pmg-login-style-a-button-font-color-hover: #fff;
+    --pmg-login-style-a-button-font-size: 18px;
+    --pmg-login-style-a-foot-note-font-color-link: #262626;
+    --pmg-login-style-a-foot-note-font-color: #262626;
+    --pmg-login-style-a-logo-width: 75px;
+    --pmg-login-style-a-logo-height: 132px;
+    --pmg-login-style-a-border-radius: 10px;
+    --pmg-login-style-a-shadow: 0px 0px 5px 5px rgb(0 0 0 / 0.1);
+    --pmg-login-style-a-sign-in-font-size: 18px;
+    --pmg-login-style-a-search-bar-border: 1px solid #c9c9c9;
+    --pmg-login-style-a-search-bar-radius: 5px;
+    --pmg-login-style-a-radio-button-ring-color: #3dac77;
+}
+
+/*****************************/
+/* End Root Colors to Update */
+/*****************************/
+
+body .hl_login--body {
+    font-family: var(--pmg-login-style-a-main-font);
+}
+
+.hl_login {
+    background: #e5e5e5;
+    background: var(--pmg-login-style-a-main-background) !important;
+    background: var(--gradient-sidebar-1);
+    background: -moz-linear-gradient(
+            45deg,
+            var(--pmg-login-style-a-background-gradient-color-1) 30%,
+            var(--pmg-login-style-a-background-gradient-color-2) 100%
+        ),
+        url(https://titanbluehost.com/ghl/pmg-textures/black-twill.pngg) repeat !important;
+    background: -webkit-linear-gradient(
+            45deg,
+            var(--pmg-login-style-a-background-gradient-color-1) 30%,
+            var(--pmg-login-style-a-background-gradient-color-2) 100%
+        ),
+        url(https://titanbluehost.com/ghl/pmg-textures/black-twill.pngg) repeat !important;
+    background: linear-gradient(
+            45deg,
+            var(--pmg-login-style-a-background-gradient-color-1) 30%,
+            var(--pmg-login-style-a-background-gradient-color-2) 100%
+        ),
+        url(https://titanbluehost.com/ghl/pmg-textures/black-twill.pngg) repeat !important;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='var(--pmg-login-style-a-background-gradient-color-1)', endColorstr='var(--pmg-login-style-a-background-gradient-color-1)', GradientType=1);
+    height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+}
+
+.hl_login--header {
+    display: none;
+}
+
+.hl_login--header .container-fluid a img,
+.hl_login--header .container-fluid a svg {
+    display: none;
+}
+
+.hl_login--body {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 80%;
+    margin: 0 auto;
+    padding: 55px 15px;
+}
+
+.hl_login--body .container-fluid {
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    text-align: left;
+    padding: 0 !important;
+}
+
+.hl_login--body .card {
+    display: block;
+    text-align: center;
+    height: 100%;
+    max-width: 40% !important;
+    border: none !important;
+    background: var(--pmg-login-style-a-inner-login-background) !important;
+    border-radius: 0 !important;
+    margin: 0 auto !important;
+    box-shadow: var(--pmg-login-style-a-shadow) !important;
+    border-radius: var(--pmg-login-style-a-border-radius) !important;
+}
+
+.hl_login--body .card .card-body {
+    display: inline-block;
+    margin: 0 !important;
+    padding: 40px 60px 30px 60px !important;
+    box-sizing: border-box;
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: left;
+}
+
+.hl_login--body .card .login-card-heading h2.heading2:before {
+    content: "";
+    background-image: var(--pmg-login-style-a-logo) !important;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: relative;
+    display: block;
+    margin: 0 auto 0px;
+    width: var(--pmg-login-style-a-logo-width) !important;
+    height: var(--pmg-login-style-a-logo-height) !important;
+    left: 0;
+    right: 0;
+}
+
+/* FORM */
+.hl_login--body .heading2 {
+    font-weight: 600;
+    color: var(--pmg-login-style-a-heading-font-color) !important;
+    font-size: var(--pmg-login-style-a-sign-in-font-size) !important;
+}
+
+.hl_login--body .card .card-body label,
+.hl_login--body .card .card-body span.hl-text-input-label {
+    display: none;
+}
+
+.hl_login--body .card .card-body input {
+    background: var(--pmg-login-style-a-input-bg) !important;
+    border: 1px solid var(--pmg-login-style-a-input-border) !important;
+    padding: 15px 20px !important;
+    border-radius: 3px !important;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--pmg-login-style-a-input-color) !important;
+    box-shadow: inset 0 0 10px #e5e7ea;
+}
+
+.hl_login--body .card .card-body input::placeholder {
+    color: var(--pmg-login-style-a-input-color) !important;
+    opacity: 1;
+}
+
+.hl_login--body .card .card-body input:-ms-input-placeholder {
+    color: var(--pmg-login-style-a-input-color) !important;
+}
+
+.hl_login--body .card .card-body input::-ms-input-placeholder {
+    color: var(--pmg-login-style-a-input-color) !important;
+}
+
+.hl_login--body .card .card-body .error,
+.hl_login--body .card .card-body .hl-input-error,
+.hl_login--body .card .card-body i {
+    color: var(--pmg-login-style-a-error-font-color) !important;
+}
+
+.hl_login--body .card .card-body .forgot-password {
+    color: var(--pmg-login-style-a-forgot-pass-font-color) !important;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+}
+
+.hl_login--body .card .card-body .hl-btn {
+    padding: 15px 25px !important;
+    background-color: var(--pmg-login-style-a-button-background);
+    font-family: var(--pmg-login-style-a-main-font) !important;
+    color: var(--pmg-login-style-a-button-font-color) !important;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.hl_login--body .card .card-body .hl-btn:hover {
+    background-color: var(
+        --pmg-login-style-a-button-background-hover
+    ) !important;
+    color: var(--pmg-login-style-a-button-font-color-hover) !important;
+    -webkit-transform: translateY(-10px);
+    transform: translateY(-10px);
+    box-shadow: 0 8px 5px -5px rgba(0, 0, 0, 0.25);
+    -webkit-transition: 0.2s;
+    transition: 0.2s;
+}
+
+.hl_login--body .card .card-body .foot-note {
+    font-size: 14px;
+    color: var(--pmg-login-style-a-foot-note-font-color) !important;
+}
+
+.hl_login--body .card .card-body .foot-note a {
+    color: var(--pmg-login-style-a-foot-note-font-color-link) !important;
+}
+
+.hl_login--body .container-fluid > div:not(.card) .card-body .flex label {
+    display: block;
+    color: var(--pmg-login-style-a-foot-note-font-color) !important;
+    margin-left: 7px !important;
+}
+
+.hl_login--body .container-fluid > div:not(.card) .card-body .flex p.ml-2 {
+    color: var(--pmg-login-style-a-foot-note-font-color) !important;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.hl_login--body
+    .container-fluid
+    > div:not(.card)
+    .card-body
+    .form-group
+    input
+    + span {
+    color: var(--pmg-login-style-a-foot-note-font-color);
+}
+
+.hl_login--body .container-fluid .card-body .form-group .g_id_signin iframe {
+    margin: 5px auto 0px !important;
+}
+
+@media only screen and (max-width: 1400px) {
+    .hl_login--body .card {
+        max-width: 55% !important;
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .hl_login--body .card {
+        max-width: 100% !important;
+    }
+}
+
+@media only screen and (max-width: 980px) {
+    .hl_login--body .card {
+        height: auto !important;
+    }
+
+    .hl_login--body .card .card-body {
+        max-width: 100% !important;
+        margin-top: 0 !important;
+        padding: 40px !important;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    #app {
+        margin-top: 0 !important;
+    }
+
+    .hl_login--body {
+        max-width: 95%;
+        padding: 40px 0px;
+    }
+
+    .hl_login--body .card .card-body {
+        padding: 40px !important;
+    }
+
+    .hl_login--body .container-fluid > div:not(.card) {
+        width: 90vw !important;
+    }
+
+    .hl_login--body .card {
+        max-width: 90% !important;
+    }
+
+    .hl_login--body .container-fluid > div:not(.card) .card-body .flex p.ml-2 {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .hl_login--body .card .card-body input {
+        font-size: 12px;
+    }
+
+    .hl_login--body .heading2 {
+        font-size: 14px !important;
+    }
+
+    input.m-2.border.border-solid.h-10.w-10.text-center.form-control.rounded.otp-input {
+        max-width: 81% !important;
+        width: 28px !important;
+        height: 28px !important;
+        margin: 0px 5px !important;
+    }
+
+    .hl_login--body
+        .container-fluid
+        > div:not(.card)
+        .card
+        .card-body
+        input[type="radio"]:checked {
+        background: var(--pmg-login-style-a-radio-button-ring-color) !important;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .hl_login--body .card {
+        max-width: 90% !important;
+    }
+
+    .hl_login--body {
+        max-width: 90% !important;
+        padding: 40px 0px;
+    }
+
+    .hl_login--body .card::before {
+        width: 180px;
+        height: 160px;
+        top: -130px;
+    }
+
+    .hl_login--body .card .card-body {
+        padding: 20px !important;
+    }
+
+    .hl_login--body .container-fluid > div:not(.card) {
+        width: 90vw !important;
+    }
+
+    .hl_login--body .card {
+        max-width: 90% !important;
+    }
+
+    .hl_login--body .container-fluid > div:not(.card) .card-body .flex p.ml-2 {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .hl_login--body .card .card-body input {
+        font-size: 12px;
+    }
+
+    .hl_login--body .heading2 {
+        font-size: 14px !important;
+    }
+
+    input.m-2.border.border-solid.h-10.w-10.text-center.form-control.rounded.otp-input {
+        max-width: 81% !important;
+        width: 28px !important;
+        height: 28px !important;
+        margin: 0px 5px !important;
+    }
+
+    [type="checkbox"]:checked,
+    [type="radio"]:checked {
+        border-color: transparent;
+        background: var(--pmg-login-style-a-radio-button-ring-color) !important;
+        background-size: 100% 100%;
+        background-position: 50%;
+        background-repeat: no-repeat;
+    }
+
+    [type="radio"]:checked {
+        background: var(--pmg-login-style-a-primary-color) !important;
+    }
+
+    .hl_login--body
+        .container-fluid
+        > div:not(.card)
+        .card
+        .card-body
+        input[type="radio"]:checked {
+        background: var(--pmg-login-style-a-radio-button-ring-color) !important;
+    }
+}
+
+/*  Fix for 2FA */
+.hl_login--body .container-fluid > div:not(.card) {
+    width: 100vw;
+}
+
+.hl_login--body
+    .container-fluid
+    > div:not(.card)
+    .card
+    .card-body
+    input[type="radio"] {
+    padding: revert !important;
+    border-radius: 50% !important;
+}
+
+.hl_login--body .container-fluid > div:not(.card) .card .card-body input {
+    padding: revert !important;
+    background: var(--pmg-login-style-a-input-bg) !important;
+    color: var(--pmg-login-style-a-input-color) !important;
+    box-shadow: none !important;
+    border: var(--pmg-login-style-a-search-bar-border) !important;
+}
+
+.hl_login--body .container-fluid .card .card-body > div:last-child {
+    color: var(--pmg-login-style-a-foot-note-font-color-link) !important;
+}
+
+[type="checkbox"]:focus,
+[type="radio"]:focus {
+    outline: 2px solid var(--pmg-login-style-a-radio-button-ring-color) !important;
+    outline-offset: 1px;
+    --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
+    --tw-ring-offset-width: 0px;
+    --tw-ring-offset-color: #fff;
+    --tw-ring-color: #0000 !important;
+    --tw-ring-offset-shadow: none !important;
+    --tw-ring-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+[type="checkbox"]:checked,
+[type="radio"]:checked {
+    border-color: transparent;
+    background-color: var(
+        --pmg-login-style-a-radio-button-ring-color
+    ) !important;
+    background-size: 100% 100%;
+    background-position: 50%;
+    background-repeat: no-repeat;
+}
+
+.hl_login--body
+    .container-fluid
+    > div:not(.card)
+    .card
+    .card-body
+    input[type="radio"]:checked {
+    background: var(--pmg-login-style-a-radio-button-ring-color) !important;
+}
+
+/************************************************/
+/* New Login - 2FA Updates included *************/
+/************************************************/
+
+/*****************************************************/
+/* Custom PMG Theme Updates for Login Theme Style A */
+/***************************************************/
+
+.hl_login--body
+    .card
+    button.hl-btn.justify-center.w-full.inline-flex.items-center.px-4.py-2.border.border-transparent.text-sm.font-medium.rounded.text-white.bg-curious-blue-500.hover\:bg-curious-blue-600.focus\:outline-none.focus\:ring-2.focus\:ring-offset-2.focus\:ring-curious-blue-600 {
+    padding: 15px 25px !important;
+    background-color: var(--pmg-login-style-a-button-background) !important;
+    border: 2px solid var(--pmg-login-style-a-button-border) !important;
+    font-family: var(--pmg-login-style-a-main-font) !important;
+    font-size: 16px !important;
+    text-transform: uppercase !important;
+    opacity: 1 !important;
+}
+
+.hl_login--body
+    .card
+    button.hl-btn.justify-center.w-full.inline-flex.items-center.px-4.py-2.border.border-transparent.text-sm.font-medium.rounded.text-white.bg-curious-blue-500.hover\:bg-curious-blue-600.focus\:outline-none.focus\:ring-2.focus\:ring-offset-2.focus\:ring-curious-blue-60:hover {
+    padding: 15px 25px !important;
+    background-color: var(
+        --pmg-login-style-a-button-background-hover
+    ) !important;
+    border: 2px solid var(--pmg-login-style-a-button-border) !important;
+    font-family: var(--pmg-login-style-a-main-font) !important;
+    color: var(--pmg-login-style-a-button-font-color-hover) !important;
+    font-size: 16px !important;
+    text-transform: uppercase !important;
+}
+
+.hl_login--body .card {
+    background: var(--pmg-login-style-a-inner-login-background) !important;
+    border-radius: 0 !important;
+    margin: 0 auto !important;
+    box-shadow: var(--pmg-login-style-a-shadow) !important;
+    border-radius: var(--pmg-login-style-a-border-radius) !important;
+}
+
+.hl_login--body
+    .card
+    input.hl-text-input.shadow-sm.focus\:ring-curious-blue-500.focus\:border-curious-blue-500.block.w-full.sm\:text-sm.border-gray-300.rounded.disabled\:opacity-50.text-gray-800 {
+    background: none !important;
+    border: var(--pmg-login-style-a-search-bar-border) !important;
+    border-radius: var(--pmg-login-style-a-search-bar-radius) !important;
+    box-shadow: none !important;
+}
+
+/* Update Dec 06, 2021 */
+/* Fix Error Exclamation Point */
+.hl_login .card .fa-exclamation-circle {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}
+
+.hl_login--body
+    .card
+    input.hl-text-input.shadow-sm.focus\:ring-curious-blue-500.focus\:border-curious-blue-500.block.w-full.sm\:text-sm.border-gray-300.rounded.disabled\:opacity-50.text-gray-800 {
+    background: var(--pmg-login-style-a-input-bg) !important;
+}
+
+.hl_login--body
+    .card
+    button.hl-btn.justify-center.w-full.inline-flex.items-center.px-4.py-2.border.border-transparent.text-sm.font-medium.rounded.text-white.bg-curious-blue-500.hover\:bg-curious-blue-600.focus\:outline-none.focus\:ring-2.focus\:ring-offset-2.focus\:ring-curious-blue-600 {
+    font-size: var(--pmg-login-style-a-button-font-size) !important;
+}
+
+.hl_login--body .heading2 {
+    font-weight: 600;
+    color: var(--pmg-login-style-a-foot-note-font-color) !important;
+}
+
+/*****************************************************/
+/* Custom PMG Theme Updates for Login Theme Style A */
+/***************************************************/
+Copied

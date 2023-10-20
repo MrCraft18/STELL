@@ -1,0 +1,25 @@
+2023/09/08-14:45:33.150 9720 Reusing MANIFEST C:\Users\Caden\OneDrive\STELL\puppeteer\Default\WebStorage\2\IndexedDB\indexeddb.leveldb/MANIFEST-000001
+2023/09/08-14:45:33.152 9720 Recovering log #891
+2023/09/08-14:45:33.152 9720 Reusing old log C:\Users\Caden\OneDrive\STELL\puppeteer\Default\WebStorage\2\IndexedDB\indexeddb.leveldb/000891.log 
+2023/09/08-14:45:33.153 9720 Delete type=2 #890
+2023/09/08-14:45:33.160 3af0 Level-0 table #896: started
+2023/09/08-14:45:33.176 3af0 Level-0 table #896: 2241 bytes OK
+2023/09/08-14:45:33.178 3af0 Delete type=0 #891
+2023/09/08-14:45:33.178 3af0 Manual compaction at level-0 from ' \x09\x01\x00\x00\x00' @ 72057594037927935 : 1 .. ' \x0a\x01\x00\x00\x00' @ 0 : 0; will stop at ' \x09\x01\x00\x00\x05' @ 15489 : 1
+2023/09/08-14:45:33.179 3af0 Compacting 1@0 + 1@1 files
+2023/09/08-14:45:33.194 3af0 Generated table #897@0: 85 keys, 2090 bytes
+2023/09/08-14:45:33.194 3af0 Compacted 1@0 + 1@1 files => 2090 bytes
+2023/09/08-14:45:33.195 3af0 compacted to: files[ 0 1 1 0 0 0 0 ]
+2023/09/08-14:45:33.196 3af0 Delete type=2 #896
+2023/09/08-14:45:33.197 3af0 Manual compaction at level-0 from ' \x09\x01\x00\x00\x05' @ 15489 : 1 .. ' \x0a\x01\x00\x00\x00' @ 0 : 0; will stop at (end)
+2023/09/08-14:46:01.198 3af0 Level-0 table #899: started
+2023/09/08-14:46:01.211 3af0 Level-0 table #899: 2224 bytes OK
+2023/09/08-14:46:01.212 3af0 Delete type=2 #893
+2023/09/08-14:46:01.212 3af0 Delete type=0 #895
+2023/09/08-14:46:01.213 3af0 Manual compaction at level-0 from ' \x0a\x01\x00\x00\x00' @ 72057594037927935 : 1 .. ' \x0b\x01\x00\x00\x00' @ 0 : 0; will stop at ' \x0a\x01\x00\x00\x05' @ 15546 : 1
+2023/09/08-14:46:01.213 3af0 Compacting 1@0 + 1@1 files
+2023/09/08-14:46:01.225 3af0 Generated table #900@0: 91 keys, 2145 bytes
+2023/09/08-14:46:01.225 3af0 Compacted 1@0 + 1@1 files => 2145 bytes
+2023/09/08-14:46:01.226 3af0 compacted to: files[ 0 1 1 0 0 0 0 ]
+2023/09/08-14:46:01.227 3af0 Delete type=2 #899
+2023/09/08-14:46:01.227 3af0 Manual compaction at level-0 from ' \x0a\x01\x00\x00\x05' @ 15546 : 1 .. ' \x0b\x01\x00\x00\x00' @ 0 : 0; will stop at (end)

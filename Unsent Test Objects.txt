@@ -1,0 +1,27 @@
+{
+  "address": "1304 Shalimar Dr, Fort Worth, TX 76134",
+  "name": "Caden Edwards",
+  "estimatedValue": "6000",
+  "taxAmount": "13800",
+  "phoneNumber": "8176737349"
+}
+
+
+
+{
+  "address": "1304 Shalimar Dr, Fort Worth, TX 76134",
+  "name": "Elijah Thompson",
+  "estimatedValue": "6000",
+  "taxAmount": "13800",
+  "phoneNumber": "8176923635"
+}
+
+
+
+{
+  "address": "1304 Shalimar Dr, Fort Worth, TX 76134",
+  "name": "Suisei Hoshimachi",
+  "estimatedValue": "6000",
+  "taxAmount": "13800",
+  "phoneNumber": "9403732277"
+}

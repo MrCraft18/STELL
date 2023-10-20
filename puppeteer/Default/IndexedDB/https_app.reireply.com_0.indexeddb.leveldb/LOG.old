@@ -1,0 +1,15 @@
+2023/09/08-14:32:57.411 97f4 Reusing MANIFEST C:\Users\Caden\OneDrive\STELL\puppeteer\Default\IndexedDB\https_app.reireply.com_0.indexeddb.leveldb/MANIFEST-000001
+2023/09/08-14:32:57.412 97f4 Recovering log #960
+2023/09/08-14:32:57.413 97f4 Reusing old log C:\Users\Caden\OneDrive\STELL\puppeteer\Default\IndexedDB\https_app.reireply.com_0.indexeddb.leveldb/000960.log 
+2023/09/08-14:32:57.413 97f4 Delete type=2 #959
+2023/09/08-14:32:57.421 955c Manual compaction at level-0 from ' \x18\x01\x00\x00\x00' @ 72057594037927935 : 1 .. ' \x19\x01\x00\x00\x00' @ 0 : 0; will stop at (end)
+2023/09/08-14:33:32.416 955c Level-0 table #965: started
+2023/09/08-14:33:32.421 955c Level-0 table #965: 9829 bytes OK
+2023/09/08-14:33:32.423 955c Delete type=0 #960
+2023/09/08-14:33:32.427 955c Manual compaction at level-0 from ' \x19\x01\x00\x00\x00' @ 72057594037927935 : 1 .. ' \x1a\x01\x00\x00\x00' @ 0 : 0; will stop at ' \x19\x01\x00\x00\x05' @ 37382 : 1
+2023/09/08-14:33:32.427 955c Compacting 1@0 + 1@1 files
+2023/09/08-14:33:32.435 955c Generated table #966@0: 5578 keys, 64442 bytes
+2023/09/08-14:33:32.435 955c Compacted 1@0 + 1@1 files => 64442 bytes
+2023/09/08-14:33:32.436 955c compacted to: files[ 0 1 1 0 0 0 0 ]
+2023/09/08-14:33:32.436 955c Delete type=2 #965
+2023/09/08-14:33:32.437 955c Manual compaction at level-0 from ' \x19\x01\x00\x00\x05' @ 37382 : 1 .. ' \x1a\x01\x00\x00\x00' @ 0 : 0; will stop at (end)

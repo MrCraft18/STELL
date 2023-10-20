@@ -1,0 +1,25 @@
+2023/09/08-14:33:04.532 97f4 Reusing MANIFEST C:\Users\Caden\OneDrive\STELL\puppeteer\Default\WebStorage\2\IndexedDB\indexeddb.leveldb/MANIFEST-000001
+2023/09/08-14:33:04.533 97f4 Recovering log #884
+2023/09/08-14:33:04.533 97f4 Reusing old log C:\Users\Caden\OneDrive\STELL\puppeteer\Default\WebStorage\2\IndexedDB\indexeddb.leveldb/000884.log 
+2023/09/08-14:33:04.534 97f4 Delete type=2 #883
+2023/09/08-14:33:04.541 955c Level-0 table #889: started
+2023/09/08-14:33:04.559 955c Level-0 table #889: 2240 bytes OK
+2023/09/08-14:33:04.561 955c Delete type=0 #884
+2023/09/08-14:33:04.562 955c Manual compaction at level-0 from ' \x07\x01\x00\x00\x00' @ 72057594037927935 : 1 .. ' \x08\x01\x00\x00\x00' @ 0 : 0; will stop at ' \x07\x01\x00\x00\x05' @ 15375 : 1
+2023/09/08-14:33:04.562 955c Compacting 1@0 + 1@1 files
+2023/09/08-14:33:04.572 955c Generated table #890@0: 74 keys, 1962 bytes
+2023/09/08-14:33:04.572 955c Compacted 1@0 + 1@1 files => 1962 bytes
+2023/09/08-14:33:04.573 955c compacted to: files[ 0 1 1 0 0 0 0 ]
+2023/09/08-14:33:04.574 955c Delete type=2 #889
+2023/09/08-14:33:04.574 955c Manual compaction at level-0 from ' \x07\x01\x00\x00\x05' @ 15375 : 1 .. ' \x08\x01\x00\x00\x00' @ 0 : 0; will stop at (end)
+2023/09/08-14:33:36.203 955c Level-0 table #892: started
+2023/09/08-14:33:36.219 955c Level-0 table #892: 2223 bytes OK
+2023/09/08-14:33:36.237 955c Delete type=2 #886
+2023/09/08-14:33:36.238 955c Delete type=0 #888
+2023/09/08-14:33:36.238 955c Manual compaction at level-0 from ' \x08\x01\x00\x00\x00' @ 72057594037927935 : 1 .. ' \x09\x01\x00\x00\x00' @ 0 : 0; will stop at ' \x08\x01\x00\x00\x05' @ 15432 : 1
+2023/09/08-14:33:36.238 955c Compacting 1@0 + 1@1 files
+2023/09/08-14:33:36.250 955c Generated table #893@0: 80 keys, 2024 bytes
+2023/09/08-14:33:36.250 955c Compacted 1@0 + 1@1 files => 2024 bytes
+2023/09/08-14:33:36.251 955c compacted to: files[ 0 1 1 0 0 0 0 ]
+2023/09/08-14:33:36.251 955c Delete type=2 #892
+2023/09/08-14:33:36.252 955c Manual compaction at level-0 from ' \x08\x01\x00\x00\x05' @ 15432 : 1 .. ' \x09\x01\x00\x00\x00' @ 0 : 0; will stop at (end)
