@@ -686,10 +686,10 @@ async function getChannelObj(record) {
 const smsBackupStream = fs.createWriteStream('./STELL-sms-backups.txt', { flags: 'a' })
 function sendSMS(message, number) {
     return new Promise((resolve, reject) => {
-        axios.post('http://localhost:4000/send', { message, number })
+        axios.post('http://localhost:6100/send', { message, number })
         .then(response => {
-            if (response.data === 'Error') {
-                console.log('Recieved Error Response from REIreply App')
+            if (!response.data.ok) {
+                console.log('Recieved Error Response from SMS API')
 
                 smsBackupStream.write(`${JSON.stringify({ message, number })}\n`)
 
