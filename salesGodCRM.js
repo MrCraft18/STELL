@@ -6,6 +6,8 @@ app = express()
 app.use(express.json())
 port = process.env.PORT || 6100
 
+
+//OUTBOUND FUNCTIONALITY
 ;(async () => {
     const outboundBrowser = await puppeteer.launch({
         headless: true,
@@ -116,6 +118,7 @@ app.post("/send", async (req, res) => {
 
 
 //AAAÁAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+//INBOUND FUNCTIONALITY
 
 
 
@@ -164,12 +167,27 @@ app.post("/send", async (req, res) => {
 function startWatcherLoop(inboundPage) {
     setInterval(async () => {
         //Click Messenger button
-        inboundPage.click('#navbar-nav > li:nth-child(3) > a')
+        await inboundPage.click('#navbar-nav > li:nth-child(3) > a')
         //Click Unread button
-        //ADD LOGIC
-
+        await inboundPage.evaluate(() => {
+            const elements = document.querySelectorAll('btn.btn-outline-primary.btn-sm.mb-0')
+            for (let element of elements) {
+                if (element.innerText === 'Unread') {
+                    element.click()
+                    break
+                }
+            }
+        })
         //Get all messages elements
-        const messageElements = '' //ADD LOGIC
+        const messages = await watcherPage.$$eval('li.pt-2.pb-2.chat_contacts.d-flex.align-items-center.position-absolute.w-100', elements => elements.map(element => {
+            const numberElement = element.querySelector('p.text-truncate.text-capitalize.fw-600.text-dark.mb-0')
+            const messageElement = element.querySelector('span.text-truncate.text-muted')
+        
+            const number = numberElement ? numberElement.innerText.replace(/\D/g, '') : null
+            const message = messageElement ? messageElement.innerText : null
+        
+            return { message, number }
+        }))
 
         //If messageElements is greater than 0 do stuff
         if (messageElements.length !== 0) {
