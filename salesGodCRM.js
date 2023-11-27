@@ -1,4 +1,4 @@
-const puppeteer  = require('puppeteer');
+puppeteer  = require('puppeteer');
 express = require('express')
 axios = require('axios')
 
@@ -6,9 +6,8 @@ app = express()
 app.use(express.json())
 port = process.env.PORT || 6100
 
-let browser
 ;(async () => {
-    const browser = await puppeteer.launch({
+    const outboundBrowser = await puppeteer.launch({
         headless: true,
         timeout: 0,
         defaultViewport: null,
@@ -19,28 +18,28 @@ let browser
         userDataDir: './puppeteer'
     });
 
-    mainPage = await browser.newPage()
+    outboundPage = await outboundBrowser.newPage()
 
-    await mainPage.goto('https://salesgodcrm.net', {waitUntil: 'networkidle0', timeout: 30000})
+    await outboundPage.goto('https://salesgodcrm.net', {waitUntil: 'networkidle0', timeout: 30000})
 
-    initialUrl = mainPage.url()
+    outboundInitialUrl = outboundPage.url()
     console.log(initialUrl)
 
-    if (mainPage.url() === "https://salesgodcrm.net/") {
+    if (outboundPage.url() === "https://salesgodcrm.net/") {
         //Pretty self explainatory
-        await mainPage.waitForSelector('#email')
-        await mainPage.click('#email')
-        await mainPage.type('#email', 'jacobwalkersolutions@gmail.com')
-        await mainPage.click('#password')
-        await mainPage.type('#password', 'Godsgotthis#1')
-        await mainPage.click('.btn-md.btn-primary.w-100')
+        await outboundPage.waitForSelector('#email')
+        await outboundPage.click('#email')
+        await outboundPage.type('#email', 'jacobwalkersolutions@gmail.com')
+        await outboundPage.click('#password')
+        await outboundPage.type('#password', 'Godsgotthis#1')
+        await outboundPage.click('.btn-md.btn-primary.w-100')
         //Wait for URL change
-        await mainPage.waitForFunction(initial => window.location.href !== initial, {}, initialUrl)
+        await outboundPage.waitForFunction(initial => window.location.href !== initial, {}, initialUrl)
     }
 
-    console.log(mainPage.url())
+    console.log(outboundPage.url())
 
-    if (mainPage.url() === "https://salesgodcrm.net/dashboard") {
+    if (outboundPage.url() === "https://salesgodcrm.net/dashboard") {
         console.log("Starting Server...")
         app.listen(port, () => {
             console.log("App listening on Port: " + port)
@@ -52,14 +51,6 @@ let browser
 
 
 
-// process.on('SIGINT', async () => {
-//     console.log('SIGINT signal received: closing browser');
-//     await browser.close();
-//     process.exit(0);
-// });
-
-
-
 app.post("/send", async (req, res) => {
     try {
         console.log('Recieved Send SMS Request')
@@ -67,35 +58,35 @@ app.post("/send", async (req, res) => {
         const number = req.body.number
     
         //Click Contacts
-        await mainPage.click("#navbar-nav > li:nth-child(4)")
+        await outboundPage.click("#navbar-nav > li:nth-child(4)")
         //Wait for search input
-        await mainPage.waitForSelector('#dt_main_search')
+        await outboundPage.waitForSelector('#dt_main_search')
         //Clear search input
-        await mainPage.$eval('#dt_main_search', el => el.value = '')
+        await outboundPage.$eval('#dt_main_search', el => el.value = '')
         //Type number into search box
-        await mainPage.type('#dt_main_search', number)
+        await outboundPage.type('#dt_main_search', number)
         //See if there is a search result for the number
         await delay(1500)
-        const searchResult = await mainPage.$$eval("#data-table > table > tbody", tbody => tbody.some(el => el.querySelector('tr') !== null));
+        const searchResult = await outboundPage.$$eval("#data-table > table > tbody", tbody => tbody.some(el => el.querySelector('tr') !== null));
     
         //Add contact if it doesnt show up
         if (!searchResult) {
             console.log("Adding Contact for: " + number)
     
             //Click Add Contact button
-            await mainPage.click('a[title="Add Contact"]')
+            await outboundPage.click('a[title="Add Contact"]')
             //Wait for first name input
-            await mainPage.waitForSelector('#first_name')
+            await outboundPage.waitForSelector('#first_name')
             //Type number in first name field
-            await mainPage.type('#first_name', number)
+            await outboundPage.type('#first_name', number)
             //Type number in number field
-            await mainPage.type('#phone', number)
+            await outboundPage.type('#phone', number)
             //Click Add Contact button
             await delay(500)
-            await mainPage.click(".btn.btn-success")
+            await outboundPage.click(".btn.btn-success")
             //See if Created Successfully close button exists
             await delay(500)
-            const successBoxButton = await mainPage.$(".Vue-Toastification__close-button")
+            const successBoxButton = await outboundPage.$(".Vue-Toastification__close-button")
             //If it exists close it
             if (successBoxButton) {
                 console.log("Found Bad button")
@@ -103,15 +94,15 @@ app.post("/send", async (req, res) => {
             }
         }
         //Click the contact name to bring up text message box
-        await mainPage.click('.cursor-pointer.text-primary.fs-14.fw-medium.h-underline')
+        await outboundPage.click('.cursor-pointer.text-primary.fs-14.fw-medium.h-underline')
         //Wait for textarea element
-        await mainPage.waitForSelector('textarea')
+        await outboundPage.waitForSelector('textarea')
         //Input text message into text field
-        await mainPage.type('textarea', message)
+        await outboundPage.type('textarea', message)
         //Click Send button
-        await mainPage.click('a[data-original-title="Send"]')
+        await outboundPage.click('a[data-original-title="Send"]')
         //Click logo button to reset everything
-        await mainPage.reload()
+        await outboundPage.reload()
         
         res.send({ok: true})
         console.log("Sent Ok Response to STELL")
@@ -121,6 +112,71 @@ app.post("/send", async (req, res) => {
         console.log("Sent Error Response to STELL")
     }
 })
+
+
+
+//AAAÁAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+
+
+;(async () => {
+    const inboundBrowser = await puppeteer.launch({
+        headless: true,
+        timeout: 0,
+        defaultViewport: null,
+        args: [
+            '--start-maximized',
+        ],
+        protocolTimeout: 250000,
+        userDataDir: './puppeteer'
+    });
+
+    inboundPage = await inboundBrowser.newPage()
+
+    await inboundPage.goto('https://salesgodcrm.net', {waitUntil: 'networkidle0', timeout: 30000})
+
+    inboundInitialUrl = inboundPage.url()
+    console.log(initialUrl)
+
+    if (inboundPage.url() === "https://salesgodcrm.net/") {
+        //Pretty self explainatory
+        await inboundPage.waitForSelector('#email')
+        await inboundPage.click('#email')
+        await inboundPage.type('#email', 'jacobwalkersolutions@gmail.com')
+        await inboundPage.click('#password')
+        await inboundPage.type('#password', 'Godsgotthis#1')
+        await inboundPage.click('.btn-md.btn-primary.w-100')
+        //Wait for URL change
+        await inboundPage.waitForFunction(initial => window.location.href !== initial, {}, initialUrl)
+    }
+
+    console.log(inboundPage.url())
+
+    if (inboundPage.url() === "https://salesgodcrm.net/dashboard") {
+        console.log("Starting Loop")
+    } else {
+        console.log("Not Starting Loop")
+    }
+})()
+
+
+
+function startWatcherLoop(inboundPage) {
+    setInterval(async () => {
+        //Click Messenger button
+        inboundPage.click('#navbar-nav > li:nth-child(3) > a')
+        //Click Unread button
+        //ADD LOGIC
+
+        //Get all messages elements
+        const messageElements = '' //ADD LOGIC
+
+        //If messageElements is greater than 0 do stuff
+        if (messageElements.length !== 0) {
+            //MARK MESSAGES AS READ IN BROWSER
+        }
+    }, 3000);
+}
 
 
 
