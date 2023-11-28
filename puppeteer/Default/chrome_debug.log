@@ -1,9 +1,34 @@
-[1126/233524.706:ERROR:cert_issuer_source_aia.cc(36)] Error parsing cert retrieved from AIA (as DER):
+[1127/204034.590:ERROR:cache_util_win.cc(20)] Unable to move the cache: Access is denied. (0x5)
+[1127/204034.591:ERROR:disk_cache.cc(205)] Unable to create cache
+[1127/204034.591:ERROR:gpu_disk_cache.cc(676)] Gpu Cache Creation failed: -2
+[1127/204034.607:ERROR:cache_util_win.cc(20)] Unable to move the cache: Access is denied. (0x5)
+[1127/204034.607:ERROR:disk_cache.cc(205)] Unable to create cache
+[1127/204034.607:ERROR:gpu_disk_cache.cc(676)] Gpu Cache Creation failed: -2
+[1127/204034.998:ERROR:cert_issuer_source_aia.cc(36)] Error parsing cert retrieved from AIA (as DER):
 ERROR: Couldn't read tbsCertificate as SEQUENCE
 ERROR: Failed parsing Certificate
 
-[1126/233524.881:ERROR:cert_issuer_source_aia.cc(36)] Error parsing cert retrieved from AIA (as DER):
+[1127/204035.181:ERROR:cert_issuer_source_aia.cc(36)] Error parsing cert retrieved from AIA (as DER):
 ERROR: Couldn't read tbsCertificate as SEQUENCE
 ERROR: Failed parsing Certificate
 
-[1126/233525.103:INFO:CONSOLE(32)] "Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'type')", source: https://salesgodcrm.net/build/assets/app-76417a73.js (32)
+[1127/204035.601:INFO:CONSOLE(32)] "Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'type')", source: https://salesgodcrm.net/build/assets/app-76417a73.js (32)
+[1127/204036.587:ERROR:cache_util_win.cc(20)] Unable to move the cache: Access is denied. (0x5)
+[1127/204036.587:ERROR:disk_cache.cc(205)] Unable to create cache
+[1127/204036.845:ERROR:cert_issuer_source_aia.cc(36)] Error parsing cert retrieved from AIA (as DER):
+ERROR: Couldn't read tbsCertificate as SEQUENCE
+ERROR: Failed parsing Certificate
+
+[1127/204037.063:ERROR:cert_issuer_source_aia.cc(36)] Error parsing cert retrieved from AIA (as DER):
+ERROR: Couldn't read tbsCertificate as SEQUENCE
+ERROR: Failed parsing Certificate
+
+[1127/204037.063:ERROR:cert_issuer_source_aia.cc(36)] Error parsing cert retrieved from AIA (as DER):
+ERROR: Couldn't read tbsCertificate as SEQUENCE
+ERROR: Failed parsing Certificate
+
+[1127/204037.584:ERROR:service_worker_storage.cc(2016)] Failed to delete the database: Database IO error
+[1127/204041.308:INFO:CONSOLE(32)] "Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'type')", source: https://salesgodcrm.net/build/assets/app-76417a73.js (32)
+[1127/204045.723:ERROR:web_contents_delegate.cc(234)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
+[1127/204058.644:ERROR:web_contents_delegate.cc(234)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
+[1127/204112.449:ERROR:web_contents_delegate.cc(234)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.

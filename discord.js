@@ -24,7 +24,7 @@ const TOKEN = "MTA5NTUwMDk0OTU0NTU1MzkyMA.GRBm3S.WJo5XNDF2JzpvVPtphXmvEY-PPQu6LZ
 //Initiate Express
 const app = express()
 app.use(express.json())
-app.listen(3000)
+app.listen(6101)
 
 
 
@@ -457,7 +457,7 @@ app.post('/msg', async (req, res) => {
             channel.send(`*[${removeIdentifier(isClearAnswerResponse).trim()}]*`)
 
             if (isClearAnswerResponse.includes('YES')) {
-                sendSMS("Ok thanks for the info. While I run my numbers do you have an ideal price you'd want for the property?")
+                sendSMS("Ok thanks for the info. While I run my numbers do you have an ideal price you'd want for the property?", record.phoneNumber)
 
                 record.conversationLabel = "awaitingLeadConfirmation"
 
@@ -501,16 +501,14 @@ app.post('/msg', async (req, res) => {
 
 
         res.send({
-            code: 200,
-            content: 'STELL PROCESSED SMS'
+            ok: true
         })
         console.log('Sent Processed Successfully Response to SMS App')
     } catch (err) {
         console.log(err)
 
         res.send({
-            code: 500,
-            content: 'STELL INTERNAL ERROR'
+            ok: false
         })
         console.log('Sent ERROR Response to SMS App')
     }

@@ -1,2 +1,26 @@
 {"message":"Hey There, this is Jacob from Fort Worth, Is this still Suisei?","number":"9403732277"}
 {"message":"Hey There, this is Jacob in Fort Worth, Is this still Suisei?","number":"9403732277"}
+{"message":"Ok thanks for the info. While I run my numbers do you have an ideal price you'd want for the property?"}
+{"message":"Great, Caden. Would you mind if I ask a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Would you be comfortable answering a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Would you be open to answering a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Would you mind if I ask a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Would you be comfortable answering a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Can I ask you a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Would you be comfortable answering a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Would you be open to answering a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Would you be comfortable answering a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Would you be comfortable answering a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Would you be open to answering a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Would you be open to answering a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Would you mind if I ask a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Would you be open to answering a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Would you be open to answering a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Can I ask you a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Would you be open to answering a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. I was wondering if you could answer a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Would you mind if I ask a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Would you be open to answering a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Great, Caden. Would you be open to answering a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Hi Caden, I was wondering if you would be okay with answering a few questions about 1304 Shalimar Dr.?","number":"8176737349"}
+{"message":"Great, Caden. Would you mind if I ask a few questions about 1304 Shalimar Dr?","number":"8176737349"}

@@ -1,4 +1,4 @@
-puppeteer  = require('puppeteer');
+puppeteer  = require('puppeteer')
 express = require('express')
 axios = require('axios')
 
@@ -18,14 +18,13 @@ port = process.env.PORT || 6100
         ],
         protocolTimeout: 250000,
         userDataDir: './puppeteer'
-    });
+    })
 
     outboundPage = await outboundBrowser.newPage()
 
     await outboundPage.goto('https://salesgodcrm.net', {waitUntil: 'networkidle0', timeout: 30000})
 
     outboundInitialUrl = outboundPage.url()
-    console.log(initialUrl)
 
     if (outboundPage.url() === "https://salesgodcrm.net/") {
         //Pretty self explainatory
@@ -36,10 +35,8 @@ port = process.env.PORT || 6100
         await outboundPage.type('#password', 'Godsgotthis#1')
         await outboundPage.click('.btn-md.btn-primary.w-100')
         //Wait for URL change
-        await outboundPage.waitForFunction(initial => window.location.href !== initial, {}, initialUrl)
+        await outboundPage.waitForFunction(initial => window.location.href !== initial, {}, outboundInitialUrl)
     }
-
-    console.log(outboundPage.url())
 
     if (outboundPage.url() === "https://salesgodcrm.net/dashboard") {
         console.log("Starting Server...")
@@ -69,7 +66,7 @@ app.post("/send", async (req, res) => {
         await outboundPage.type('#dt_main_search', number)
         //See if there is a search result for the number
         await delay(1500)
-        const searchResult = await outboundPage.$$eval("#data-table > table > tbody", tbody => tbody.some(el => el.querySelector('tr') !== null));
+        const searchResult = await outboundPage.$$eval("#data-table > table > tbody", tbody => tbody.some(el => el.querySelector('tr') !== null))
     
         //Add contact if it doesnt show up
         if (!searchResult) {
@@ -105,6 +102,8 @@ app.post("/send", async (req, res) => {
         await outboundPage.click('a[data-original-title="Send"]')
         //Click logo button to reset everything
         await outboundPage.reload()
+
+        console.log(`Sent: ${message}\nTo: ${number}`)
         
         res.send({ok: true})
         console.log("Sent Ok Response to STELL")
@@ -139,7 +138,6 @@ app.post("/send", async (req, res) => {
     await inboundPage.goto('https://salesgodcrm.net', {waitUntil: 'networkidle0', timeout: 30000})
 
     inboundInitialUrl = inboundPage.url()
-    console.log(initialUrl)
 
     if (inboundPage.url() === "https://salesgodcrm.net/") {
         //Pretty self explainatory
@@ -150,15 +148,14 @@ app.post("/send", async (req, res) => {
         await inboundPage.type('#password', 'Godsgotthis#1')
         await inboundPage.click('.btn-md.btn-primary.w-100')
         //Wait for URL change
-        await inboundPage.waitForFunction(initial => window.location.href !== initial, {}, initialUrl)
+        await inboundPage.waitForFunction(initial => window.location.href !== initial, {}, inboundInitialUrl)
     }
 
-    console.log(inboundPage.url())
-
     if (inboundPage.url() === "https://salesgodcrm.net/dashboard") {
-        console.log("Starting Loop")
+        console.log("Starting Watcher Loop")
+        startWatcherLoop(inboundPage)
     } else {
-        console.log("Not Starting Loop")
+        console.log("Not Starting Watcher Loop")
     }
 })()
 
@@ -178,22 +175,67 @@ function startWatcherLoop(inboundPage) {
                 }
             }
         })
-        //Get all messages elements
-        const messages = await watcherPage.$$eval('li.pt-2.pb-2.chat_contacts.d-flex.align-items-center.position-absolute.w-100', elements => elements.map(element => {
-            const numberElement = element.querySelector('p.text-truncate.text-capitalize.fw-600.text-dark.mb-0')
-            const messageElement = element.querySelector('span.text-truncate.text-muted')
-        
-            const number = numberElement ? numberElement.innerText.replace(/\D/g, '') : null
-            const message = messageElement ? messageElement.innerText : null
-        
-            return { message, number }
-        }))
+        //Get existing chatElement
+        const chatElement = await inboundPage.$('li.pt-2.pb-2.chat_contacts.d-flex.align-items-center.position-absolute.w-100')
 
-        //If messageElements is greater than 0 do stuff
-        if (messageElements.length !== 0) {
-            //MARK MESSAGES AS READ IN BROWSER
+        //If chatElement exists then do stuff
+        if (chatElement) {
+            console.log("Found Message")
+            //Click the chat element
+            await chatElement.click()
+
+            await inboundPage.waitForSelector("#users-conversation")
+            
+            //Get Number
+            const number = await chatElement.$eval('p.text-truncate.text-capitalize.fw-600.text-dark.mb-0', numberElement => {
+                //Pare inner text from number element
+                const number = numberElement ? numberElement.innerText.replace(/\D/g, '') : null
+            
+                return number
+              })
+            //Get Message
+            const message = await inboundPage.$eval("#users-conversation", conversationElement => {
+                //Get last message child from conversation element
+                const lastMessageElement = conversationElement.lastElementChild
+
+                //Extract text from text content element
+                const message = lastMessageElement.querySelector('p.mb-0.ctext-content').textContent
+
+                return message
+            })
+
+            //Select message in chat element
+            await chatElement.evaluate((element) => {
+                const input = element.querySelector('input.form-check-input.me-1.fs-14');
+                if (input) {
+                    input.click();
+                }
+            });
+            //Click Mark Read
+            await inboundPage.evaluate(() => {
+                const elements = document.querySelectorAll('label.btn.btn-outline-dark.btn-sm.mb-0')
+                for (let element of elements) {
+                    if (element.innerText === 'Mark Read') {
+                        element.click()
+                        break
+                    }
+                }
+            })
+
+            axios.post('http://localhost:6101/msg', { message, number })
+                .then(response => {
+                    if (response.data.ok) {
+                        console.log(`Successfully Forwarded: ${message}\nFrom: ${number}`)
+                    } else {
+                        console.error(`Recieved Not Ok Response from STELL`)
+                    }
+                })
+                .catch(err => {
+                    console.error(err)
+                    console.log("Axios Error")
+                })
         }
-    }, 3000);
+    }, 3000)
 }
 
 
