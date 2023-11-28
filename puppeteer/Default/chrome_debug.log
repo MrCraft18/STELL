@@ -1,44 +1,0 @@
-[1128/075637.212:WARNING:leveldb_database.cc(123)] Unable to open C:\Users\Caden\Projects\STELL\puppeteer\Default\shared_proto_db\metadata: IO error: C:\Users\Caden\Projects\STELL\puppeteer\Default\shared_proto_db\metadata/MANIFEST-000001: Unable to create sequential file (ChromeMethodBFE: 7::NewSequentialFile::1)
-[1128/075637.212:WARNING:leveldb_database.cc(123)] Unable to open C:\Users\Caden\Projects\STELL\puppeteer\Default\shared_proto_db\metadata: IO error: C:\Users\Caden\Projects\STELL\puppeteer\Default\shared_proto_db\metadata/MANIFEST-000001: Unable to create sequential file (ChromeMethodBFE: 7::NewSequentialFile::1)
-[1128/075637.227:WARNING:leveldb_database.cc(123)] Unable to open C:\Users\Caden\Projects\STELL\puppeteer\Default\shared_proto_db\metadata: IO error: C:\Users\Caden\Projects\STELL\puppeteer\Default\shared_proto_db\metadata/MANIFEST-000001: Unable to create sequential file (ChromeMethodBFE: 7::NewSequentialFile::1)
-[1128/075637.227:WARNING:leveldb_database.cc(123)] Unable to open C:\Users\Caden\Projects\STELL\puppeteer\Default\shared_proto_db\metadata: IO error: C:\Users\Caden\Projects\STELL\puppeteer\Default\shared_proto_db\metadata/MANIFEST-000001: Unable to create sequential file (ChromeMethodBFE: 7::NewSequentialFile::1)
-[1128/075637.243:ERROR:cache_util_win.cc(20)] Unable to move the cache: Access is denied. (0x5)
-[1128/075637.246:ERROR:disk_cache.cc(205)] Unable to create cache
-[1128/075637.246:ERROR:gpu_disk_cache.cc(676)] Gpu Cache Creation failed: -2
-[1128/075637.256:ERROR:cache_util_win.cc(20)] Unable to move the cache: Access is denied. (0x5)
-[1128/075637.256:ERROR:disk_cache.cc(205)] Unable to create cache
-[1128/075637.256:ERROR:gpu_disk_cache.cc(676)] Gpu Cache Creation failed: -2
-[1128/075638.914:ERROR:cache_util_win.cc(20)] Unable to move the cache: Access is denied. (0x5)
-[1128/075638.914:ERROR:disk_cache.cc(205)] Unable to create cache
-[1128/075642.784:INFO:CONSOLE(32)] "Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'type')", source: https://salesgodcrm.net/build/assets/app-76417a73.js (32)
-[1128/075659.801:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/075753.642:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/075811.206:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/080925.548:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/081012.653:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/085456.021:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/085518.694:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/085548.385:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/085638.218:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/092051.878:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/092116.233:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/092142.196:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/092557.394:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/092804.050:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/092821.686:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/092952.249:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/093027.038:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/093340.684:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/093407.503:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/093511.423:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/093630.792:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/093900.815:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/094805.288:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/094823.598:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/094916.104:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/095129.833:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/095427.942:INFO:CONSOLE(0)] "Autofocus processing was blocked because a document already has a focused element.", source: https://salesgodcrm.net/contacts (0)
-[1128/095429.426:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/095449.903:ERROR:web_contents_delegate.cc(235)] WebContentsDelegate::RequestMediaAccessPermission: Not supported.
-[1128/104426.241:INFO:CONSOLE(18)] "Socket Connection disconnected. Attempting to reconnect...", source: https://salesgodcrm.net/build/assets/app-76417a73.js (18)
-[1128/104426.241:INFO:CONSOLE(22)] "Connection died", source: https://salesgodcrm.net/build/assets/app-76417a73.js (22)
