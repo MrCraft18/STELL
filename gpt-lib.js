@@ -1,13 +1,10 @@
-const { Configuration, OpenAIApi } = require("openai")
+const OpenAI = require("openai")
 const fs = require('fs')
 
 
-
-const configuration = new Configuration({
+const openai = new OpenAI({
     apiKey: "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",
 })
-
-const openai = new OpenAIApi(configuration)
 
 const generateConversation = (record) => {
     return new Promise(async resolve => {
@@ -33,25 +30,25 @@ const generateConversation = (record) => {
         })
 
         try {
-            const completion = await openai.createChatCompletion({
-                model: 'gpt-3.5-turbo',
+            const completion = await openai.chat.completions.create({
+                model: 'gpt-4',
                 messages,
                 temperature: 0.1,
                 max_tokens: 256
             })
         
-            resolve(completion.data.choices[0].message.content)
+            resolve(completion.choices[0].message.content)
         } catch (err) {
-            console.log(err.data)
+            console.log(err)
 
-            const completion = await openai.createChatCompletion({
+            const completion = await openai.chat.completions.create({
                 model: 'gpt-3.5-turbo',
                 messages,
                 temperature: 0.1,
                 max_tokens: 256
             })
         
-            resolve(completion.data.choices[0].message.content)
+            resolve(completion.choices[0].message.content)
         }
     })
 }
@@ -83,25 +80,25 @@ const generateisQuestion = (record) => {
         })
 
         try {
-            const completion = await openai.createChatCompletion({
+            const completion = await openai.chat.completions.create({
                 model: 'gpt-3.5-turbo',
                 messages,
                 temperature: 0.01,
                 max_tokens: 256
             })
         
-            resolve(completion.data.choices[0].message.content)
+            resolve(completion.choices[0].message.content)
         } catch (err) {
-            console.log(err.data)
+            console.log(err)
 
-            const completion = await openai.createChatCompletion({
+            const completion = await openai.chat.completions.create({
                 model: 'gpt-3.5-turbo',
                 messages,
                 temperature: 0.1,
                 max_tokens: 256
             })
         
-            resolve(completion.data.choices[0].message.content)
+            resolve(completion.choices[0].message.content)
         }
     })
 }
@@ -133,25 +130,25 @@ const generateisColdLead = (record) => {
         })
 
         try {
-            const completion = await openai.createChatCompletion({
+            const completion = await openai.chat.completions.create({
                 model: 'gpt-3.5-turbo',
                 messages,
                 temperature: 0.01,
                 max_tokens: 256
             })
         
-            resolve(completion.data.choices[0].message.content)
+            resolve(completion.choices[0].message.content)
         } catch (err) {
-            console.log(err.data)
+            console.log(err)
 
-            const completion = await openai.createChatCompletion({
+            const completion = await openai.chat.completions.create({
                 model: 'gpt-3.5-turbo',
                 messages,
                 temperature: 0.1,
                 max_tokens: 256
             })
         
-            resolve(completion.data.choices[0].message.content)
+            resolve(completion.choices[0].message.content)
         }
     })
 }
@@ -183,25 +180,25 @@ const generateisClearAnswer = (record) => {
         })
 
         try {
-            const completion = await openai.createChatCompletion({
+            const completion = await openai.chat.completions.create({
                 model: 'gpt-3.5-turbo',
                 messages,
                 temperature: 0.01,
                 max_tokens: 256
             })
         
-            resolve(completion.data.choices[0].message.content)
+            resolve(completion.choices[0].message.content)
         } catch (err) {
-            console.log(err.data)
+            console.log(err)
 
-            const completion = await openai.createChatCompletion({
+            const completion = await openai.chat.completions.create({
                 model: 'gpt-3.5-turbo',
                 messages,
                 temperature: 0.1,
                 max_tokens: 256
             })
         
-            resolve(completion.data.choices[0].message.content)
+            resolve(completion.choices[0].message.content)
         }
     })
 }
@@ -263,7 +260,7 @@ function isColdLeadPrompt(record) {
 
 
 function isClearAnswerPrompt(record) {
-    const rawSystemContext = fs.readFileSync('./isClearAsnwer-prompt.txt', 'utf8')
+    const rawSystemContext = fs.readFileSync('./isClearAnswer-prompt.txt', 'utf8')
 
     const name = record.name.split(' ')[0]
 
