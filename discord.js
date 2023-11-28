@@ -461,7 +461,7 @@ app.post('/msg', async (req, res) => {
 
                 record.conversationLabel = "awaitingLeadConfirmation"
 
-                //channel.setParent(leadsCategory).then(() => {console.log(`Moved ${record.phoneNumber} to leads category`)}) MOVE
+                //channel.setParent(leadsCategory).then(() => {console.log(`Moved ${record.phoneNumber} to leads category`)})
             } else {
                 const stellText = await gpt.generateConversation(record)
     
@@ -483,9 +483,9 @@ app.post('/msg', async (req, res) => {
 
             record.conversationLabel = "lead"
 
-            channel.setParent(leadsCategory).then(() => {console.log(`Moved ${record.phoneNumber} to leads category`)})
-
             const channel = await getChannelObj(record)
+
+            channel.setParent(leadsCategory).then(() => {console.log(`Moved ${record.phoneNumber} to leads category`)})
 
             channel.send('Yippee!!! <@1117500402766708898>')
 
