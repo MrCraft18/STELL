@@ -24,3 +24,5 @@
 {"message":"Great, Caden. Would you be open to answering a few questions about 1304 Shalimar Dr?","number":"8176737349"}
 {"message":"Hi Caden, I was wondering if you would be okay with answering a few questions about 1304 Shalimar Dr.?","number":"8176737349"}
 {"message":"Great, Caden. Would you mind if I ask a few questions about 1304 Shalimar Dr?","number":"8176737349"}
+{"message":"Hello There, I am Jacob in Fort Worth. Is this still Caden?","number":"8176737349"}
+{"message":"Hello There, I am Jacob in Fort Worth. Is this still Caden?","number":"8176737349"}

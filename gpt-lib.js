@@ -42,7 +42,7 @@ const generateConversation = (record) => {
             console.log(err)
 
             const completion = await openai.chat.completions.create({
-                model: 'gpt-3.5-turbo',
+                model: 'gpt-4',
                 messages,
                 temperature: 0.1,
                 max_tokens: 256
@@ -81,7 +81,7 @@ const generateisQuestion = (record) => {
 
         try {
             const completion = await openai.chat.completions.create({
-                model: 'gpt-3.5-turbo',
+                model: 'gpt-4',
                 messages,
                 temperature: 0.01,
                 max_tokens: 256
@@ -92,7 +92,7 @@ const generateisQuestion = (record) => {
             console.log(err)
 
             const completion = await openai.chat.completions.create({
-                model: 'gpt-3.5-turbo',
+                model: 'gpt-4',
                 messages,
                 temperature: 0.1,
                 max_tokens: 256
@@ -131,7 +131,7 @@ const generateisColdLead = (record) => {
 
         try {
             const completion = await openai.chat.completions.create({
-                model: 'gpt-3.5-turbo',
+                model: 'gpt-4',
                 messages,
                 temperature: 0.01,
                 max_tokens: 256
@@ -142,7 +142,7 @@ const generateisColdLead = (record) => {
             console.log(err)
 
             const completion = await openai.chat.completions.create({
-                model: 'gpt-3.5-turbo',
+                model: 'gpt-4',
                 messages,
                 temperature: 0.1,
                 max_tokens: 256
@@ -181,7 +181,7 @@ const generateisClearAnswer = (record) => {
 
         try {
             const completion = await openai.chat.completions.create({
-                model: 'gpt-3.5-turbo',
+                model: 'gpt-4',
                 messages,
                 temperature: 0.01,
                 max_tokens: 256
@@ -192,7 +192,7 @@ const generateisClearAnswer = (record) => {
             console.log(err)
 
             const completion = await openai.chat.completions.create({
-                model: 'gpt-3.5-turbo',
+                model: 'gpt-4',
                 messages,
                 temperature: 0.1,
                 max_tokens: 256
