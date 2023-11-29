@@ -9,14 +9,14 @@ port = process.env.PORT || 6100
 //OUTBOUND FUNCTIONALITY
 ;(async () => {
     const outboundBrowser = await puppeteer.launch({
-        headless: true,
+        headless: 'new',
         timeout: 0,
         defaultViewport: null,
         args: [
             '--start-maximized',
         ],
         protocolTimeout: 250000,
-        userDataDir: './puppeteer'
+        userDataDir: './outbound-browser'
     })
 
     outboundPage = await outboundBrowser.newPage()
@@ -55,6 +55,8 @@ app.post("/send", async (req, res) => {
         const message = req.body.message
         const number = req.body.number
     
+        //Wait for contacts selector
+        await outboundPage.waitForSelector("#navbar-nav > li:nth-child(4)")
         //Click Contacts
         await outboundPage.click("#navbar-nav > li:nth-child(4)")
         //Wait for search input

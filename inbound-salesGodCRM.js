@@ -12,7 +12,7 @@ axios = require('axios')
             '--start-maximized',
         ],
         protocolTimeout: 250000,
-        userDataDir: './puppeteer'
+        userDataDir: './inbound-browser'
     });
 
     inboundPage = await inboundBrowser.newPage()

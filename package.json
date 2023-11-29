@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"node inbound-salesGodCRM.js\" \"node outbound-salesGodCRM.js\""
+    "start": "concurrently \"node outbound-salesGodCRM.js\" \"node inbound-salesGodCRM.js\""
   },
   "keywords": [],
   "author": "",

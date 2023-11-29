@@ -32,7 +32,7 @@ console.log = async (message) => {
     try {
         if (message) {
             process.stdout.write(`${message}\n`)
-            await discordClient.channels.cache.get('1117979636685623416').send(message)
+            await discordClient.channels.cache.get('1117979636685623416').send(message.toString())
         }
     } catch (err) {
         process.stdout.write(`${err}\n`)
@@ -124,7 +124,6 @@ discordClient.on('messageCreate', async (message) => {
       promiseArray.push(
         requestTextFile(attachment.url)
           .then(async csvString => {
-
             const parseData = parseCSV(csvString)
 
             try {
@@ -604,10 +603,10 @@ function parseCSV(csvString) {
 
     totalRecords++
 
-    if (obj.DataZapp_DoNotCall === "N") {
+    if (obj.DataZapp_CellDoNotCall === "N") {
       const address = `${obj.Address}, ${obj.City}, ${obj.State} ${obj.Zip}`
       const name = `${obj["Owner 1 First Name"]} ${obj["Owner 1 Last Name"]}`
-      const record = { address: address, name: name, estimatedValue: obj["Estimated Value"], taxAmount: obj["Tax Amount"], phoneNumber: obj.DataZapp_Phone }
+      const record = { address: address, name: name, estimatedValue: obj["Estimated Value"], taxAmount: obj["Tax Amount"], phoneNumber: obj.DataZapp_Cell }
       usableRecords.push(record)
     }
   }
