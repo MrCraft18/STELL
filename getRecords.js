@@ -17,10 +17,10 @@ function parseCSV(csvString) {
       obj[headers[j]] = currentLine[j];
     };
 
-    if (obj.DataZapp_DoNotCall === "N") {
+    if (obj.DataZapp_CellDoNotCall === "N") {
       const address = `${obj.Address}, ${obj.City}, ${obj.State} ${obj.Zip}`;
       const name = `${obj["Owner 1 First Name"]} ${obj["Owner 1 Last Name"]}`;
-      const record = { address: address, name: name, estimatedValue: obj["Estimated Value"], taxAmount: obj["Tax Amount"], phoneNumber: obj.DataZapp_Phone };
+      const record = { address: address, name: name, estimatedValue: obj["Estimated Value"], taxAmount: obj["Tax Amount"], phoneNumber: obj.DataZapp_Cell };
       data.push(record);
     };
   };
