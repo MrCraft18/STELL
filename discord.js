@@ -31,7 +31,7 @@ app.listen(6101)
 console.log = async (message) => {
     try {
         if (message) {
-            process.stdout.write(`${message}\n`)
+            process.stdout.write(message + '\n')
             await discordClient.channels.cache.get('1117979636685623416').send(message.toString())
         }
     } catch (err) {
@@ -692,7 +692,7 @@ function sendSMS(message, number) {
 
                 reject()
             } else {
-                console.log(response.data)
+                console.log("Recieved OK Response from SMS API")
                 resolve()
             }
         })

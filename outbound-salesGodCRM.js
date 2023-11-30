@@ -9,7 +9,7 @@ port = process.env.PORT || 6100
 //OUTBOUND FUNCTIONALITY
 ;(async () => {
     const outboundBrowser = await puppeteer.launch({
-        headless: 'new',
+        headless: false,
         timeout: 0,
         defaultViewport: null,
         args: [
@@ -83,6 +83,7 @@ app.post("/send", async (req, res) => {
             await outboundPage.type('#phone', number)
             //Click Add Contact button
             await delay(500)
+            await outboundPage.waitForSelector(".btn.btn-success")
             await outboundPage.click(".btn.btn-success")
             //See if Created Successfully close button exists
             await delay(500)
@@ -93,6 +94,8 @@ app.post("/send", async (req, res) => {
                 await successBoxButton.click()
             }
         }
+        //Wait for contact to show up
+        await outboundPage.waitForSelector('.cursor-pointer.text-primary.fs-14.fw-medium.h-underline')
         //Click the contact name to bring up text message box
         await outboundPage.click('.cursor-pointer.text-primary.fs-14.fw-medium.h-underline')
         //Wait for textarea element
@@ -105,6 +108,8 @@ app.post("/send", async (req, res) => {
         await outboundPage.reload()
 
         console.log(`Sent: ${message}\nTo: ${number}`)
+
+        await delay(3000)
         
         res.send({ok: true})
         console.log("Sent Ok Response to STELL")

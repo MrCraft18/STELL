@@ -1,30 +1,3 @@
-Hi There, I'm Jacob Walker in [city]. Is this still [name]?
-Hi There, I am Jacob from [city] Is this still [name]?
-Hi There, I am Jacob in [city] Is this still [name]?
-Hi There, I am Jacob from [city], Is this still [name]?
-Hi There, I am Jacob in [city], Is this still [name]?
-Hi There, I am Jacob from [city]. Is this still [name]?
-Hi There, I am Jacob in [city]. Is this still [name]?
-Hi There, I am Jacob Walker from [city] Is this still [name]?
-Hi There, I am Jacob Walker in [city] Is this still [name]?
-Hi There, I am Jacob Walker from [city], Is this still [name]?
-Hi There, I am Jacob Walker in [city], Is this still [name]?
-Hi There, I am Jacob Walker from [city]. Is this still [name]?
-Hi There, I am Jacob Walker in [city]. Is this still [name]?
-Hello There, this is Jacob from [city] Is this still [name]?
-Hello There, this is Jacob in [city] Is this still [name]?
-Hello There, this is Jacob from [city], Is this still [name]?
-Hello There, this is Jacob in [city], Is this still [name]?
-Hello There, this is Jacob from [city]. Is this still [name]?
-Hello There, this is Jacob in [city]. Is this still [name]?
-Hello There, this is Jacob Walker from [city] Is this still [name]?
-Hello There, this is Jacob Walker in [city] Is this still [name]?
-Hello There, this is Jacob Walker from [city], Is this still [name]?
-Hello There, this is Jacob Walker in [city], Is this still [name]?
-Hello There, this is Jacob Walker from [city]. Is this still [name]?
-Hello There, this is Jacob Walker in [city]. Is this still [name]?
-Hello There, I'm Jacob from [city] Is this still [name]?
-Hello There, I'm Jacob in [city] Is this still [name]?
 Hello There, I'm Jacob from [city], Is this still [name]?
 Hello There, I'm Jacob in [city], Is this still [name]?
 Hello There, I'm Jacob from [city]. Is this still [name]?
@@ -249,4 +222,31 @@ Hi There, I'm Jacob Walker from [city] Is this still [name]?
 Hi There, I'm Jacob Walker in [city] Is this still [name]?
 Hi There, I'm Jacob Walker from [city], Is this still [name]?
 Hi There, I'm Jacob Walker in [city], Is this still [name]?
-Hi There, I'm Jacob Walker from [city]. Is this still [name]?
+Hi There, I'm Jacob Walker from [city]. Is this still [name]?
+Hi There, I'm Jacob Walker in [city]. Is this still [name]?
+Hi There, I am Jacob from [city] Is this still [name]?
+Hi There, I am Jacob in [city] Is this still [name]?
+Hi There, I am Jacob from [city], Is this still [name]?
+Hi There, I am Jacob in [city], Is this still [name]?
+Hi There, I am Jacob from [city]. Is this still [name]?
+Hi There, I am Jacob in [city]. Is this still [name]?
+Hi There, I am Jacob Walker from [city] Is this still [name]?
+Hi There, I am Jacob Walker in [city] Is this still [name]?
+Hi There, I am Jacob Walker from [city], Is this still [name]?
+Hi There, I am Jacob Walker in [city], Is this still [name]?
+Hi There, I am Jacob Walker from [city]. Is this still [name]?
+Hi There, I am Jacob Walker in [city]. Is this still [name]?
+Hello There, this is Jacob from [city] Is this still [name]?
+Hello There, this is Jacob in [city] Is this still [name]?
+Hello There, this is Jacob from [city], Is this still [name]?
+Hello There, this is Jacob in [city], Is this still [name]?
+Hello There, this is Jacob from [city]. Is this still [name]?
+Hello There, this is Jacob in [city]. Is this still [name]?
+Hello There, this is Jacob Walker from [city] Is this still [name]?
+Hello There, this is Jacob Walker in [city] Is this still [name]?
+Hello There, this is Jacob Walker from [city], Is this still [name]?
+Hello There, this is Jacob Walker in [city], Is this still [name]?
+Hello There, this is Jacob Walker from [city]. Is this still [name]?
+Hello There, this is Jacob Walker in [city]. Is this still [name]?
+Hello There, I'm Jacob from [city] Is this still [name]?
+Hello There, I'm Jacob in [city] Is this still [name]?
