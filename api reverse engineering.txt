@@ -149,3 +149,102 @@ Keep-Alive: timeout=5, max=97
 Connection: Keep-Alive
 Transfer-Encoding: chunked
 Content-Type: application/json
+
+
+
+
+
+fetch("https://salesgodcrm.net/api/message/sendChatMessage/1562376", {
+  "headers": {
+    "accept": "application/json",
+    "accept-language": "en-US,en;q=0.9",
+    "access-control-allow-credentials": "True",
+    "content-type": "multipart/form-data; boundary=----WebKitFormBoundaryWWGGEo5gXIrpEmHu",
+    "sec-ch-ua": "\"Chromium\";v=\"118\", \"Opera GX\";v=\"104\", \"Not=A?Brand\";v=\"99\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "withcredentials": "true",
+    "x-requested-with": "XMLHttpRequest",
+    "x-xsrf-token": "eyJpdiI6ImZlS0JEckhxSlhOUS9aS0s1aE9lTGc9PSIsInZhbHVlIjoidUFKWkJTM05xU0NzczgxbkxoVGF1UGFkaUtoMlR2Y2ZncHN6UUd5K1lhTGg4SWxFeGFPZWJpYkUxN3BkdzZXNXN5eDdlMFhndS9odHkvWkpTZksrOUNLQURRU0ViQkVWanJmREdYdE9odU93Z21xdWp1T0N1aVdRY3VDVi9qYVkiLCJtYWMiOiIxODJkOTMxNGE5MDE0NTA4YTNmMTUzMWJjMDY4NWViMDllNTg3MTUyMzQ5NTViMmU1YWFjMjIwYjAxNWU2ZTk5IiwidGFnIjoiIn0=",
+    "cookie": "PAPVisitorId=JhPKK98WGNKTaaV97PH5a7YqzoFh8Kyz; XSRF-TOKEN=eyJpdiI6ImZlS0JEckhxSlhOUS9aS0s1aE9lTGc9PSIsInZhbHVlIjoidUFKWkJTM05xU0NzczgxbkxoVGF1UGFkaUtoMlR2Y2ZncHN6UUd5K1lhTGg4SWxFeGFPZWJpYkUxN3BkdzZXNXN5eDdlMFhndS9odHkvWkpTZksrOUNLQURRU0ViQkVWanJmREdYdE9odU93Z21xdWp1T0N1aVdRY3VDVi9qYVkiLCJtYWMiOiIxODJkOTMxNGE5MDE0NTA4YTNmMTUzMWJjMDY4NWViMDllNTg3MTUyMzQ5NTViMmU1YWFjMjIwYjAxNWU2ZTk5IiwidGFnIjoiIn0%3D; salesgod_crm_session=eyJpdiI6IjFCaFlFV2lTT0o4QmlrQjh4YjA0cFE9PSIsInZhbHVlIjoidGg2a1ZDRUtVUG5CYWxFOEs0RzRFaThTSFU3dXBKL0tPc0RCODR4bk1rbGppZDlidDJzUDNZRVRkKzQ0d2VJeW4wRnNBdFd1M0xVRkRFNGZ1WnU4bWFDdFBNeGRKMGRaS1YvQWV3bFZuZ2lvQ3FtTUNRaHpVQnhMWjMvejZzZGwiLCJtYWMiOiJhZTMzYWE5MmE3OThhMzNlZjMxMDliYjFmNTc2YmJkYjc5ZmU2OWI5ZmI1MDZmMjI2MDYyNzU4NzdiOWVmNjQwIiwidGFnIjoiIn0%3D; Yo0ujjDLlYXYxICXGo3E0Bi315Z1D4X6nGSXoq9K=eyJpdiI6ImtySGNPSWRPbUQ1VUpqSWphSklIaEE9PSIsInZhbHVlIjoid2hGOGlzTHpwbWMrb1FEU2hJekU3NHJsYVJnek1LRXU4NlhvTjlzT3l6VmVTaVlxa2M4dGFDaWdXN1BFTEJ3UitmQUtGRm9QeHAyaDBMMGJaTmdqZzQxVXFhOUlSTENLekNnM0NZVjRjSko1QkhmMjIrNWRGV0w5bDRnbVRPMmI3bThiTmhFVE1xaG9BZ05NRnpnSndmRU1NVHl6anh6SmU3MzBQZ1VyRlc5b2ZEM2NvV05tYkxsb0lWbWVNeEdsOTV5eThIc3VTYnpTN2daalJmUDBwQmNOYkkzdFduT1U5VGtLQVhrV1FJWnphRjYwVUtwTFlvV09yZEx1dHJMZk5ZQ1B3b3c0d09Mbnd3K28vcTBhOWNYTzFNRlJCekRPWEl6TktFNlZ6K3ZMUUp6cFUvVVdkZXZldE9rQzczRWM0TEIvL3RNNHRBeEpPc3lwdUlIS2xqRDR1Q0I5TkFUUDZYYlgxMVlCbEVadGxmaVd0SlpOMHd6RERnQjV2aUtMWDVlOUVFYU1SQThVb0hyRjY1aUxHSVpYS1RFcEx2ZGtXcGpHMzZmd3VzejVkbHczZjFtUzlQdEErZHUvaitNOUtyU1FWeDIyT2YrTzdFMlF0TzB1YUE9PSIsIm1hYyI6IjliYmFhODQ5N2JhYjBhMjJkOGM1MmRhNTg1MmJlZmE3NWFiOTJiOTczNmNjMTU3YjlmMmZmNWE4YWFlNGNlZTUiLCJ0YWciOiIifQ%3D%3D",
+    "Referer": "https://salesgodcrm.net/messenger",
+    "Referrer-Policy": "strict-origin-when-cross-origin"
+  },
+  "body": "------WebKitFormBoundaryWWGGEo5gXIrpEmHu\r\nContent-Disposition: form-data; name=\"text\"\r\n\r\nNo not at all\r\n------WebKitFormBoundaryWWGGEo5gXIrpEmHu\r\nContent-Disposition: form-data; name=\"from\"\r\n\r\nlast_used\r\n------WebKitFormBoundaryWWGGEo5gXIrpEmHu--\r\n",
+  "method": "POST"
+});
+
+
+
+
+fetch("https://salesgodcrm.net/api/auth/login", {
+  "headers": {
+    "accept": "application/json",
+    "accept-language": "en-US,en;q=0.9",
+    "access-control-allow-credentials": "True",
+    "content-type": "application/json",
+    "sec-ch-ua": "\"Chromium\";v=\"118\", \"Opera GX\";v=\"104\", \"Not=A?Brand\";v=\"99\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "withcredentials": "true",
+    "x-requested-with": "XMLHttpRequest",
+    "x-xsrf-token": "eyJpdiI6InR5Z0dGb1VLdXpFem9IUTZ1c1Y4R1E9PSIsInZhbHVlIjoiaFd3TGEyenoxbjJWeWd2TGt5ajlKZkVBOUxwcFFlU2xnaUUyeFpGS2F2cU9aeGwyNmVIRExHdEgvN1g1b29hcEhtNzd4alUzMUp5N3VJVEtsRmlZYnNGSnAxbHY2MDRDaXYwV2xTWWRBcEZ4eTRlMDVlbmFnaFVxVlhHalpOcjUiLCJtYWMiOiI3NWZiYjUyMGJiMDE4Njk1ZTI3NzY5OTM2NDBlN2U3ODhkMGUxMTg2MzNmYTlhOGE5MjI1YTE3MzZiZGEzMDM5IiwidGFnIjoiIn0=",
+    "cookie": "PAPVisitorId=JhPKK98WGNKTaaV97PH5a7YqzoFh8Kyz; XSRF-TOKEN=eyJpdiI6InR5Z0dGb1VLdXpFem9IUTZ1c1Y4R1E9PSIsInZhbHVlIjoiaFd3TGEyenoxbjJWeWd2TGt5ajlKZkVBOUxwcFFlU2xnaUUyeFpGS2F2cU9aeGwyNmVIRExHdEgvN1g1b29hcEhtNzd4alUzMUp5N3VJVEtsRmlZYnNGSnAxbHY2MDRDaXYwV2xTWWRBcEZ4eTRlMDVlbmFnaFVxVlhHalpOcjUiLCJtYWMiOiI3NWZiYjUyMGJiMDE4Njk1ZTI3NzY5OTM2NDBlN2U3ODhkMGUxMTg2MzNmYTlhOGE5MjI1YTE3MzZiZGEzMDM5IiwidGFnIjoiIn0%3D; salesgod_crm_session=eyJpdiI6IjBtWkkyOE0xbmcwMFc1NVlRdG1HRnc9PSIsInZhbHVlIjoid3Z6YUNvSUpXQVJsWFBwVXI0cjlPemprYW1vRHIzeGQ4M1BUQXhxbFVQcXlodHJoU2xSLzFQYitVa0t4a3FQU0hBeXpZMXdqQktybHd3RlBNMEVSOXRFenpIRzNXcGdBaHdRdVV2S0hDaE9xRldPR3N3MzF5cUEzZ0FXRVFvelYiLCJtYWMiOiJhOWFhNWI1ZTg2ZDhjMzNmM2UxYjY0NDMxYWZiYjVhMmNlZDk5OGE1ZDg5MDFjMmE2ZmFlMjQ4MWIxYWVmMzRhIiwidGFnIjoiIn0%3D; EOxPxVSLty7l0AtcS8megVO7EMjqe8FIBI4ydWZp=eyJpdiI6IjRrU0hjOUx5b01abEZacURJYlVBV0E9PSIsInZhbHVlIjoiZmVMUEFqcFVpdis1T0ZESDVEcmlNVFBOM0RObVpIUFY2QlEyaTZrWGVMY2pTYVZwOHBkeVMvYlZPNEc0OENUdmxIREdLZktuVlA0Y3VYSExPRmp5ejZQbjUxWTBHY3c1RWVXMk5oM21vWWpSV1pWT09sdjlsZmV2bkZMTzVKbkY0SXJ1RDU4WFdLcUxOTER3aWNzY0J3YTBrektFUTdEREEvZFY2UWJlT0dTRU9pMlJ6OFEzY1oyZFpEL1BKdkVTMnRyOVdFdEhrVEZjSDRRY0tMWHB0cVBYN2hnUTFvc0ZoUWJKSTdTanJtWTg4aWRrY0pOSW1HMk1mVVM2UWZvNGVuczU0OVBLdXhJNFdLRmkrWXh5d3FVY0xrRkxoczhJa0E5SFIxblY0OVN5MU85VWloazdrS2RSQUZVY0xJMTU4bnYrTWZXb3VxMzAvL2JxOVFWQU9teG56RVJvQzZST1hPZjIzUGZlc0F2OVFkdUN2OGV2R3ZTdzFUVWRoSVV2IiwibWFjIjoiMTMyZmJlMjRmZmRlOWVjNGZkZjFjMjZjNDM0Y2Q1MWM4NGQ5NTBjZWYwMDU0ODdiOTVjY2Y1MDA0YWIxZjcxNiIsInRhZyI6IiJ9",
+    "Referer": "https://salesgodcrm.net/auth/login",
+    "Referrer-Policy": "strict-origin-when-cross-origin"
+  },
+  "body": "{\"email\":\"jacobwalkersolutions@gmail.com\",\"password\":\"Godsgotthis#1\"}",
+  "method": "POST"
+});
+
+
+
+await fetch("wss://salesgodcrm.net:3000/socket.io/?EIO=4&transport=websocket", {
+    "credentials": "include",
+    "headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0",
+        "Accept": "*/*",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Sec-WebSocket-Version": "13",
+        "Sec-WebSocket-Extensions": "permessage-deflate",
+        "Sec-WebSocket-Key": "bYv7UwwHZL2W3qeQNhLv0A==",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "websocket",
+        "Sec-Fetch-Site": "same-site",
+        "Pragma": "no-cache",
+        "Cache-Control": "no-cache"
+    },
+    "method": "GET",
+    "mode": "cors"
+});
+
+
+
+fetch("https://salesgodcrm.net/api/message/sendChatMessage/1562376", {
+  "headers": {
+    "accept": "application/json",
+    "accept-language": "en-US,en;q=0.9",
+    "access-control-allow-credentials": "True",
+    "content-type": "multipart/form-data; boundary=----WebKitFormBoundary5tP17iMLlRg9W5qF",
+    "sec-ch-ua": "\"Google Chrome\";v=\"119\", \"Chromium\";v=\"119\", \"Not?A_Brand\";v=\"24\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "withcredentials": "true",
+    "x-requested-with": "XMLHttpRequest",
+    "x-xsrf-token": "eyJpdiI6InAzYUR0aCttTlFZUGNLS0N3QTIyeXc9PSIsInZhbHVlIjoiWE5rTTE4VFJjSWw4YWNZdHAzUG1sRE0zcmZnckdnTUNKd0JoMWREMnhzblZOTFVadFlKNmlMa0QweHRCV0J0b0Z6SUMxc3d1SENiT3hZOWMvakZ4QWkzaWh5Z0o1YWN2YitMSG83U3BkcU9YeEJGM2pKQ3VjUGdvZUNmWlVLWmwiLCJtYWMiOiIxNWM5ZTQwYzFmY2I2YTg5MjAwMzYzZjk5ZjgwZTM4YjgyMDA3YWM2NWVmYzQxZGQ4ZmY5ZGFjOWVkODBmMTdkIiwidGFnIjoiIn0=",
+    "cookie": "PAPVisitorId=wED6zFURsbWgmvWpGkyM2Y9CcUtfoaoU; XSRF-TOKEN=eyJpdiI6InAzYUR0aCttTlFZUGNLS0N3QTIyeXc9PSIsInZhbHVlIjoiWE5rTTE4VFJjSWw4YWNZdHAzUG1sRE0zcmZnckdnTUNKd0JoMWREMnhzblZOTFVadFlKNmlMa0QweHRCV0J0b0Z6SUMxc3d1SENiT3hZOWMvakZ4QWkzaWh5Z0o1YWN2YitMSG83U3BkcU9YeEJGM2pKQ3VjUGdvZUNmWlVLWmwiLCJtYWMiOiIxNWM5ZTQwYzFmY2I2YTg5MjAwMzYzZjk5ZjgwZTM4YjgyMDA3YWM2NWVmYzQxZGQ4ZmY5ZGFjOWVkODBmMTdkIiwidGFnIjoiIn0%3D; salesgod_crm_session=eyJpdiI6IlRtYi9VaUJHbExIM2wwZUZLWTZ6TkE9PSIsInZhbHVlIjoiWCtibFdldnZOaitXNkYvSHRRVFh1RDUvaHBBaGJ1cWkyTVdGWElhYmdCUE9qVWZLMDhhVHBnUmNnRkVxOVhmRTBjMXYzSEV6KzdNc3VueVd0OFM0M0MwZEtVT1QyS2N0WGVLOWxVMTFzaHVhdmF0bEI1ZXFWMG5pZHVPclMrS2EiLCJtYWMiOiJmMzNlNmEwMjI0ODAyOWRjZmRmMjMwZTExNDc5NjI4MzM0NGQ0YmQyNjI4MjdlOWRlZWUyZDNjOWJhZTkwZGFkIiwidGFnIjoiIn0%3D; 30a5iEF81WYdx9tIFX17zGPzIzKPCGVqRN0Ov31J=eyJpdiI6IjhGT0VqWmNSY0E4Q2ZSSzRMNTR5K1E9PSIsInZhbHVlIjoiYk50NWVyY2hQWlBpTnBGVGl3Sy9vQnlQRjZpRWFLbEE2WWZZVFZwMCt5VzdxdWhBVHZCQ1E0YzAydUNIWml3a2VnT1VMcFJXUTdYM3hRaGtnSkhTTkdoV0w2L2dhRUFHMDRSVWdNM2R4UlFRUXZxNW1ocW5MTFhXUkRYUXJUSW1ZNERtNUE4ZVpqZlgvd3VYa0FGeU94TFFXUzRlYWJjY0xwRHhNY1RyMjdxSlA2WWV3YVVpVVQyQkE3S3hYdEh2VmNuMzJEb1BDSExHRjBDTlZDMmFvVGQ2WUVWMnZPNk53VUpiMUMwS2YyakpKNDJYaU9tRXZjajJpcmgzOEVFSkM4RVNLSkhjMnhkREhjWW9lbTRCM0N6cXhoWWhXOWVhNDhULzR1MlhCUjl1WFFBN3kySVMyTjBVQVVDMTJjaUhMTFpWQUZIbmJPK0xUVmNrSGdUMVFUcHRnOGNJN1pFZHNSVkFleTRBQldCZjk2a0JIN0k1Lzk2cUpyc0dMQW04QmV6RGk1cHZoNEREMW5OK3dCVVFITXhCNDBIdVZEYko1UTU5S0JQdnlZL1R4RE5aalBUbmxaRWJPelhDOTl3TXNNVUQrL2JHN0k0alprYTV3S2xCRUE9PSIsIm1hYyI6Ijc3ZTc2ZWZlMzdhMTgzZTA1Nzc4MzBmMDkyNDc1MDE0N2QyNWYwNGFkNjgxYTIyYTllMTM5ZmMxNWVmNGQyYzgiLCJ0YWciOiIifQ%3D%3D",
+    "Referer": "https://salesgodcrm.net/messenger",
+    "Referrer-Policy": "strict-origin-when-cross-origin"
+  },
+  "body": "------WebKitFormBoundary5tP17iMLlRg9W5qF\r\nContent-Disposition: form-data; name=\"text\"\r\n\r\nTEST\r\n\r\n------WebKitFormBoundary5tP17iMLlRg9W5qF\r\nContent-Disposition: form-data; name=\"from\"\r\n\r\nlast_used\r\n------WebKitFormBoundary5tP17iMLlRg9W5qF--\r\n",
+  "method": "POST"
+});
