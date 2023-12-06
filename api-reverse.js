@@ -1,6 +1,5 @@
 const WebSocket = require('ws')
 const FormData = require('form-data')
-const { response } = require('express')
 const axios = require('axios').create({
     withCredentials: true,
     baseURL: 'https://salesgodcrm.net/api/'
@@ -18,11 +17,8 @@ const salesGodCRM = {
 
             await axios.post('auth/login', {"email": email,"password": password}, {
                 headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
                     ...cookies,
-                    "Referer": "https://salesgodcrm.net/auth/login",
-                    "Referrer-Policy": "strict-origin-when-cross-origin"
+                    "referer": "https://salesgodcrm.net/auth/login",
                   } 
             })
             .then(response => {
@@ -30,7 +26,7 @@ const salesGodCRM = {
             })
         } catch (error) {
             if (error.response && error.response.data) {
-                throw new Error(`Error during login process: ${JSON.stringify(error.response.data)}`)
+                throw new Error(`Error during login process: ${JSON.stringify(error.response.data.message)}`)
             } else {
                 throw new Error(`Error during login process: ${error}`)
             }
@@ -92,27 +88,39 @@ const salesGodCRM = {
             })
         } catch (error) {
             if (error.response && error.response.data) {
-                throw new Error(`Error fetching Phone Numbers: ${JSON.stringify(error.response.data)}`)
+                throw new Error(`Error Fetching Phone Numbers: ${JSON.stringify(error.response.data)}`)
             } else {
-                throw new Error(`Error fetching Phone Numbers: ${error}`)
+                throw new Error(`Error Fetching Phone Numbers: ${error}`)
             } 
         }
     },
-    fetchContacts: async () => {
-        //ADD FILTER
+    fetchContacts: async (filter) => {
         let contacts = []
-        const response = await axios.get(`/contact/fetchContacts?limit=100&page=1`, {
+
+        let filterQuery
+
+        if (filter) {
+            filterQuery = `&filter=${filter}`
+        } else {
+            filterQuery = ''
+        }
+
+        const response = await axios.get(`/contact/fetchContacts?limit=100&page=1${filterQuery}`, {
             headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
                 ...cookies,
                 "Referer": "https://salesgodcrm.net/contacts",
-                "Referrer-Policy": "strict-origin-when-cross-origin"
               } 
         })
         .then(response => {
             updateSession(response)
             return response.data
+        })
+        .catch(error => {
+            if (error.response && error.response.data) {
+                throw new Error(`Error Fetching Contacts: ${JSON.stringify(error.response.data.message)}`)
+            } else {
+                throw new Error(`Error Fetching Contacts: ${error}`)
+            }
         })
 
         contacts = [...contacts, ... response.tableData.data]
@@ -120,18 +128,22 @@ const salesGodCRM = {
         if (response.tableData.last_page > 1) {
             for (i = 2; i <= response.tableData.last_page; i++) {
                 console.log(i)
-                const response = await axios.get(`/contact/fetchContacts?limit=100&page=${i}`, {
+                const response = await axios.get(`/contact/fetchContacts?limit=100&page=${i}${filterQuery}`, {
                     headers: {
-                        "Accept": "application/json",
-                        "Content-Type": "application/json",
                         ...cookies,
                         "Referer": "https://salesgodcrm.net/contacts",
-                        "Referrer-Policy": "strict-origin-when-cross-origin"
                       } 
                 })
                 .then(response => {
                     updateSession(response)
                     return response.data
+                })
+                .catch(error => {
+                    if (error.response && error.response.data) {
+                        throw new Error(`Error Fetching Contacts: ${JSON.stringify(error.response.data.message)}`)
+                    } else {
+                        throw new Error(`Error Fetching Contacts: ${error}`)
+                    }
                 })
 
                 contacts = [...contacts, ... response.tableData.data]
@@ -140,20 +152,77 @@ const salesGodCRM = {
 
         return contacts
     },
-    addContact: async () => {
+    addContact: async (contactData) => {
         const formData = new FormData()
 
-        formData.append('first_name', '8176737349');
-        formData.append('phone', '8176737349');
-        formData.append('type', 'personal');
-        formData.append('del_image', '0');
+        const fields = [
+            'first_name', 'last_name', 'phone', 'email', 'type', 
+            'country', 'state', 'city', 'address', 'postal_code'
+        ]
+    
+        fields.forEach(field => {
+            if (contactData.hasOwnProperty(field)) {
+                formData.append(field, contactData[field])
+            } else if (field === 'type') {
+                formData.append(field, 'personal')
+            }
+        })
 
-        await axios.post('/contact/addContact')
+        formData.append('del_image', '0')
+
+        await axios.post('/contact/addContact', formData, {
+            headers: {
+                ...formData.getHeaders(),
+                ...cookies,
+                "Referer": "https://salesgodcrm.net/contact",
+              }
+        })
         .then(response => {
             updateSession(response)
         })
+        .catch(error => {
+            if (error.response && error.response.data) {
+                throw new Error(`Error Adding Contact: ${JSON.stringify(error.response.data.message)}`)
+            } else {
+                throw new Error(`Error Adding Contact: ${error}`)
+            }
+        })
+    }, sendChatMessage: async (contactID, text) => {
+        const formData = new FormData()
+
+        formData.append('text', text)
+        formData.append('from', 'last_used')
+
+        await axios.post(`/message/sendChatMessage/${contactID}`, formData, {
+            headers: {
+                "Accept": "application/json",
+                ...formData.getHeaders(),
+                ...cookies,
+                "Referer": "https://salesgodcrm.net/contacts",
+                "Referrer-Policy": "strict-origin-when-cross-origin"
+              }
+        })
+        .then(response => updateSession(response))
+        .catch(error => {
+            if (error.response && error.response.data) {
+                throw new Error(`Error Sending Message: ${JSON.stringify(error.response.data.message)}`)
+            } else {
+                throw new Error(`Error Sending Message: ${error}`)
+            }
+        })
     }
+
 }
+
+
+
+
+
+
+
+
+
+
 
 function updateSession(response) {
     let XRSF_TOKEN, SESSION, COOKIE
@@ -173,26 +242,59 @@ function updateSession(response) {
         cookies['Cookie'] = (XRSF_TOKEN + SESSION + COOKIE)
 }
 
+
+
+
+
+
+
+
+
+
+
 (async function () {
-    try {
-        console.log('Before Login')
+    await salesGodCRM.login("jacobwalkersolutions@gmail.com", "Godsgotthis#1")
+    .then(() => console.log("Logged Into SalesGodCRM Successfully"))
+
         
-        await salesGodCRM.login("jacobwalkersolutions@gmail.com", "Godsgotthis#1")
 
-        console.log("Logged Into SalesGodCRM Successfully")
+    // await salesGodCRM.addContact({
+    //     first_name: 'Caden',
+    //     phone: '8176737349'
+    // })
+    // .then(() => {
+    //     console.log("added contact successfully")
+    // })
+    // .catch(error => {
+    //     console.log(error)
+    // })
 
-        const contacts = await salesGodCRM.fetchContacts()
+    // const contacts = await salesGodCRM.fetchContacts(8176737349)
+    // .catch(error => {
+    //     console.log(error)
+    // })
 
-        console.log(contacts.length)
+    // console.log(contacts.length)
 
-        // salesGodCRM.onText((text) => {
-            
-        // })
-    
-        // const phoneNumbers = await salesGodCRM.fetchPhoneNumbers()
+    await salesGodCRM.sendChatMessage(2014247, "Work Now")
 
-        // console.log(phoneNumbers)
-    } catch (error) {
-        console.error(error)
-    }
+    // salesGodCRM.onText((text) => {
+        
+    // })
+
+    // const phoneNumbers = await salesGodCRM.fetchPhoneNumbers()
+    // console.log(phoneNumbers)
 })()
+
+
+
+
+
+
+
+
+
+
+
+
+

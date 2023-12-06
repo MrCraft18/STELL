@@ -248,3 +248,30 @@ fetch("https://salesgodcrm.net/api/message/sendChatMessage/1562376", {
   "body": "------WebKitFormBoundary5tP17iMLlRg9W5qF\r\nContent-Disposition: form-data; name=\"text\"\r\n\r\nTEST\r\n\r\n------WebKitFormBoundary5tP17iMLlRg9W5qF\r\nContent-Disposition: form-data; name=\"from\"\r\n\r\nlast_used\r\n------WebKitFormBoundary5tP17iMLlRg9W5qF--\r\n",
   "method": "POST"
 });
+
+
+
+
+fetch("https://salesgodcrm.net/api/contact/addContact", {
+  "headers": {
+    "accept": "application/json",
+    "accept-language": "en-US,en;q=0.9",
+    "access-control-allow-credentials": "True",
+    "content-type": "multipart/form-data; boundary=----WebKitFormBoundaryrmeQYZupBOs5Lh86",
+    "sec-ch-ua": "\"Google Chrome\";v=\"119\", \"Chromium\";v=\"119\", \"Not?A_Brand\";v=\"24\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "withcredentials": "true",
+    "x-requested-with": "XMLHttpRequest",
+    "x-xsrf-token": "eyJpdiI6IkEvZFF5QVNJTGNpazBKbjhCWng0eGc9PSIsInZhbHVlIjoiZHhVSVVwTTBDTjkydVd6eG9acTU2eVRBUkFSdFJ3SGJzOFc2VTZJMUE2R005TDRtUlQxL2RTSkl5ZFdMb3JrVzlaOGV0QmpZOGRTbHc3b0tDNW1XMEtrV2VSamdMSmpqOEllRkxJRit0S0w1OTJMbWFaSWI2R1NoVnJleTlZc1ciLCJtYWMiOiIxMzViOTVjNjE1NWJhYzJmZGZiNGZhNDkwZWVlZWU5YTVmMjYzYzk4NmM3NDdlYTRiOTZiYTlmNWY1NjhmZGIxIiwidGFnIjoiIn0="
+  },
+  "referrer": "https://salesgodcrm.net/contacts",
+  "referrerPolicy": "strict-origin-when-cross-origin",
+  "body": "------WebKitFormBoundaryrmeQYZupBOs5Lh86\r\nContent-Disposition: form-data; name=\"first_name\"\r\n\r\nCaden\r\n------WebKitFormBoundaryrmeQYZupBOs5Lh86\r\nContent-Disposition: form-data; name=\"phone\"\r\n\r\n8176737349\r\n------WebKitFormBoundaryrmeQYZupBOs5Lh86\r\nContent-Disposition: form-data; name=\"type\"\r\n\r\npersonal\r\n------WebKitFormBoundaryrmeQYZupBOs5Lh86\r\nContent-Disposition: form-data; name=\"del_image\"\r\n\r\n0\r\n------WebKitFormBoundaryrmeQYZupBOs5Lh86--\r\n",
+  "method": "POST",
+  "mode": "cors",
+  "credentials": "include"
+});
