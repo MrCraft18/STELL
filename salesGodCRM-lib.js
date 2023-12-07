@@ -40,8 +40,6 @@ const salesGodCRM = {
         })
 
         ws.on('open', ()  => {
-            console.log('connected ws')
-
             ws.send(40)
         })
 
@@ -55,13 +53,9 @@ const salesGodCRM = {
             } else if (message.startsWith(42)) {
                 const arr = JSON.parse(message.substring(2))
 
-                console.log(arr[0])
-
                 if (arr[0] === 'message_received:user_25_message') {
-                    console.log(arr[1].content)
+                    callback(arr[1].content)
                 }
-            } else {
-                console.log(message)
             }
         })
     },
@@ -210,17 +204,74 @@ const salesGodCRM = {
                 throw new Error(`Error Sending Message: ${error}`)
             }
         })
+    },
+    getContactsForMessaging: async () => {
+        return await axios.post('/contact/getContactsForMessaging', {"unread_count":0,"recent_count":0,"all_count":0,"offset":0,"type":"load"}, {
+            headers: {
+                "Accept": "application/json",
+                ...cookies,
+                "Referer": "https://salesgodcrm.net/messenger",
+                "Referrer-Policy": "strict-origin-when-cross-origin"
+              }
+        })
+        .then(response => {
+            updateSession(response)
+
+            return response.data
+        })
+        .catch(error => {
+            if (error.response && error.response.data) {
+                throw new Error(`Error Getting Contacts for Messaging: ${JSON.stringify(error.response.data.message)}`)
+            } else {
+                throw new Error(`Error Getting Contacts for Messaging: ${error}`)
+            }
+        })
+    },
+    fetchContactMessages: async (contactID) => {
+        return await axios.post(`message/fetchChatMessages/${contactID}`, {offset: 0}, {
+            headers: {
+                "Accept": "application/json",
+                ...cookies,
+                "Referer": "https://salesgodcrm.net/messenger",
+                "Referrer-Policy": "strict-origin-when-cross-origin"
+              }
+        })
+        .then(response => {
+            updateSession(response)
+
+            return response.data
+        })
+        .catch(error => {
+            if (error.response && error.response.data) {
+                throw new Error(`Error Fetching Contact Messages: ${JSON.stringify(error.response.data.message)}`)
+            } else {
+                throw new Error(`Error Fetching Contact Messages: ${error}`)
+            }
+        })
+    },
+    markBulkChatMessageRead: async (contactIDs) => {
+        axios.post('/message/markBulkChatMessageRead', {ids: contactIDs}, {
+            headers: {
+                "Accept": "application/json",
+                ...cookies,
+                "Referer": "https://salesgodcrm.net/messenger",
+                "Referrer-Policy": "strict-origin-when-cross-origin"
+              }
+        })
+        .then(response => {
+            updateSession(response)
+
+            return response.data
+        })
+        .catch(error => {
+            if (error.response && error.response.data) {
+                throw new Error(`Error Marking Chat Messages as Read: ${JSON.stringify(error.response.data.message)}`)
+            } else {
+                throw new Error(`Error Marking Chat Messages as Read: ${error}`)
+            }
+        })
     }
-
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -246,45 +297,56 @@ function updateSession(response) {
 
 
 
+module.exports = salesGodCRM
 
 
 
 
 
-
-(async function () {
-    await salesGodCRM.login("jacobwalkersolutions@gmail.com", "Godsgotthis#1")
-    .then(() => console.log("Logged Into SalesGodCRM Successfully"))
+// (async function () {
+//     await salesGodCRM.login("jacobwalkersolutions@gmail.com", "Godsgotthis#1")
+//     .then(() => console.log("Logged Into SalesGodCRM Successfully"))
 
         
 
-    // await salesGodCRM.addContact({
-    //     first_name: 'Caden',
-    //     phone: '8176737349'
-    // })
-    // .then(() => {
-    //     console.log("added contact successfully")
-    // })
-    // .catch(error => {
-    //     console.log(error)
-    // })
+//     // await salesGodCRM.addContact({
+//     //     first_name: 'Caden',
+//     //     phone: '8176737349'
+//     // })
+//     // .then(() => {
+//     //     console.log("added contact successfully")
+//     // })
+//     // .catch(error => {
+//     //     console.log(error)
+//     // })
 
-    // const contacts = await salesGodCRM.fetchContacts(8176737349)
-    // .catch(error => {
-    //     console.log(error)
-    // })
+//     // const contacts = await salesGodCRM.fetchContacts(8176737349)
+//     // .catch(error => {
+//     //     console.log(error)
+//     // })
 
-    // console.log(contacts.length)
+//     // console.log(contacts.length)
 
-    await salesGodCRM.sendChatMessage(2014247, "Work Now")
+//     //await salesGodCRM.sendChatMessage(2014247, "Yellow")
 
-    // salesGodCRM.onText((text) => {
-        
-    // })
+//     // const messagingContacts = await salesGodCRM.getContactsForMessaging()
 
-    // const phoneNumbers = await salesGodCRM.fetchPhoneNumbers()
-    // console.log(phoneNumbers)
-})()
+//     // console.log(messagingContacts.unread_contacts)
+
+//     const contactMessages = await salesGodCRM.fetchContactMessages(2016278)
+
+//     console.log(contactMessages.items)
+//     // console.log(contactMessages.items[0].text)
+//     // console.log(contactMessages.items[contactMessages.items.length-1].text)
+
+//     // salesGodCRM.onText((data) => {
+//     //     console.log(data.text)
+//     //     console.log(data.contact.phone)
+//     // })
+
+//     // const phoneNumbers = await salesGodCRM.fetchPhoneNumbers()
+//     // console.log(phoneNumbers)
+// })()
 
 
 

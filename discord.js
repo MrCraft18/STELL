@@ -24,7 +24,7 @@ const TOKEN = "MTA5NTUwMDk0OTU0NTU1MzkyMA.GRBm3S.WJo5XNDF2JzpvVPtphXmvEY-PPQu6LZ
 //Initiate Express
 const app = express()
 app.use(express.json())
-app.listen(6101)
+app.listen(6100)
 
 
 
@@ -683,7 +683,7 @@ async function getChannelObj(record) {
 const smsBackupStream = fs.createWriteStream('./STELL-sms-backups.txt', { flags: 'a' })
 function sendSMS(message, number) {
     return new Promise((resolve, reject) => {
-        axios.post('http://localhost:6100/send', { message, number })
+        axios.post('http://localhost:6101/send', { message, number })
         .then(response => {
             if (!response.data.ok) {
                 console.log('Recieved Error Response from SMS API')
