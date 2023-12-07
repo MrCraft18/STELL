@@ -320,12 +320,12 @@ module.exports = salesGodCRM
 //     //     console.log(error)
 //     // })
 
-//     // const contacts = await salesGodCRM.fetchContacts(8176737349)
-//     // .catch(error => {
-//     //     console.log(error)
-//     // })
+//     const contacts = await salesGodCRM.fetchContacts(8176737349)
+//     .catch(error => {
+//         console.log(error)
+//     })
 
-//     // console.log(contacts.length)
+//     console.log(contacts)
 
 //     //await salesGodCRM.sendChatMessage(2014247, "Yellow")
 
@@ -333,9 +333,9 @@ module.exports = salesGodCRM
 
 //     // console.log(messagingContacts.unread_contacts)
 
-//     const contactMessages = await salesGodCRM.fetchContactMessages(2016278)
+//     // const contactMessages = await salesGodCRM.fetchContactMessages(2016278)
 
-//     console.log(contactMessages.items)
+//     // console.log(contactMessages.items)
 //     // console.log(contactMessages.items[0].text)
 //     // console.log(contactMessages.items[contactMessages.items.length-1].text)
 
