@@ -3,7 +3,7 @@ express = require('express')
 
 app = express()
 app.use(express.json())
-port = process.env.PORT || 6100
+port = process.env.PORT || 6101
 
 
 //OUTBOUND FUNCTIONALITY
