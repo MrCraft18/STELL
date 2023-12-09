@@ -4,7 +4,6 @@ const express = require('express')
 const axios = require('axios')
 const mongodb = require('./mongodb-lib')
 const gpt = require('./gpt-lib.js')
-const { channel } = require("diagnostics_channel")
 
 
 
@@ -502,59 +501,6 @@ app.post('/msg', async (req, res) => {
 
 
 
-// //Handle Incoming Communications from REIreply App
-// app.post('/', async (req, res) => {
-//     const message = (req.body.message)
-//     switch (message) {
-//         case "Need OTP Code":
-//             console.log("Recieved OTP Code request from REIreply App")
-
-//             if (req.body.wrong) {
-//                 devChannel.send("That code was incorrect! I need the correct OTP code.")
-//             } else {
-//                 devChannel.send("I need an OTP I sent to the email for REIreply!")
-//             }
-
-//             while (true) {
-//                 const filter = m => m.author.id !== discordClient.user.id;
-//                 const collected = await devChannel.awaitMessages({ max: 1, filter });
-//                 const code = collected.first().content;
-
-//                 if (Number.isInteger(Number(code)) && code.length === 6) {
-//                     res.send(code)
-
-//                     console.log(`Sent OTP Code "${code} to REIreply App"`)
-//                     devChannel.send('Ok! Working on it...')
-//                     break
-//                 } else {
-//                     devChannel.send("That code is Invalid. The code must be a 6 digit number.")
-//                 }
-//             }
-//             break
-        
-//         case "Logged In":
-//             console.log(`Recieved "Logged In" confirmaion from REIreply App`)
-
-//             devChannel.send("I've successfully logged into REIreply!")
-
-//             res.send('gud')
-//             break
-        
-//         case "Change Number":
-//             console.log('Recieved "Change Number" message from REIreply App')
-
-//             devChannel.send("It's time to change the Phone Number! <@137772697986793472>")
-
-//             res.send('gud')
-//             break
-//     }
-// })
-
-
-//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-
-
-
 //FUNCTIONS
 function requestTextFile(url) {
     return axios.get(url)
@@ -563,7 +509,7 @@ function requestTextFile(url) {
         })
         .catch(err => {
             throw err;
-        });
+        })
 }
 
 
