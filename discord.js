@@ -4,11 +4,7 @@ const express = require('express')
 const axios = require('axios')
 const mongodb = require('./mongodb-lib')
 const gpt = require('./gpt-lib.js')
-const { resolve } = require("path")
 const { channel } = require("diagnostics_channel")
-const { send } = require("process");
-const { json } = require("express/lib/response");
-
 
 
 
@@ -24,7 +20,6 @@ const TOKEN = "MTA5NTUwMDk0OTU0NTU1MzkyMA.GRBm3S.WJo5XNDF2JzpvVPtphXmvEY-PPQu6LZ
 //Initiate Express
 const app = express()
 app.use(express.json())
-app.listen(6100)
 
 
 
@@ -76,7 +71,11 @@ discordClient.login(TOKEN)
 
 
 discordClient.on('ready', async () => {
+    await mongodb.connectDatabase()
+
     console.log(`${discordClient.user.tag} has logged in and is ready.`)
+
+    app.listen(6100)
 
     //Create Guild Object
     guild = discordClient.guilds.cache.get(guildID)
@@ -116,7 +115,6 @@ discordClient.on('ready', async () => {
 //Functionality Handler
 discordClient.on('messageCreate', async (message) => {
   if (message.channel.id === uploadID && message.attachments.size > 0) {
-    await mongodb.connectDatabase()
     uploadChannel.send(`Got it! Uploading Records...`)
 
     const promiseArray = []
@@ -142,12 +140,10 @@ discordClient.on('messageCreate', async (message) => {
       )
     })
     await Promise.all(promiseArray)
-    await mongodb.closeDatabase()
 
 
 
   } else if (message.channel.id === textID && message.author.username !== 'STELL - Chan') {
-    await mongodb.connectDatabase()
     textChannel.send(`Okay! Sending texts...`)
 
     const unsentRecords = await mongodb.getUnsentRecords()
@@ -188,13 +184,10 @@ discordClient.on('messageCreate', async (message) => {
         }
       }
     }
-    await mongodb.closeDatabase()
 
 
 
   } else if (message.channel.parent && !message.author.bot && message.content.charAt(0) !== '!') {
-    await mongodb.connectDatabase()
-
     const phoneNumber = message.channel.topic
 
     const record = await mongodb.getConversation(phoneNumber)
@@ -208,9 +201,7 @@ discordClient.on('messageCreate', async (message) => {
     try {
         await sendSMS(message.content, record.phoneNumber)
 
-        await mongodb.updateConversation(record)
-    
-        await mongodb.closeDatabase()
+        await mongodb.updateConversation(record)    
     } catch (err) {
         message.channel.send('This message did not send!\nPlease let Master know!!!')
     }
@@ -232,9 +223,13 @@ discordClient.on('messageCreate', async (message) => {
 
             case '!masterConversation':
                 try {
-                    await mongodb.connectDatabase()
-
                     await mongodb.deleteConversation({ phoneNumber: '8176737349' })
+
+                    const oldChannel = guild.channels.cache.find(channel => channel.topic === '8176737349')
+
+                    if (oldChannel) {
+                        await oldChannel.delete().then(() => console.log("Deleted Old Master Channel"))
+                    }
 
                     const content = 'Hello There, I am Jacob in Fort Worth. Is this still Caden?'
     
@@ -258,8 +253,6 @@ discordClient.on('messageCreate', async (message) => {
                 } catch (err) {
                     console.log(err)
                     message.channel.send('I had an issue sending a conversation to you Master :(')
-                } finally {
-                    mongodb.closeDatabase()
                 }
                 break
 
@@ -274,8 +267,6 @@ discordClient.on('messageCreate', async (message) => {
         switch (message.content) {
             case '!override':
                 try {
-                    await mongodb.connectDatabase()
-
                     const phoneNumber = message.channel.topic
 
                     const record = await mongodb.getConversation(phoneNumber)
@@ -290,8 +281,6 @@ discordClient.on('messageCreate', async (message) => {
                 } catch (err) {
                     console.log(err)
                     message.channel.send('Error overriding conversation!!!')
-                } finally {
-                    await mongodb.closeDatabase()
                 }
         }
     }
@@ -311,8 +300,6 @@ app.post('/msg', async (req, res) => {
     console.log(`Recieved new text from: ${req.body.number} Content: ${req.body.message}`)
 
     try {
-        await mongodb.connectDatabase()
-        
         let record = await mongodb.getConversation(from)
         
         if (record === undefined) {
@@ -459,8 +446,6 @@ app.post('/msg', async (req, res) => {
                 sendSMS("Ok thanks for the info. While I run my numbers do you have an ideal price you'd want for the property?", record.phoneNumber)
 
                 record.conversationLabel = "awaitingLeadConfirmation"
-
-                //channel.setParent(leadsCategory).then(() => {console.log(`Moved ${record.phoneNumber} to leads category`)})
             } else {
                 const stellText = await gpt.generateConversation(record)
     
@@ -495,8 +480,6 @@ app.post('/msg', async (req, res) => {
         }
         
         await mongodb.updateConversation(record)
-
-        await mongodb.closeDatabase()
 
 
         res.send({
