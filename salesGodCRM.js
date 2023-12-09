@@ -34,7 +34,7 @@ async function forwardSMS(SMS) {
 
 salesGodCRM.onText(async data => {
     await forwardSMS({message: data.text, number: data.contact.phone.substring(2)})
-    .then(() => salesGodCRM.markBulkChatMessageRead([contact.id]))
+    .then(() => salesGodCRM.markBulkChatMessageRead([data.contact.id]))
     .catch(() => {})
 })
 
