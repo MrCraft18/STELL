@@ -1,27 +1,41 @@
 const MongoClient = require('mongodb').MongoClient;
+const fs = require('fs')
 
 
 
-const url = process.env.MONGO_URL || 'mongodb://mongo:glWrr3hBYKaKCdfemdab@containers-us-west-100.railway.app:7091'
-const client = new MongoClient(url);
+// const url = process.env.MONGO_URL || 'mongodb://mongo:glWrr3hBYKaKCdfemdab@containers-us-west-100.railway.app:7091'
+// const client = new MongoClient(url);
+
+const UNSENT_RECORDS_PATH = './database/unsentRecords'
+const CONVERATIONS_PATH = './database/converations'
+
+fs.mkdirSync('./database')
+fs.mkdirSync(UNSENT_RECORDS_PATH)
+fs.mkdirSync(CONVERATIONS_PATH)
 
 
 
-const connectDatabase = async () => {
-    await client.connect()
-}
 
-const closeDatabase = async () => {
-    await client.close()
-}
+// const connectDatabase = async () => {
+//     await client.connect()
+// }
+
+// const closeDatabase = async () => {
+//     await client.close()
+// }
 
 
 
 const addNewRecords = async (records) => {
-    const dataBase = client.db('Main')
-    const collection = dataBase.collection('unsentRecords')
+    // const dataBase = client.db('Main')
+    // const collection = dataBase.collection('unsentRecords')
 
-    await collection.insertMany(records)
+    // await collection.insertMany(records)
+
+    records.forEach(record => {
+        fs.writeFileSync(`${UNSENT_RECORDS_PATH}/${record.phoneNumber}`, JSON.stringify(record, null, 4))
+    })
+
     console.log("Added New Records")
 }
 
