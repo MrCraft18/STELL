@@ -40,7 +40,7 @@ salesGodCRM.onText(async data => {
 
 const messagingContacts = await salesGodCRM.getContactsForMessaging()
 
-messagingContacts.unread_contacts.forEach(async contact => {
+for (const contact of messagingContacts.unread_contacts) {
     const contactMessages = await salesGodCRM.fetchContactMessages(contact.id)
 
     const unreadMessages = contactMessages.items.slice(0, contact.unread)
@@ -50,7 +50,7 @@ messagingContacts.unread_contacts.forEach(async contact => {
     await forwardSMS({message: combinedUnreadTexts, number: contact.phone.substring(2)})
     .then(() => salesGodCRM.markBulkChatMessageRead([contact.id]))
     .catch(() => {})
-})
+}
 
 
 
