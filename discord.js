@@ -45,7 +45,7 @@ const textID = "1095499160813326336"
 const leadsID = '1095499249157935144'
 const dealsID = '1095499341466177638'
 const deadLeadsID = '1095499363511443556'
-const stellConversationsID ='1095499425100603402'
+const stellConversationsID = '1095499425100603402'
 const stellDroppedConversationsID = '1117204980600942701'
 const overridenConversationsCategoryID = '1118329950794170510'
 
@@ -58,7 +58,7 @@ const avatarURL = 'https://static.vecteezy.com/system/resources/previews/000/355
 
 //INIT
 const discordClient = new Client({
-     intents: [
+    intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.MessageContent
@@ -83,7 +83,7 @@ discordClient.on('ready', async () => {
     devChannel = discordClient.channels.cache.get(devID)
     uploadChannel = discordClient.channels.cache.get(uploadID)
     textChannel = discordClient.channels.cache.get(textID)
-    
+
     //Initialize Category Functions
     leadsCategory = discordClient.channels.cache.get(leadsID)
     dealsCategory = discordClient.channels.cache.get(dealsID)
@@ -113,97 +113,99 @@ discordClient.on('ready', async () => {
 
 //Functionality Handler
 discordClient.on('messageCreate', async (message) => {
-  if (message.channel.id === uploadID && message.attachments.size > 0) {
-    uploadChannel.send(`Got it! Uploading Records...`)
+    if (message.channel.id === uploadID && message.attachments.size > 0) {
+        uploadChannel.send(`Got it! Uploading Records...`)
 
-    const promiseArray = []
-    message.attachments.forEach(attachment => {
-      promiseArray.push(
-        requestTextFile(attachment.url)
-          .then(async csvString => {
-            const parseData = parseCSV(csvString)
+        const promiseArray = []
+        message.attachments.forEach(attachment => {
+            promiseArray.push(
+                requestTextFile(attachment.url)
+                    .then(async csvString => {
+                        const parseData = parseCSV(csvString)
+
+                        try {
+                            await mongodb.addNewRecords(parseData.usableRecords)
+
+                            uploadChannel.send(`Ok! I uploaded ${parseData.usableRecords.length} usable records out of ${parseData.totalRecords} total records.\n\nDon't add this file again or you will send duplicate texts!`)
+                        } catch (err) {
+                            console.log(err)
+                            uploadChannel.send(`Sorry but there was an error uploading the records! Please let Master know!!!`)
+                        }
+                    })
+                    .catch(err => {
+                        console.log(`HTTP Error: ${err.message}`)
+                        uploadChannel.send(`Sorry but there was an error with the HTTP request! Please let Master know!!!`)
+                    })
+            )
+        })
+        await Promise.all(promiseArray)
+
+
+
+    } else if (message.channel.id === textID && message.author.username !== 'STELL - Chan') {
+        textChannel.send(`Okay! Sending texts...`)
+
+        const unsentRecords = await mongodb.getUnsentRecords()
+
+        const sendNumber = parseInt(message.content)
+
+        if (sendNumber > unsentRecords.length) {
+            textChannel.send(`Sorry that number is too big!\n\nThe available number of records you have in the system is: ${unsentRecords.length}`)
+        } else {
+            for (let i = 0; i < sendNumber; i++) {
+
+                let record = unsentRecords[i]
+                const message = getOpeningText(record)
+
+                try {
+                    await sendSMS(message, record.phoneNumber)
+
+                    record.conversationLabel = "noResponse"
+
+                    record.conversation = [{
+                        sender: "STELL",
+                        content: message,
+                        timestamp: timestamp()
+                    }]
+
+                    await mongodb.addNewConversation(record)
+
+                    await mongodb.removeUnsentRecord(record)
+
+                    if (i === sendNumber - 1) {
+                        textChannel.send(`Sent all ${sendNumber} texts!~`)
+                    } else {
+                        //await new Promise(resolve =>setTimeout(resolve, 60000))
+                    }
+                } catch (err) {
+                    textChannel.send('It seems there was an error sending the texts :(\nPlease let master know!!! ')
+                    break
+                }
+            }
+        }
+
+
+
+    } else if (message.channel.parent && !message.author.bot && message.content.charAt(0) !== '!') {
+        const phoneNumber = message.channel.topic
+
+        const record = await mongodb.getConversation(phoneNumber)
+
+        if (record.conversationLabel !== 'DNC') {
+            record.conversation.push({
+                sender: message.author.username,
+                content: message.content,
+                timestamp: timestamp()
+            })
 
             try {
-              await mongodb.addNewRecords(parseData.usableRecords)
+                await sendSMS(message.content, record.phoneNumber)
 
-              uploadChannel.send(`Ok! I uploaded ${parseData.usableRecords.length} usable records out of ${parseData.totalRecords} total records.\n\nDon't add this file again or you will send duplicate texts!`)
+                await mongodb.updateConversation(record)
             } catch (err) {
-              console.log(err)
-              uploadChannel.send(`Sorry but there was an error uploading the records! Please let Master know!!!`)
+                message.channel.send('This message did not send!\nPlease let Master know!!!')
             }
-          })
-          .catch(err => {
-            console.log(`HTTP Error: ${err.message}`)
-            uploadChannel.send(`Sorry but there was an error with the HTTP request! Please let Master know!!!`)
-          })
-      )
-    })
-    await Promise.all(promiseArray)
-
-
-
-  } else if (message.channel.id === textID && message.author.username !== 'STELL - Chan') {
-    textChannel.send(`Okay! Sending texts...`)
-
-    const unsentRecords = await mongodb.getUnsentRecords()
-
-    const sendNumber = parseInt(message.content)
-
-    if (sendNumber > unsentRecords.length) {
-      textChannel.send(`Sorry that number is too big!\n\nThe available number of records you have in the system is: ${unsentRecords.length}`)
-    } else {
-        for (let i = 0; i < sendNumber; i++) {
-
-        let record = unsentRecords[i]
-        const message = getOpeningText(record)
-
-        try {
-            await sendSMS(message, record.phoneNumber)
-
-            record.conversationLabel = "noResponse"
-    
-            record.conversation = [{
-                sender : "STELL",
-                content : message,
-                timestamp : timestamp()
-            }]
-    
-            await mongodb.addNewConversation(record)
-          
-            await mongodb.removeUnsentRecord(record)
-    
-            if (i === sendNumber - 1) {
-                textChannel.send(`Sent all ${sendNumber} texts!~`)
-            } else {
-                //await new Promise(resolve =>setTimeout(resolve, 60000))
-            }
-        } catch (err) {
-            textChannel.send('It seems there was an error sending the texts :(\nPlease let master know!!! ')
-            break
         }
-      }
-    }
-
-
-
-  } else if (message.channel.parent && !message.author.bot && message.content.charAt(0) !== '!') {
-    const phoneNumber = message.channel.topic
-
-    const record = await mongodb.getConversation(phoneNumber)
-
-    record.conversation.push({
-      sender: message.author.username,
-      content: message.content,
-      timestamp: timestamp()
-    })
-
-    try {
-        await sendSMS(message.content, record.phoneNumber)
-
-        await mongodb.updateConversation(record)    
-    } catch (err) {
-        message.channel.send('This message did not send!\nPlease let Master know!!!')
-    }
 
 
 
@@ -231,9 +233,9 @@ discordClient.on('messageCreate', async (message) => {
                     }
 
                     const content = 'Hello There, I am Jacob in Fort Worth. Is this still Caden?'
-    
+
                     await sendSMS(content, "8176737349")
-    
+
                     await mongodb.addNewConversation({
                         address: "1304 Shalimar Dr, Fort Worth, TX 76134",
                         name: "Caden Edwards",
@@ -242,12 +244,12 @@ discordClient.on('messageCreate', async (message) => {
                         phoneNumber: "8176737349",
                         conversationLabel: 'noResponse',
                         conversation: [{
-                            sender : "STELL",
+                            sender: "STELL",
                             content,
-                            timestamp : timestamp()
+                            timestamp: timestamp()
                         }]
-                      })
-                    
+                    })
+
                     message.channel.send('Sent a test Conversation to Master!')
                 } catch (err) {
                     console.log(err)
@@ -256,7 +258,7 @@ discordClient.on('messageCreate', async (message) => {
                 break
 
             case '!crash':
-                message.channel.send(`Fine then I'll kill myself ;-;`).then(() => {throw new Error('Crashing the script intentionally.')})
+                message.channel.send(`Fine then I'll kill myself ;-;`).then(() => { throw new Error('Crashing the script intentionally.') })
                 break
         }
 
@@ -274,7 +276,7 @@ discordClient.on('messageCreate', async (message) => {
 
                     await mongodb.updateConversation(record)
 
-                    message.channel.setParent(overridenConversationsCategory).then(() => {console.log(`Moved ${phoneNumber} to overriden category`)})
+                    message.channel.setParent(overridenConversationsCategory).then(() => { console.log(`Moved ${phoneNumber} to overriden category`) })
 
                     message.channel.send('Conversation Overriden!')
                 } catch (err) {
@@ -300,7 +302,7 @@ app.post('/msg', async (req, res) => {
 
     try {
         let record = await mongodb.getConversation(from)
-        
+
         if (record === undefined) {
             console.log('THIS IS AN UNKNOWN NUMBER')
 
@@ -312,19 +314,19 @@ app.post('/msg', async (req, res) => {
 
             return
         }
-        
+
         record.conversation.push({
             sender: from,
             content: message,
             timestamp: timestamp()
         })
-        
-        
-        
+
+
+
         if (record.conversationLabel === 'noResponse') {
             if (message.toLowerCase().match(/\b(nah|no|wrong|stop|nope)\b|message blocking is active/)) {
                 record.conversationLabel = "DNC"
-        
+
                 await mongodb.updateConversation(record)
 
                 console.log(`Marked ${record.phoneNumber} as DNC`)
@@ -336,16 +338,16 @@ app.post('/msg', async (req, res) => {
                     parent: stellConversationsID,
                     topic: record.phoneNumber
                 })
-        
+
                 webhook = await channel.createWebhook({
                     name: record.name,
                     avatar: avatarURL,
                 })
-          
+
                 record.webhook = webhook.url
 
                 record.conversationLabel = 'stellConversation'
-        
+
                 await initiateChannel(channel, record)
 
                 console.log('Sent Info to Channel')
@@ -353,18 +355,18 @@ app.post('/msg', async (req, res) => {
                 const stellText = await gpt.generateConversation(record)
 
                 await sendSMS(stellText, record.phoneNumber)
-    
+
                 channel.send(stellText)
-    
+
                 record.conversation.push({
                     sender: 'STELL',
                     content: stellText,
                     timestamp: timestamp()
                 })
             }
-        
-        
-        
+
+
+
         } else if (record.conversationLabel === 'stellConversation') {
             await sellerMessage(message, record.webhook)
 
@@ -385,15 +387,15 @@ app.post('/msg', async (req, res) => {
 
                 if (isColdLeadResponse.includes('DROP')) {
                     record.conversationLabel = 'DNC'
-        
-                    channel.setParent(stellDroppedConversationsCategory).then(() => {console.log(`Moved ${record.phoneNumber} to STELL dropped conversations category`)})
+
+                    channel.setParent(stellDroppedConversationsCategory).then(() => { console.log(`Moved ${record.phoneNumber} to STELL dropped conversations category`) })
                 } else if (isColdLeadResponse.includes('CONTINUE')) {
                     const stellText = await gpt.generateConversation(record)
-    
+
                     await sendSMS(stellText, record.phoneNumber)
-        
+
                     channel.send(stellText)
-        
+
                     record.conversation.push({
                         sender: 'STELL',
                         content: stellText,
@@ -403,11 +405,11 @@ app.post('/msg', async (req, res) => {
                     record.conversationLabel = 'coldLead'
 
                     const stellText = await gpt.generateConversation(record)
-    
+
                     await sendSMS(stellText, record.phoneNumber)
-        
+
                     channel.send(stellText)
-        
+
                     record.conversation.push({
                         sender: 'STELL',
                         content: stellText,
@@ -416,11 +418,11 @@ app.post('/msg', async (req, res) => {
                 }
             } else {
                 const stellText = await gpt.generateConversation(record)
-    
+
                 await sendSMS(stellText, record.phoneNumber)
-    
+
                 channel.send(stellText)
-    
+
                 record.conversation.push({
                     sender: 'STELL',
                     content: stellText,
@@ -447,19 +449,19 @@ app.post('/msg', async (req, res) => {
                 record.conversationLabel = "awaitingLeadConfirmation"
             } else {
                 const stellText = await gpt.generateConversation(record)
-    
+
                 await sendSMS(stellText, record.phoneNumber)
-    
+
                 channel.send(stellText)
-    
+
                 record.conversation.push({
                     sender: 'STELL',
                     content: stellText,
                     timestamp: timestamp()
                 })
             }
-          
-            
+
+
 
         } else if (record.conversationLabel === 'awaitingLeadConfirmation') {
             await sellerMessage(message, record.webhook)
@@ -468,7 +470,7 @@ app.post('/msg', async (req, res) => {
 
             const channel = await getChannelObj(record)
 
-            channel.setParent(leadsCategory).then(() => {console.log(`Moved ${record.phoneNumber} to leads category`)})
+            channel.setParent(leadsCategory).then(() => { console.log(`Moved ${record.phoneNumber} to leads category`) })
 
             channel.send('Yippee!!! <@1117500402766708898>')
 
@@ -477,7 +479,7 @@ app.post('/msg', async (req, res) => {
         } else {
             await sellerMessage(message, record.webhook)
         }
-        
+
         await mongodb.updateConversation(record)
 
 
@@ -515,70 +517,70 @@ function requestTextFile(url) {
 
 
 function parseCSV(csvString) {
-  const lines = csvString.trim().split('\n')
+    const lines = csvString.trim().split('\n')
 
-  const headers = lines[0].split(',')
+    const headers = lines[0].split(',')
 
-  const usableRecords = []
-  let totalRecords = 0
+    const usableRecords = []
+    let totalRecords = 0
 
-  for (let i = 1; i < lines.length; i++) {
-    const obj = {}
-    const currentLine = lines[i].split(',')
+    for (let i = 1; i < lines.length; i++) {
+        const obj = {}
+        const currentLine = lines[i].split(',')
 
-    for (let j = 0; j < headers.length; j++) {
-      obj[headers[j]] = currentLine[j]
+        for (let j = 0; j < headers.length; j++) {
+            obj[headers[j]] = currentLine[j]
+        }
+
+        totalRecords++
+
+        if (obj.DataZapp_CellDoNotCall === "N") {
+            const address = `${obj.Address}, ${obj.City}, ${obj.State} ${obj.Zip}`
+            const name = `${obj["Owner 1 First Name"]} ${obj["Owner 1 Last Name"]}`
+            const record = { address: address, name: name, estimatedValue: obj["Estimated Value"], taxAmount: obj["Tax Amount"], phoneNumber: obj.DataZapp_Cell }
+            usableRecords.push(record)
+        }
     }
-
-    totalRecords++
-
-    if (obj.DataZapp_CellDoNotCall === "N") {
-      const address = `${obj.Address}, ${obj.City}, ${obj.State} ${obj.Zip}`
-      const name = `${obj["Owner 1 First Name"]} ${obj["Owner 1 Last Name"]}`
-      const record = { address: address, name: name, estimatedValue: obj["Estimated Value"], taxAmount: obj["Tax Amount"], phoneNumber: obj.DataZapp_Cell }
-      usableRecords.push(record)
-    }
-  }
-  return { usableRecords: usableRecords, totalRecords: totalRecords }
+    return { usableRecords: usableRecords, totalRecords: totalRecords }
 }
 
 
 
 function getOpeningText(record) {
-  const data = fs.readFileSync('openingTexts.txt', 'utf-8')
-  const lines = data.split('\n')
-  const topLine = lines.shift()
-  const newContent = lines.join('\n') + '\n' + topLine
+    const data = fs.readFileSync('openingTexts.txt', 'utf-8')
+    const lines = data.split('\n')
+    const topLine = lines.shift()
+    const newContent = lines.join('\n') + '\n' + topLine
 
-  fs.writeFileSync('openingTexts.txt', newContent)
+    fs.writeFileSync('openingTexts.txt', newContent)
 
-  const name = record.name.split(' ')[0];
-  const city = record.address.split(',')[1].trim()
+    const name = record.name.split(' ')[0];
+    const city = record.address.split(',')[1].trim()
 
-  const message = topLine
-      .replace('[name]', name)
-      .replace('[city]', city)
+    const message = topLine
+        .replace('[name]', name)
+        .replace('[city]', city)
 
-  return message
+    return message
 }
 
 
 
 function timestamp() {
-  const now = new Date();
-  const dateInCentralTimezone = new Date(now.toLocaleString('en-US', { timeZone: 'America/Chicago', timeZoneName: 'short' }))
-  const formattedDate = dateInCentralTimezone.toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true, timeZoneName: 'short', timeZone: 'America/Chicago', newLine: '\n' })
-  return formattedDate
+    const now = new Date();
+    const dateInCentralTimezone = new Date(now.toLocaleString('en-US', { timeZone: 'America/Chicago', timeZoneName: 'short' }))
+    const formattedDate = dateInCentralTimezone.toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true, timeZoneName: 'short', timeZone: 'America/Chicago', newLine: '\n' })
+    return formattedDate
 };
 
 
 
 function sellerMessage(content, url) {
-  return new Promise(resolve => {
-    axios.post(url, {"content": content})
-        .then(resolve())
-        .catch(err => console.log(err))
-  })
+    return new Promise(resolve => {
+        axios.post(url, { "content": content })
+            .then(resolve())
+            .catch(err => console.log(err))
+    })
 }
 
 
@@ -613,34 +615,34 @@ const smsBackupStream = fs.createWriteStream('./STELL-sms-backups.txt', { flags:
 function sendSMS(message, number) {
     return new Promise((resolve, reject) => {
         axios.post('http://localhost:6101/send', { message, number })
-        .then(response => {
-            if (!response.data.ok) {
-                console.log('Recieved Error Response from SMS API')
+            .then(response => {
+                if (!response.data.ok) {
+                    console.log('Recieved Error Response from SMS API')
+
+                    smsBackupStream.write(`${JSON.stringify({ message, number })}\n`)
+
+                    reject()
+                } else {
+                    console.log("Recieved OK Response from SMS API")
+                    resolve()
+                }
+            })
+            .catch(err => {
+                console.log(err.cause)
 
                 smsBackupStream.write(`${JSON.stringify({ message, number })}\n`)
 
                 reject()
-            } else {
-                console.log("Recieved OK Response from SMS API")
-                resolve()
-            }
-        })
-        .catch(err => {
-            console.log(err.cause)
-
-            smsBackupStream.write(`${JSON.stringify({ message, number })}\n`)
-
-            reject()
-        })
+            })
     })
 }
 
 
 
 function removeIdentifier(inputString) {
-  const identifiers = /\[(YES|NO|DROP|DROPPED|LEAD|CONTINUE|TRUE)\]/g
+    const identifiers = /\[(YES|NO|DROP|DROPPED|LEAD|CONTINUE|TRUE)\]/g
 
-  const result = inputString.replace(identifiers, '').trim()
+    const result = inputString.replace(identifiers, '').trim()
 
-  return result
+    return result
 }
