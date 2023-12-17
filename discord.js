@@ -70,7 +70,7 @@ discordClient.login(TOKEN)
 
 
 discordClient.on('ready', async () => {
-    await mongodb.connectDatabase()
+    // await mongodb.connectDatabase()
 
     console.log(`${discordClient.user.tag} has logged in and is ready.`)
 
@@ -538,6 +538,7 @@ function parseCSV(csvString) {
             const address = `${obj.Address}, ${obj.City}, ${obj.State} ${obj.Zip}`
             const name = `${obj["Owner 1 First Name"]} ${obj["Owner 1 Last Name"]}`
             const record = { address: address, name: name, estimatedValue: obj["Estimated Value"], taxAmount: obj["Tax Amount"], phoneNumber: obj.DataZapp_Cell }
+            console.log(obj)
             usableRecords.push(record)
         }
     }

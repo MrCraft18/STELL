@@ -9,9 +9,19 @@ const fs = require('fs')
 const UNSENT_RECORDS_PATH = './database/unsentRecords'
 const CONVERATIONS_PATH = './database/converations'
 
-fs.mkdirSync('./database')
-fs.mkdirSync(UNSENT_RECORDS_PATH)
-fs.mkdirSync(CONVERATIONS_PATH)
+if (!fs.existsSync('./database')) {
+    fs.mkdirSync('./database')
+    fs.mkdirSync(UNSENT_RECORDS_PATH)
+    fs.mkdirSync(CONVERATIONS_PATH)
+} else {
+    if (!fs.existsSync(UNSENT_RECORDS_PATH)) {
+        fs.mkdirSync(UNSENT_RECORDS_PATH)
+    }
+
+    if (!fs.existsSync(CONVERATIONS_PATH)) {
+        fs.mkdirSync(CONVERATIONS_PATH)
+    }
+}
 
 
 
@@ -32,8 +42,10 @@ const addNewRecords = async (records) => {
 
     // await collection.insertMany(records)
 
+    console.log(records)
+
     records.forEach(record => {
-        fs.writeFileSync(`${UNSENT_RECORDS_PATH}/${record.phoneNumber}`, JSON.stringify(record, null, 4))
+        fs.writeFileSync(`${UNSENT_RECORDS_PATH}/${record.phoneNumber}.txt`, JSON.stringify(record, null, 4))
     })
 
     console.log("Added New Records")
@@ -42,10 +54,20 @@ const addNewRecords = async (records) => {
 
 
 const getUnsentRecords = async () => {
-    const dataBase = client.db('Main')
-    const collection = dataBase.collection('unsentRecords')
+    // const dataBase = client.db('Main')
+    // const collection = dataBase.collection('unsentRecords')
 
-    const unsentRecords = await collection.find({}).project({ _id: 0 }).toArray()
+    // const unsentRecords = await collection.find({}).project({ _id: 0 }).toArray()
+
+    const files = fs.readdirSync(UNSENT_RECORDS_PATH)
+
+    const unsentRecords = []
+
+    files.forEach(file => {
+        const recordString = fs.readFileSync(`${UNSENT_RECORDS_PATH}/${file}`, 'utf-8')
+
+        unsentRecords.push(JSON.parse(recordString))
+    })
 
     return unsentRecords
 }
@@ -53,50 +75,70 @@ const getUnsentRecords = async () => {
 
 
 const removeUnsentRecord = async (record) => {
-    const dataBase = client.db('Main')
-    const collection = dataBase.collection('unsentRecords')
+    // const dataBase = client.db('Main')
+    // const collection = dataBase.collection('unsentRecords')
 
-    await collection.deleteMany({ phoneNumber: record.phoneNumber })
+    // await collection.deleteMany({ phoneNumber: record.phoneNumber })
+
+    const file = fs.readdirSync(UNSENT_RECORDS_PATH).find(file => record.phoneNumber === file.slice(0, -4))
+
+    fs.rmSync(`${UNSENT_RECORDS_PATH}/${file}`)
 }
 
 
 
 const addNewConversation = async (record) => {
-    const dataBase = client.db('Main')
-    const collection = dataBase.collection('conversations')
+    // const dataBase = client.db('Main')
+    // const collection = dataBase.collection('conversations')
 
-    await collection.insertMany([record])
+    // await collection.insertMany([record])
+
+    fs.writeFileSync(`${CONVERATIONS_PATH}/${record.phoneNumber}.txt`, JSON.stringify(record, null, 4))
+
     console.log(`Created Conversation for ${record.phoneNumber}`)
 }
 
 
 
 const getConversation = async (from) => {
-    const dataBase = client.db('Main')
-    const collection = dataBase.collection('conversations')
+    // const dataBase = client.db('Main')
+    // const collection = dataBase.collection('conversations')
 
-    const conversation = await collection.find({ phoneNumber: from }).project({ _id: 0 }).toArray()++
+    // const conversation = await collection.find({ phoneNumber: from }).project({ _id: 0 }).toArray()++
 
-    return conversation[0]
+    const file = fs.readdirSync(CONVERATIONS_PATH).find(file => record.phoneNumber === file.slice(0, -4))
+
+    const conversation = fs.readFileSync(`${CONVERATIONS_PATH}/${file}`, 'utf-8')
+
+    return conversation
 }
 
 
 
 const updateConversation = async (updatedRecord) => {
-    const dataBase = client.db('Main')
-    const collection = dataBase.collection('conversations')
+    // const dataBase = client.db('Main')
+    // const collection = dataBase.collection('conversations')
 
-    await collection.updateOne({ phoneNumber: updatedRecord.phoneNumber }, { $set: { conversation: updatedRecord.conversation, conversationLabel: updatedRecord.conversationLabel, webhook: updatedRecord.webhook } })
+    // await collection.updateOne({ phoneNumber: updatedRecord.phoneNumber }, { $set: { conversation: updatedRecord.conversation, conversationLabel: updatedRecord.conversationLabel, webhook: updatedRecord.webhook } })
+
+    const file = fs.readdirSync(CONVERATIONS_PATH).find(file => record.phoneNumber === file.slice(0, -4))
+
+    fs.writeFileSync(`${CONVERATIONS_PATH}/${file}`, JSON.stringify(updatedRecord, null, 4))
+
     console.log('Updated Conversation')
 }
 
 
 
 const deleteConversation = async (record) => {
-    const dataBase = client.db('Main')
-    const collection = dataBase.collection('conversations')
+    // const dataBase = client.db('Main')
+    // const collection = dataBase.collection('conversations')
 
-    await collection.deleteMany({ phoneNumber: record.phoneNumber })
+    // await collection.deleteMany({ phoneNumber: record.phoneNumber })
+
+    const file = fs.readdirSync(CONVERATIONS_PATH).find(file => record.phoneNumber === file.slice(0, -4))
+
+    fs.rmSync(`${CONVERATIONS_PATH}/${file}`)
 }
 
 
@@ -109,8 +151,8 @@ const deleteConversation = async (record) => {
 
 
 module.exports = {
-    connectDatabase,
-    closeDatabase,
+    // connectDatabase,
+    // closeDatabase,
     addNewRecords,
     getUnsentRecords,
     removeUnsentRecord,
