@@ -2,7 +2,7 @@ const { Client, GatewayIntentBits } = require("discord.js")
 const fs = require('fs')
 const express = require('express')
 const axios = require('axios')
-const mongodb = require('./mongodb-lib')
+const database = require('./database-lib')
 const gpt = require('./gpt-lib.js')
 
 
@@ -70,7 +70,7 @@ discordClient.login(TOKEN)
 
 
 discordClient.on('ready', async () => {
-    // await mongodb.connectDatabase()
+    // await database.connectDatabase()
 
     console.log(`${discordClient.user.tag} has logged in and is ready.`)
 
@@ -124,7 +124,7 @@ discordClient.on('messageCreate', async (message) => {
                         const parseData = parseCSV(csvString)
 
                         try {
-                            await mongodb.addNewRecords(parseData.usableRecords)
+                            await database.addNewRecords(parseData.usableRecords)
 
                             uploadChannel.send(`Ok! I uploaded ${parseData.usableRecords.length} usable records out of ${parseData.totalRecords} total records.\n\nDon't add this file again or you will send duplicate texts!`)
                         } catch (err) {
@@ -145,7 +145,7 @@ discordClient.on('messageCreate', async (message) => {
     } else if (message.channel.id === textID && message.author.username !== 'STELL - Chan') {
         textChannel.send(`Okay! Sending texts...`)
 
-        const unsentRecords = await mongodb.getUnsentRecords()
+        const unsentRecords = await database.getUnsentRecords()
 
         const sendNumber = parseInt(message.content)
 
@@ -168,9 +168,9 @@ discordClient.on('messageCreate', async (message) => {
                         timestamp: timestamp()
                     }]
 
-                    await mongodb.addNewConversation(record)
+                    await database.addNewConversation(record)
 
-                    await mongodb.removeUnsentRecord(record)
+                    await database.removeUnsentRecord(record)
 
                     if (i === sendNumber - 1) {
                         textChannel.send(`Sent all ${sendNumber} texts!~`)
@@ -189,7 +189,7 @@ discordClient.on('messageCreate', async (message) => {
     } else if (message.channel.parent && !message.author.bot && message.content.charAt(0) !== '!') {
         const phoneNumber = message.channel.topic
 
-        const record = await mongodb.getConversation(phoneNumber)
+        const record = await database.getConversation(phoneNumber)
 
         if (record.conversationLabel !== 'DNC') {
             record.conversation.push({
@@ -201,7 +201,7 @@ discordClient.on('messageCreate', async (message) => {
             try {
                 await sendSMS(message.content, record.phoneNumber)
 
-                await mongodb.updateConversation(record)
+                await database.updateConversation(record)
             } catch (err) {
                 message.channel.send('This message did not send!\nPlease let Master know!!!')
             }
@@ -224,7 +224,7 @@ discordClient.on('messageCreate', async (message) => {
 
             case '!masterConversation':
                 try {
-                    await mongodb.deleteConversation({ phoneNumber: '8176737349' })
+                    await database.deleteConversation({ phoneNumber: '8176737349' })
 
                     const oldChannel = guild.channels.cache.find(channel => channel.topic === '8176737349')
 
@@ -236,7 +236,7 @@ discordClient.on('messageCreate', async (message) => {
 
                     await sendSMS(content, "8176737349")
 
-                    await mongodb.addNewConversation({
+                    await database.addNewConversation({
                         address: "1304 Shalimar Dr, Fort Worth, TX 76134",
                         name: "Caden Edwards",
                         estimatedValue: "6000",
@@ -270,11 +270,11 @@ discordClient.on('messageCreate', async (message) => {
                 try {
                     const phoneNumber = message.channel.topic
 
-                    const record = await mongodb.getConversation(phoneNumber)
+                    const record = await database.getConversation(phoneNumber)
 
                     record.conversationLabel = 'override'
 
-                    await mongodb.updateConversation(record)
+                    await database.updateConversation(record)
 
                     message.channel.setParent(overridenConversationsCategory).then(() => { console.log(`Moved ${phoneNumber} to overriden category`) })
 
@@ -301,7 +301,7 @@ app.post('/msg', async (req, res) => {
     console.log(`Recieved new text from: ${req.body.number} Content: ${req.body.message}`)
 
     try {
-        let record = await mongodb.getConversation(from)
+        let record = await database.getConversation(from)
 
         if (record === undefined) {
             console.log('THIS IS AN UNKNOWN NUMBER')
@@ -327,7 +327,7 @@ app.post('/msg', async (req, res) => {
             if (message.toLowerCase().match(/\b(nah|no|wrong|stop|nope)\b|message blocking is active/)) {
                 record.conversationLabel = "DNC"
 
-                await mongodb.updateConversation(record)
+                await database.updateConversation(record)
 
                 console.log(`Marked ${record.phoneNumber} as DNC`)
             } else {
@@ -480,7 +480,7 @@ app.post('/msg', async (req, res) => {
             await sellerMessage(message, record.webhook)
         }
 
-        await mongodb.updateConversation(record)
+        await database.updateConversation(record)
 
 
         res.send({
