@@ -7,6 +7,32 @@ const axios = require('axios').create({
 
 const cookies = {}
 
+//QUEUE FUNCTIONALITY
+let requestQueue = []
+let isProcessing = false
+
+function enqueueReqeust(requestFunction) {
+    return new Promise((resolve, reject) => {
+        requestQueue.push(() => requestFunction.then(resolve).catch(reject))
+        processQueue()
+    })
+}
+
+function processQueue() {
+    if (isProcessing || requestQueue.length === 0) {
+        return
+    }
+
+    isProcessing = true
+
+    const request = requestQueue.shift()
+    request().finally(() => {
+        isProcessing = false
+        processQueue()
+    })
+}
+
+//FUNCTIONS OBJECT
 const salesGodCRM = {
     login: async (email, password) => {
         try {
@@ -21,14 +47,41 @@ const salesGodCRM = {
                     "referer": "https://salesgodcrm.net/auth/login",
                   } 
             })
-            .then(response => {
-                updateSession(response)
-            })
+            .then(response => updateSession(response))
         } catch (error) {
             if (error.response && error.response.data) {
                 throw new Error(`Error during login process: ${JSON.stringify(error.response.data.message)}`)
             } else {
                 throw new Error(`Error during login process: ${error}`)
+            }
+        }
+    },
+    loginWithLastSession : async (lastSessionCookies) => {
+        try {
+            await axios.get('auth/user', {
+                headers: {
+                    ...lastSessionCookies,
+                    "referer": "https://salesgodcrm.net/dashboard",
+                  }
+            })
+            .then(response => {
+                updateSession(response)
+
+                keepAliveInterval = setInterval(async () => {
+                    await axios.get('auth/user', {
+                        headers: {
+                            ...cookies,
+                            "referer": "https://salesgodcrm.net/dashboard",
+                          } 
+                    })
+                    .then(response => updateSession(response))
+                }, (1000*60*60*24))
+            })
+        } catch (error) {
+            if (error.response && error.response.data) {
+                throw new Error(`Error during login from last session process: ${JSON.stringify(error.response.data.message)}`)
+            } else {
+                throw new Error(`Error during login from last session process: ${error}`)
             }
         }
     },
@@ -292,6 +345,23 @@ function updateSession(response) {
         cookies['X-XSRF-TOKEN'] = XRSF_TOKEN.replace('XSRF-TOKEN=', '').replace('%3D; ', '=')
         cookies['Cookie'] = (XRSF_TOKEN + SESSION + COOKIE)
 }
+
+
+
+function keepSessionAlive() {
+
+
+    interval = setInterval(async () => {
+        await axios.get('auth/user', {
+            headers: {
+                ...cookies,
+                "referer": "https://salesgodcrm.net/dashboard",
+              } 
+        })
+        .then(response => updateSession(response))
+    }, (1000*60*60*24));
+}
+
 
 
 
