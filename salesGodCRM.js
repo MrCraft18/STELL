@@ -4,8 +4,8 @@ const express = require('express')
 const axios = require('axios')
 
 
-await salesGodCRM.login('jacobwalkersolutions@gmail.com', 'Godsgotthis#1')
-.then(() => console.log('Logged In Successfully'))
+// await salesGodCRM.login('jacobwalkersolutions@gmail.com', 'Godsgotthis#1')
+// .then(() => console.log('Logged In Successfully'))
 
 
 //FORWARD RECIEVED TEXTS
