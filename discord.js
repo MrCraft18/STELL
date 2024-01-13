@@ -1,9 +1,12 @@
 const { Client, GatewayIntentBits } = require("discord.js")
 const fs = require('fs')
+const csv = require('csv-parser')
+const { Readable } = require('stream')
 const express = require('express')
 const axios = require('axios')
 const database = require('./database-lib')
 const gpt = require('./gpt-lib.js')
+const { resolve } = require("path")
 
 
 
@@ -21,15 +24,15 @@ const app = express()
 app.use(express.json())
 
 
+function dualLog(message) {
+    console.log(message)
 
-console.log = async (message) => {
     try {
         if (message) {
-            process.stdout.write(message + '\n')
-            await discordClient.channels.cache.get('1117979636685623416').send(message.toString())
+            discordClient.channels.cache.get('1117979636685623416').send(message.toString())
         }
     } catch (err) {
-        process.stdout.write(`${err}\n`)
+        console.log(err)
     }
 }
 
@@ -72,7 +75,7 @@ discordClient.login(TOKEN)
 discordClient.on('ready', async () => {
     // await database.connectDatabase()
 
-    console.log(`${discordClient.user.tag} has logged in and is ready.`)
+    dualLog(`${discordClient.user.tag} has logged in and is ready.`)
 
     app.listen(6100)
 
@@ -121,19 +124,19 @@ discordClient.on('messageCreate', async (message) => {
             promiseArray.push(
                 requestTextFile(attachment.url)
                     .then(async csvString => {
-                        const parseData = parseCSV(csvString)
+                        const parseData = await parseCSV(csvString)
 
                         try {
                             await database.addNewRecords(parseData.usableRecords)
 
                             uploadChannel.send(`Ok! I uploaded ${parseData.usableRecords.length} usable records out of ${parseData.totalRecords} total records.\n\nDon't add this file again or you will send duplicate texts!`)
                         } catch (err) {
-                            console.log(err)
+                            dualLog(err)
                             uploadChannel.send(`Sorry but there was an error uploading the records! Please let Master know!!!`)
                         }
                     })
                     .catch(err => {
-                        console.log(`HTTP Error: ${err.message}`)
+                        dualLog(`HTTP Error: ${err.message}`)
                         uploadChannel.send(`Sorry but there was an error with the HTTP request! Please let Master know!!!`)
                     })
             )
@@ -212,7 +215,7 @@ discordClient.on('messageCreate', async (message) => {
     } else if (message.channel == devChannel && !message.author.bot) {
         switch (message.content) {
             case '!test':
-                console.log("Sending test SMS...")
+                dualLog("Sending test SMS...")
                 await sendSMS("This is a test text from STELL!~ Please do not respond!", '8176737349')
                     .then(() => {
                         message.channel.send('Sent test SMS!')
@@ -230,12 +233,10 @@ discordClient.on('messageCreate', async (message) => {
 
                     await database.deleteConversation({ phoneNumber: masterNumber })
 
-                    console.log('ayo')
-
                     const oldChannel = guild.channels.cache.find(channel => channel.topic === masterNumber)
 
                     if (oldChannel) {
-                        await oldChannel.delete().then(() => console.log("Deleted Old Master Channel"))
+                        await oldChannel.delete().then(() => dualLog("Deleted Old Master Channel"))
                     }
 
                     const content = 'Hello There, I am Jacob in Fort Worth. Is this still Caden?'
@@ -258,7 +259,7 @@ discordClient.on('messageCreate', async (message) => {
 
                     message.channel.send('Sent a test Conversation to Master!')
                 } catch (err) {
-                    console.log(err)
+                    dualLog(err)
                     message.channel.send('I had an issue sending a conversation to you Master :(')
                 }
                 break
@@ -282,11 +283,11 @@ discordClient.on('messageCreate', async (message) => {
 
                     await database.updateConversation(record)
 
-                    message.channel.setParent(overridenConversationsCategory).then(() => { console.log(`Moved ${phoneNumber} to overriden category`) })
+                    message.channel.setParent(overridenConversationsCategory).then(() => { dualLog(`Moved ${phoneNumber} to overriden category`) })
 
                     message.channel.send('Conversation Overriden!')
                 } catch (err) {
-                    console.log(err)
+                    dualLog(err)
                     message.channel.send('Error overriding conversation!!!')
                 }
         }
@@ -304,19 +305,19 @@ app.post('/msg', async (req, res) => {
     const message = req.body.message
     const from = req.body.number
 
-    console.log(`Recieved new text from: ${req.body.number} Content: ${req.body.message}`)
+    dualLog(`Recieved new text from: ${req.body.number} Content: ${req.body.message}`)
 
     try {
         let record = await database.getConversation(from)
 
         if (record === undefined) {
-            console.log('THIS IS AN UNKNOWN NUMBER')
+            dualLog('THIS IS AN UNKNOWN NUMBER')
 
             res.send({
                 code: 200,
                 content: 'STELL PROCESSED SMS'
             })
-            console.log('Sent Processed Successfully Response to SMS App')
+            dualLog('Sent Processed Successfully Response to SMS App')
 
             return
         }
@@ -335,9 +336,9 @@ app.post('/msg', async (req, res) => {
 
                 await database.updateConversation(record)
 
-                console.log(`Marked ${record.phoneNumber} as DNC`)
+                dualLog(`Marked ${record.phoneNumber} as DNC`)
             } else {
-                console.log(`Creating new channel for: ${from}`)
+                dualLog(`Creating new channel for: ${from}`)
 
                 const channel = await guild.channels.create({
                     name: record.name,
@@ -356,7 +357,7 @@ app.post('/msg', async (req, res) => {
 
                 await initiateChannel(channel, record)
 
-                console.log('Sent Info to Channel')
+                dualLog('Sent Info to Channel')
 
                 const stellText = await gpt.generateConversation(record)
 
@@ -378,7 +379,7 @@ app.post('/msg', async (req, res) => {
 
             const isQuestionResponse = await gpt.generateisQuestion(record)
 
-            console.log(isQuestionResponse)
+            dualLog(isQuestionResponse)
 
             const channel = await getChannelObj(record)
 
@@ -387,14 +388,14 @@ app.post('/msg', async (req, res) => {
             if (isQuestionResponse.includes('YES')) {
                 const isColdLeadResponse = await gpt.generateisColdLead(record)
 
-                console.log(isColdLeadResponse)
+                dualLog(isColdLeadResponse)
 
                 channel.send(`*[${removeIdentifier(isColdLeadResponse).trim()}]*`)
 
                 if (isColdLeadResponse.includes('DROP')) {
                     record.conversationLabel = 'DNC'
 
-                    channel.setParent(stellDroppedConversationsCategory).then(() => { console.log(`Moved ${record.phoneNumber} to STELL dropped conversations category`) })
+                    channel.setParent(stellDroppedConversationsCategory).then(() => { dualLog(`Moved ${record.phoneNumber} to STELL dropped conversations category`) })
                 } else if (isColdLeadResponse.includes('CONTINUE')) {
                     const stellText = await gpt.generateConversation(record)
 
@@ -443,7 +444,7 @@ app.post('/msg', async (req, res) => {
 
             const isClearAnswerResponse = await gpt.generateisClearAnswer(record)
 
-            console.log(isClearAnswerResponse)
+            dualLog(isClearAnswerResponse)
 
             const channel = await getChannelObj(record)
 
@@ -476,7 +477,7 @@ app.post('/msg', async (req, res) => {
 
             const channel = await getChannelObj(record)
 
-            channel.setParent(leadsCategory).then(() => { console.log(`Moved ${record.phoneNumber} to leads category`) })
+            channel.setParent(leadsCategory).then(() => { dualLog(`Moved ${record.phoneNumber} to leads category`) })
 
             channel.send('Yippee!!! <@1117500402766708898>')
 
@@ -492,14 +493,14 @@ app.post('/msg', async (req, res) => {
         res.send({
             ok: true
         })
-        console.log('Sent Processed Successfully Response to SMS App')
+        dualLog('Sent Processed Successfully Response to SMS App')
     } catch (err) {
-        console.log(err)
+        dualLog(err)
 
         res.send({
             ok: false
         })
-        console.log('Sent ERROR Response to SMS App')
+        dualLog('Sent ERROR Response to SMS App')
     }
 })
 
@@ -523,43 +524,39 @@ function requestTextFile(url) {
 
 
 function parseCSV(csvString) {
-    const lines = csvString.trim().split('\n')
+    return new Promise((resolve, reject) => {
+        const usableRecords = []
+        let totalRecords = 0
 
-    const headers = lines[0].split(',')
+        const stream = Readable.from(csvString)
+        stream.pipe(csv())
+        .on('data', obj => {
+            totalRecords++
 
-    const usableRecords = []
-    let totalRecords = 0
-
-    for (let i = 1; i < lines.length; i++) {
-        const obj = {}
-        const currentLine = lines[i].split(',')
-
-        for (let j = 0; j < headers.length; j++) {
-            obj[headers[j]] = currentLine[j]
-        }
-
-        totalRecords++
-
-        if (obj['Owner MOBILE 1']) {
-            const record = {
-                address: `${obj['Property Address']}, ${obj['Property City']}, ${obj['Property State']} ${obj['Property Zip']}`,
-                name: `${obj["First Name"]} ${obj["Last Name"]}`,
-                phoneNumber: obj['Owner MOBILE 1'],
-                info : [
-                    'Land Acreage',
-                    'Land Square Footage',
-                    'Land Value',
-                    'Tax Assessed Value'
-                ]
-                .map(header => {
-                    return { [header]: obj[header] }
-                })
+            if (obj['Owner MOBILE 1']) {
+                dualLog(obj)
+                const record = {
+                    address: `${obj['Property Address']}, ${obj['Property City']}, ${obj['Property State']} ${obj['Property Zip']}`,
+                    name: `${obj["First Name"]} ${obj["Last Name"]}`,
+                    phoneNumber: obj['Owner MOBILE 1'],
+                    info : [
+                        'Land Acreage',
+                        'Land Square Footage',
+                        'Land Value',
+                        'Tax Assessed Value'
+                    ]
+                    .map(header => {
+                        return { [header]: obj[header] }
+                    })
+                }
+                usableRecords.push(record)
             }
-            console.log(obj)
-            usableRecords.push(record)
-        }
-    }
-    return { usableRecords: usableRecords, totalRecords: totalRecords }
+        })
+        .on('end', () => {
+            resolve({ usableRecords: usableRecords, totalRecords: totalRecords })
+        })
+        .on('error', reject)
+    })
 }
 
 
@@ -597,7 +594,7 @@ function sellerMessage(content, url) {
     return new Promise(resolve => {
         axios.post(url, { "content": content })
             .then(resolve())
-            .catch(err => console.log(err))
+            .catch(err => dualLog(err))
     })
 }
 
@@ -635,18 +632,18 @@ function sendSMS(message, number) {
         axios.post('http://localhost:6101/send', { message, number })
             .then(response => {
                 if (!response.data.ok) {
-                    console.log('Recieved Error Response from SMS API')
+                    dualLog('Recieved Error Response from SMS API')
 
                     smsBackupStream.write(`${JSON.stringify({ message, number })}\n`)
 
                     reject()
                 } else {
-                    console.log("Recieved OK Response from SMS API")
+                    dualLog("Recieved OK Response from SMS API")
                     resolve()
                 }
             })
             .catch(err => {
-                console.log(err.cause)
+                dualLog(err.cause)
 
                 smsBackupStream.write(`${JSON.stringify({ message, number })}\n`)
 
