@@ -1,0 +1,46 @@
+{
+    "address": "1304 Shalimar Dr, Fort Worth, TX 76134",
+    "name": "Caden Edwards",
+    "estimatedValue": "6000",
+    "taxAmount": "13800",
+    "phoneNumber": "8176737349",
+    "conversationLabel": "lead",
+    "conversation": [
+        {
+            "sender": "STELL",
+            "content": "Hello There, I am Jacob in Fort Worth. Is this still Caden?",
+            "timestamp": "01/12/2024, 6:41:59 PM CST"
+        },
+        {
+            "sender": "8176737349",
+            "content": "Indeed",
+            "timestamp": "01/12/2024, 6:52:59 PM CST"
+        },
+        {
+            "sender": "STELL",
+            "content": "Great, Caden. I have some questions about 1304 Shalimar Dr as I'm looking at acquiring it if at all possible. Are you okay with that?",
+            "timestamp": "01/12/2024, 6:53:03 PM CST"
+        },
+        {
+            "sender": "8176737349",
+            "content": "That's fine",
+            "timestamp": "01/12/2024, 6:53:36 PM CST"
+        },
+        {
+            "sender": "STELL",
+            "content": "Perfect, thank you. Does 1304 Shalimar Dr have utility access and do you have a survey for it?",
+            "timestamp": "01/12/2024, 6:53:42 PM CST"
+        },
+        {
+            "sender": "8176737349",
+            "content": "Yes to both",
+            "timestamp": "01/12/2024, 6:53:52 PM CST"
+        },
+        {
+            "sender": "8176737349",
+            "content": "Gaaaaaay",
+            "timestamp": "01/12/2024, 6:54:06 PM CST"
+        }
+    ],
+    "webhook": "https://discord.com/api/webhooks/1195530907898089533/hDNW7SS9qZ5FWn1xAQeL-HiTwS7WftGTA-61sS86asEz-0ZfX3JhX-6n4rtNRA-Xgkq7"
+}

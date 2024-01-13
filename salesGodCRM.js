@@ -40,8 +40,6 @@ salesGodCRM.onText(async data => {
 
 const messagingContacts = await salesGodCRM.getContactsForMessaging()
 
-console.log(messagingContacts)
-
 for (const contact of messagingContacts.unread_contacts) {
     const contactMessages = await salesGodCRM.fetchContactMessages(contact.id)
 
