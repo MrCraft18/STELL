@@ -1,6 +1,3 @@
-Hi, I'm Jacob Walker from [city]. Is this still [name]?
-Hi, I'm Jacob Walker in [city]. Is this still [name]?
-Hi, I am Jacob from [city] Is this still [name]?
 Hi, I am Jacob in [city] Is this still [name]?
 Hi, I am Jacob from [city], Is this still [name]?
 Hi, I am Jacob in [city], Is this still [name]?
@@ -249,4 +246,7 @@ Hi, I'm Jacob in [city]. Is this still [name]?
 Hi, I'm Jacob Walker from [city] Is this still [name]?
 Hi, I'm Jacob Walker in [city] Is this still [name]?
 Hi, I'm Jacob Walker from [city], Is this still [name]?
-Hi, I'm Jacob Walker in [city], Is this still [name]?
+Hi, I'm Jacob Walker in [city], Is this still [name]?
+Hi, I'm Jacob Walker from [city]. Is this still [name]?
+Hi, I'm Jacob Walker in [city]. Is this still [name]?
+Hi, I am Jacob from [city] Is this still [name]?
