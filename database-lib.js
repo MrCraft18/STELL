@@ -41,7 +41,7 @@ const addNewRecords = async (records) => {
 
     // await collection.insertMany(records)
 
-    console.log(records)
+    // console.log(records)
 
     records.forEach(record => {
         fs.writeFileSync(`${UNSENT_RECORDS_PATH}/${record.phoneNumber}.txt`, JSON.stringify(record, null, 4))
