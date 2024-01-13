@@ -224,11 +224,15 @@ discordClient.on('messageCreate', async (message) => {
 
             case '!masterConversation':
                 try {
-                    await database.deleteConversation({ phoneNumber: '8176737349' })
+                    const masterNumber = '8176923635'
+                    const masterName = 'Elijah Thompson'
+                    const masterAddress = '1304 Shalimar Dr, Fort Worth, TX 76134'
+
+                    await database.deleteConversation({ phoneNumber: masterNumber })
 
                     console.log('ayo')
 
-                    const oldChannel = guild.channels.cache.find(channel => channel.topic === '8176737349')
+                    const oldChannel = guild.channels.cache.find(channel => channel.topic === masterNumber)
 
                     if (oldChannel) {
                         await oldChannel.delete().then(() => console.log("Deleted Old Master Channel"))
@@ -236,14 +240,14 @@ discordClient.on('messageCreate', async (message) => {
 
                     const content = 'Hello There, I am Jacob in Fort Worth. Is this still Caden?'
 
-                    await sendSMS(content, "8176737349")
+                    await sendSMS(content, masterNumber)
 
                     await database.addNewConversation({
-                        address: "1304 Shalimar Dr, Fort Worth, TX 76134",
-                        name: "Caden Edwards",
+                        address: masterAddress,
+                        name: masterName,
                         estimatedValue: "6000",
                         taxAmount: "13800",
-                        phoneNumber: "8176737349",
+                        phoneNumber: masterNumber,
                         conversationLabel: 'noResponse',
                         conversation: [{
                             sender: "STELL",
@@ -536,10 +540,21 @@ function parseCSV(csvString) {
 
         totalRecords++
 
-        if (obj.DataZapp_CellDoNotCall === "N") {
-            const address = `${obj.Address}, ${obj.City}, ${obj.State} ${obj.Zip}`
-            const name = `${obj["Owner 1 First Name"]} ${obj["Owner 1 Last Name"]}`
-            const record = { address: address, name: name, estimatedValue: obj["Estimated Value"], taxAmount: obj["Tax Amount"], phoneNumber: obj.DataZapp_Cell }
+        if (obj['Owner MOBILE 1']) {
+            const record = {
+                address: `${obj['Property Address']}, ${obj['Property City']}, ${obj['Property State']} ${obj['Property Zip']}`,
+                name: `${obj["First Name"]} ${obj["Last Name"]}`,
+                phoneNumber: obj['Owner MOBILE 1'],
+                info : [
+                    'Land Acreage',
+                    'Land Square Footage',
+                    'Land Value',
+                    'Tax Assessed Value'
+                ]
+                .map(header => {
+                    return { [header]: obj[header] }
+                })
+            }
             console.log(obj)
             usableRecords.push(record)
         }
