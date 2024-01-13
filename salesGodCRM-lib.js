@@ -1,90 +1,67 @@
 const WebSocket = require('ws')
+const puppeteer  = require('puppeteer')
+const fs = require('fs')
 const FormData = require('form-data')
 const axios = require('axios').create({
     withCredentials: true,
     baseURL: 'https://salesgodcrm.net/api/'
 })
 
-const cookies = {}
-
-//QUEUE FUNCTIONALITY
-let requestQueue = []
-let isProcessing = false
-
-function enqueueReqeust(requestFunction) {
-    return new Promise((resolve, reject) => {
-        requestQueue.push(() => requestFunction.then(resolve).catch(reject))
-        processQueue()
-    })
-}
-
-function processQueue() {
-    if (isProcessing || requestQueue.length === 0) {
-        return
-    }
-
-    isProcessing = true
-
-    const request = requestQueue.shift()
-    request().finally(() => {
-        isProcessing = false
-        processQueue()
-    })
-}
-
 //FUNCTIONS OBJECT
 const salesGodCRM = {
-    login: async (email, password) => {
-        try {
-            await axios.get('sanctum/csrf-cookie')
-            .then(response => {
-                updateSession(response)
-            })
+    // login: async (email, password) => {
+    //     try {
+    //         await axios.get('sanctum/csrf-cookie')
+    //         .then(response => {
+    //             console.log(response.headers['set-cookie'])
+    //             updateSession(response)
+    //             console.log(cookies)
+    //         })
 
-            await axios.post('auth/login', {"email": email,"password": password}, {
-                headers: {
-                    ...cookies,
-                    "referer": "https://salesgodcrm.net/auth/login",
-                  } 
-            })
-            .then(response => updateSession(response))
-        } catch (error) {
-            if (error.response && error.response.data) {
-                throw new Error(`Error during login process: ${JSON.stringify(error.response.data.message)}`)
-            } else {
-                throw new Error(`Error during login process: ${error}`)
-            }
-        }
-    },
-    loginWithLastSession : async (lastSessionCookies) => {
-        try {
-            await axios.get('auth/user', {
-                headers: {
-                    ...lastSessionCookies,
-                    "referer": "https://salesgodcrm.net/dashboard",
-                  }
-            })
-            .then(response => {
-                updateSession(response)
+    //         await axios.post('auth/login', {"email": email,"password": password}, {
+    //             headers: {
+    //                 ...cookies,
+    //                 "referer": "https://salesgodcrm.net/auth/login",
+    //               } 
+    //         })
+    //         .then(response => updateSession(response))
+    //     } catch (error) {
+    //         if (error.response && error.response.data) {
+    //             throw new Error(`Error during login process: ${JSON.stringify(error.response.data.message)}`)
+    //         } else {
+    //             throw new Error(`Error during login process: ${error}`)
+    //         }
+    //     }
+    // },
+    // newLogin: async (lastSessionCookies) => {
+    //     try {
+    //         await axios.get('auth/user', {
+    //             headers: {
+    //                 ...lastSessionCookies,
+    //                 "referer": "https://salesgodcrm.net/dashboard",
+    //               }
+    //         })
+    //         .then(response => {
+    //             updateSession(response)
 
-                keepAliveInterval = setInterval(async () => {
-                    await axios.get('auth/user', {
-                        headers: {
-                            ...cookies,
-                            "referer": "https://salesgodcrm.net/dashboard",
-                          } 
-                    })
-                    .then(response => updateSession(response))
-                }, (1000*60*60*24))
-            })
-        } catch (error) {
-            if (error.response && error.response.data) {
-                throw new Error(`Error during login from last session process: ${JSON.stringify(error.response.data.message)}`)
-            } else {
-                throw new Error(`Error during login from last session process: ${error}`)
-            }
-        }
-    },
+    //             keepAliveInterval = setInterval(async () => {
+    //                 await axios.get('auth/user', {
+    //                     headers: {
+    //                         ...cookies,
+    //                         "referer": "https://salesgodcrm.net/dashboard",
+    //                       } 
+    //                 })
+    //                 .then(response => updateSession(response))
+    //             }, (1000*60*60*24))
+    //         })
+    //     } catch (error) {
+    //         if (error.response && error.response.data) {
+    //             throw new Error(`Error during login from last session process: ${JSON.stringify(error.response.data.message)}`)
+    //         } else {
+    //             throw new Error(`Error during login from last session process: ${error}`)
+    //         }
+    //     }
+    // },
     onText: (callback) => {
         const ws = new WebSocket('wss://salesgodcrm.net:3000/socket.io/?EIO=4&transport=websocket', {
             headers: {
@@ -113,6 +90,8 @@ const salesGodCRM = {
         })
     },
     fetchPhoneNumbers: async () => {
+        const cookies = await getCookies()
+
         try {
             return await axios.get('/phoneNumber/fetchPhoneNumbers?limit=10000&sort=is_primary', {
                 headers: {
@@ -142,6 +121,8 @@ const salesGodCRM = {
         }
     },
     fetchContacts: async (filter) => {
+        const cookies = await getCookies()
+
         let contacts = []
 
         let filterQuery
@@ -200,6 +181,8 @@ const salesGodCRM = {
         return contacts
     },
     addContact: async (contactData) => {
+        const cookies = await getCookies()
+
         const formData = new FormData()
 
         const fields = [
@@ -234,7 +217,10 @@ const salesGodCRM = {
                 throw new Error(`Error Adding Contact: ${error}`)
             }
         })
-    }, sendChatMessage: async (contactID, text) => {
+    }, 
+    sendChatMessage: async (contactID, text) => {
+        const cookies = await getCookies()
+
         const formData = new FormData()
 
         formData.append('text', text)
@@ -259,6 +245,8 @@ const salesGodCRM = {
         })
     },
     getContactsForMessaging: async () => {
+        const cookies = await getCookies()
+
         return await axios.post('/contact/getContactsForMessaging', {"unread_count":0,"recent_count":0,"all_count":0,"offset":0,"type":"load"}, {
             headers: {
                 "Accept": "application/json",
@@ -281,6 +269,8 @@ const salesGodCRM = {
         })
     },
     fetchContactMessages: async (contactID) => {
+        const cookies = await getCookies()
+
         return await axios.post(`message/fetchChatMessages/${contactID}`, {offset: 0}, {
             headers: {
                 "Accept": "application/json",
@@ -303,6 +293,8 @@ const salesGodCRM = {
         })
     },
     markBulkChatMessageRead: async (contactIDs) => {
+        const cookies = await getCookies()
+
         axios.post('/message/markBulkChatMessageRead', {ids: contactIDs}, {
             headers: {
                 "Accept": "application/json",
@@ -342,24 +334,81 @@ function updateSession(response) {
             }
         })
 
-        cookies['X-XSRF-TOKEN'] = XRSF_TOKEN.replace('XSRF-TOKEN=', '').replace('%3D; ', '=')
-        cookies['Cookie'] = (XRSF_TOKEN + SESSION + COOKIE)
+        fs.writeFileSync('./cookies.txt', JSON.stringify({
+            expiryDate: response.headers['set-cookie'][0].split(';').find(data => data.trim().startsWith('expires=')).replace('expires=', ''),
+            cookies: {
+                'X-XSRF-TOKEN': XRSF_TOKEN.replace('XSRF-TOKEN=', '').replace('%3D; ', '='),
+                'Cookie': (XRSF_TOKEN + SESSION + COOKIE)
+            }
+        }, null, 4))
 }
 
 
 
-function keepSessionAlive() {
+async function getCookies() {
+    const previousCookies = JSON.parse(fs.readFileSync('./cookies.txt', 'utf-8'))
+
+    if (new Date() > new Date(previousCookies.expiryDate)) {
+        console.log('Getting new cookies')
+        return await getNewCookies()
+    } else {
+        return previousCookies.cookies
+    }
+}
 
 
-    interval = setInterval(async () => {
-        await axios.get('auth/user', {
-            headers: {
-                ...cookies,
-                "referer": "https://salesgodcrm.net/dashboard",
-              } 
-        })
-        .then(response => updateSession(response))
-    }, (1000*60*60*24));
+async function getNewCookies() {
+    const browser = await puppeteer.launch({
+        headless: 'new',
+        timeout: 0,
+        defaultViewport: null,
+        args: [
+            '--start-maximized',
+        ],
+        protocolTimeout: 250000,
+    });
+
+    page = await browser.newPage()
+
+    await page.goto('https://salesgodcrm.net', {waitUntil: 'networkidle0', timeout: 30000})
+
+    inboundInitialUrl = page.url()
+
+    if (page.url() === "https://salesgodcrm.net/") {
+        //Pretty self explainatory
+        await page.waitForSelector('#email')
+        await page.click('#email')
+        await page.type('#email', 'jacobwalkersolutions@gmail.com')
+        await page.click('#password')
+        await page.type('#password', 'Godsgotthis#1')
+        await page.click('.btn-md.btn-primary.w-100')
+        //Wait for URL change
+        await page.waitForFunction(initial => window.location.href !== initial, {}, inboundInitialUrl)
+    }
+
+    if (page.url() === "https://salesgodcrm.net/dashboard") {
+        console.log("Got New Cookies")
+
+        const cookies = await page.cookies()
+
+        browser.close()
+
+        return {
+            'X-XSRF-TOKEN': decodeURIComponent(cookies.find(cookie => cookie.name === 'XSRF-TOKEN').value),
+            'Cookie': `XSRF-TOKEN=${cookies.find(cookie => cookie.name === 'XSRF-TOKEN').value}; salesgod_crm_session=${cookies.find(cookie => cookie.name === 'salesgod_crm_session').value}; ${cookies.find(cookie => cookie.name !== 'salesgod_crm_session' && cookie.name !== 'XSRF-TOKEN').name}=${cookies.find(cookie => cookie.name !== 'salesgod_crm_session' && cookie.name !== 'XSRF-TOKEN').value}`
+        }
+        // expiryDate: Math.round((cookies[0].expires * 1000) - 60 * 1000),
+
+        // fs.writeFileSync('./cookies.txt', JSON.stringify({
+        //     expiryDate: Math.round((cookies[0].expires * 1000) - 60 * 1000),
+        //     cookies: {
+        //         'X-XSRF-TOKEN': decodeURIComponent(cookies.find(cookie => cookie.name === 'XSRF-TOKEN').value),
+        //         'Cookie': `XSRF-TOKEN=${cookies.find(cookie => cookie.name === 'XSRF-TOKEN').value}; salesgod_crm_session=${cookies.find(cookie => cookie.name === 'salesgod_crm_session').value}; ${cookies.find(cookie => cookie.name !== 'salesgod_crm_session' && cookie.name !== 'XSRF-TOKEN').name}=${cookies.find(cookie => cookie.name !== 'salesgod_crm_session' && cookie.name !== 'XSRF-TOKEN').value}`
+        //     }
+        // }, null, 4))
+    } else {
+        console.log("Not Logged In from Puppeteer")
+    }
 }
 
 
@@ -368,65 +417,3 @@ function keepSessionAlive() {
 
 
 module.exports = salesGodCRM
-
-
-
-
-
-// (async function () {
-//     await salesGodCRM.login("jacobwalkersolutions@gmail.com", "Godsgotthis#1")
-//     .then(() => console.log("Logged Into SalesGodCRM Successfully"))
-
-        
-
-//     // await salesGodCRM.addContact({
-//     //     first_name: 'Caden',
-//     //     phone: '8176737349'
-//     // })
-//     // .then(() => {
-//     //     console.log("added contact successfully")
-//     // })
-//     // .catch(error => {
-//     //     console.log(error)
-//     // })
-
-//     const contacts = await salesGodCRM.fetchContacts(8176737349)
-//     .catch(error => {
-//         console.log(error)
-//     })
-
-//     console.log(contacts)
-
-//     //await salesGodCRM.sendChatMessage(2014247, "Yellow")
-
-//     // const messagingContacts = await salesGodCRM.getContactsForMessaging()
-
-//     // console.log(messagingContacts.unread_contacts)
-
-//     // const contactMessages = await salesGodCRM.fetchContactMessages(2016278)
-
-//     // console.log(contactMessages.items)
-//     // console.log(contactMessages.items[0].text)
-//     // console.log(contactMessages.items[contactMessages.items.length-1].text)
-
-//     // salesGodCRM.onText((data) => {
-//     //     console.log(data.text)
-//     //     console.log(data.contact.phone)
-//     // })
-
-//     // const phoneNumbers = await salesGodCRM.fetchPhoneNumbers()
-//     // console.log(phoneNumbers)
-// })()
-
-
-
-
-
-
-
-
-
-
-
-
-
