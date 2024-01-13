@@ -227,8 +227,8 @@ discordClient.on('messageCreate', async (message) => {
 
             case '!masterConversation':
                 try {
-                    const masterNumber = '8176923635'
-                    const masterName = 'Elijah Thompson'
+                    const masterNumber = '8176737349'
+                    const masterName = 'Caden Edwards'
                     const masterAddress = '1304 Shalimar Dr, Fort Worth, TX 76134'
 
                     await database.deleteConversation({ phoneNumber: masterNumber })
@@ -246,8 +246,6 @@ discordClient.on('messageCreate', async (message) => {
                     await database.addNewConversation({
                         address: masterAddress,
                         name: masterName,
-                        estimatedValue: "6000",
-                        taxAmount: "13800",
                         phoneNumber: masterNumber,
                         conversationLabel: 'noResponse',
                         conversation: [{
@@ -451,9 +449,19 @@ app.post('/msg', async (req, res) => {
             channel.send(`*[${removeIdentifier(isClearAnswerResponse).trim()}]*`)
 
             if (isClearAnswerResponse.includes('YES')) {
-                sendSMS("Ok thanks for the info. While I run my numbers do you have an ideal price you'd want for the property?", record.phoneNumber)
+                const stellText = "Ok thanks for the info. While I run my numbers do you have an ideal price you'd want for the property?"
+
+                sendSMS(stellText, record.phoneNumber)
+
+                channel.send(stellText)
 
                 record.conversationLabel = "awaitingLeadConfirmation"
+
+                record.conversation.push({
+                    sender: 'STELL',
+                    content: stellText,
+                    timestamp: timestamp()
+                })
             } else {
                 const stellText = await gpt.generateConversation(record)
 
@@ -479,7 +487,9 @@ app.post('/msg', async (req, res) => {
 
             channel.setParent(leadsCategory).then(() => { dualLog(`Moved ${record.phoneNumber} to leads category`) })
 
-            channel.send('Yippee!!! <@1117500402766708898>')
+            // channel.send('Yippee!!! <@1117500402766708898>')
+
+            sendSMS(`Yipeee!!!\n\nI got you a lead:\n${record.name}`, '8176923635')
 
 
 
