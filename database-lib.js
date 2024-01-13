@@ -105,9 +105,9 @@ const getConversation = async (from) => {
 
     // const conversation = await collection.find({ phoneNumber: from }).project({ _id: 0 }).toArray()++
 
-    const file = fs.readdirSync(CONVERATIONS_PATH).find(file => record.phoneNumber === file.slice(0, -4))
+    const file = fs.readdirSync(CONVERATIONS_PATH).find(file => from === file.slice(0, -4))
 
-    const conversation = fs.readFileSync(`${CONVERATIONS_PATH}/${file}`, 'utf-8')
+    const conversation = JSON.parse(fs.readFileSync(`${CONVERATIONS_PATH}/${file}`, 'utf-8'))
 
     return conversation
 }
@@ -120,7 +120,7 @@ const updateConversation = async (updatedRecord) => {
 
     // await collection.updateOne({ phoneNumber: updatedRecord.phoneNumber }, { $set: { conversation: updatedRecord.conversation, conversationLabel: updatedRecord.conversationLabel, webhook: updatedRecord.webhook } })
 
-    const file = fs.readdirSync(CONVERATIONS_PATH).find(file => record.phoneNumber === file.slice(0, -4))
+    const file = fs.readdirSync(CONVERATIONS_PATH).find(file => updatedRecord.phoneNumber === file.slice(0, -4))
 
     fs.writeFileSync(`${CONVERATIONS_PATH}/${file}`, JSON.stringify(updatedRecord, null, 4))
 
@@ -137,7 +137,9 @@ const deleteConversation = async (record) => {
 
     const file = fs.readdirSync(CONVERATIONS_PATH).find(file => record.phoneNumber === file.slice(0, -4))
 
+    if (file) {
     fs.rmSync(`${CONVERATIONS_PATH}/${file}`)
+    }
 }
 
 

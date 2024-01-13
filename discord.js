@@ -226,6 +226,8 @@ discordClient.on('messageCreate', async (message) => {
                 try {
                     await database.deleteConversation({ phoneNumber: '8176737349' })
 
+                    console.log('ayo')
+
                     const oldChannel = guild.channels.cache.find(channel => channel.topic === '8176737349')
 
                     if (oldChannel) {
