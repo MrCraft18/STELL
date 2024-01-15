@@ -359,7 +359,7 @@ async function getCookies() {
 
 async function getNewCookies() {
     const browser = await puppeteer.launch({
-        headless: 'new',
+        headless: false,
         timeout: 0,
         defaultViewport: null,
         args: [
