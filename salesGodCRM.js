@@ -8,6 +8,38 @@ const axios = require('axios')
 // .then(() => console.log('Logged In Successfully'))
 
 
+
+//INIT EXPRESS
+const app = express()
+app.use(express.json())
+
+const port = 6101
+app.listen(port, async () => {
+    console.log('App listening on: ' + port)
+
+    salesGodCRM.onText(async data => {
+        await forwardSMS({message: data.text, number: data.contact.phone.substring(2)})
+        .then(() => salesGodCRM.markBulkChatMessageRead([data.contact.id]))
+        .catch(() => {})
+    })
+    
+    const messagingContacts = await salesGodCRM.getContactsForMessaging()
+    
+    for (const contact of messagingContacts.unread_contacts) {
+        const contactMessages = await salesGodCRM.fetchContactMessages(contact.id)
+    
+        const unreadMessages = contactMessages.items.slice(0, contact.unread)
+    
+        const combinedUnreadTexts = unreadMessages.map(obj => obj.text).join('\n\n')
+    
+        await forwardSMS({message: combinedUnreadTexts, number: contact.phone.substring(2)})
+        .then(() => salesGodCRM.markBulkChatMessageRead([contact.id]))
+        .catch(() => {})
+    }
+})
+
+
+
 //FORWARD RECIEVED TEXTS
 async function forwardSMS(SMS) {
     return new Promise(async (resolve, reject) => {
@@ -32,34 +64,13 @@ async function forwardSMS(SMS) {
     })
 }
 
-salesGodCRM.onText(async data => {
-    await forwardSMS({message: data.text, number: data.contact.phone.substring(2)})
-    .then(() => salesGodCRM.markBulkChatMessageRead([data.contact.id]))
-    .catch(() => {})
-})
 
-const messagingContacts = await salesGodCRM.getContactsForMessaging()
-
-for (const contact of messagingContacts.unread_contacts) {
-    const contactMessages = await salesGodCRM.fetchContactMessages(contact.id)
-
-    const unreadMessages = contactMessages.items.slice(0, contact.unread)
-
-    const combinedUnreadTexts = unreadMessages.map(obj => obj.text).join('\n\n')
-
-    await forwardSMS({message: combinedUnreadTexts, number: contact.phone.substring(2)})
-    .then(() => salesGodCRM.markBulkChatMessageRead([contact.id]))
-    .catch(() => {})
-}
 
 
 
 //SEND TEXTS
 
 
-
-const app = express()
-app.use(express.json())
 
 
 app.post('/send', async (req, res) => {
@@ -93,11 +104,5 @@ app.post('/send', async (req, res) => {
         res.send({ok: false})
         console.log('Sent NOT OK Response to STELL')
     }
-})
-
-
-const port = 6101
-app.listen(port, () => {
-    console.log('App listening on: ' + port)
 })
 })()
