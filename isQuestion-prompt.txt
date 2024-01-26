@@ -1,6 +1,6 @@
 The user has given you a conversation between you the cold caller wholesaler and a potential property seller, [name].
 
-Based on the conversation so far can you tell if you has asked [name] if they are open to answering questions about their property?
+Based on the conversation so far can you tell if you have asked [name] if they are open to answering questions about their property?
 
 If you have asked then reply with only "[YES]" and why this is the case.
 

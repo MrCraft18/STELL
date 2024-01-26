@@ -46,8 +46,6 @@ const textID = "1095499160813326336"
 
 //Categorys
 const leadsID = '1095499249157935144'
-const dealsID = '1095499341466177638'
-const deadLeadsID = '1095499363511443556'
 const stellConversationsID = '1095499425100603402'
 const stellDroppedConversationsID = '1117204980600942701'
 const overridenConversationsCategoryID = '1118329950794170510'
@@ -89,8 +87,6 @@ discordClient.on('ready', async () => {
 
     //Initialize Category Functions
     leadsCategory = discordClient.channels.cache.get(leadsID)
-    dealsCategory = discordClient.channels.cache.get(dealsID)
-    deadLeadsCategory = discordClient.channels.cache.get(deadLeadsID)
     stellConversationsCategory = discordClient.channels.cache.get(stellConversationsID)
     stellDroppedConversationsCategory = discordClient.channels.cache.get(stellDroppedConversationsID)
     overridenConversationsCategory = discordClient.channels.cache.get(overridenConversationsCategoryID)
@@ -178,7 +174,7 @@ discordClient.on('messageCreate', async (message) => {
                     if (i === sendNumber - 1) {
                         textChannel.send(`Sent all ${sendNumber} texts!~`)
                     } else {
-                        //await new Promise(resolve =>setTimeout(resolve, 60000))
+                        await new Promise(resolve =>setTimeout(resolve, 2000))
                     }
                 } catch (err) {
                     textChannel.send('It seems there was an error sending the texts :(\nPlease let master know!!! ')
@@ -329,7 +325,7 @@ app.post('/msg', async (req, res) => {
 
 
         if (record.conversationLabel === 'noResponse') {
-            if (message.toLowerCase().match(/\b(nah|no|wrong|stop|nope)\b|message blocking is active/)) {
+            if (message.toLowerCase().match(/\b(nah|no|wrong|stop|nope|negative)\b|message blocking is active/)) {
                 record.conversationLabel = "DNC"
 
                 await database.updateConversation(record)
@@ -653,7 +649,7 @@ function sendSMS(message, number) {
                 }
             })
             .catch(err => {
-                dualLog(err.cause)
+                dualLog(err)
 
                 smsBackupStream.write(`${JSON.stringify({ message, number })}\n`)
 
