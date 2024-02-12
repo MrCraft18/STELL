@@ -1,0 +1,12 @@
+{
+    "type": "function",
+    "function": {
+        "name": "is_property_questions_answered",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    "description": "Checks if the user (the recipient) has responded to the questions about their property."
+}

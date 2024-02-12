@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet", type="text/css" href="styles.css">
+        <link rel="stylesheet", type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/2.5.0/styles/overlayscrollbars.min.css">
+    </head>
+
+    <body>
+        <div id="navbar">
+            <div class="navbar-section">
+
+            </div>
+
+            <div class="navbar-section">
+                <a class="navbar-item nav-button" href="/conversations">
+                    Conversations
+                </a>
+    
+                <a class="navbar-item nav-button" href="/send-texts">
+                    Send Texts
+                </a>
+    
+                <a class="navbar-item nav-button" href="/upload-records">
+                    Upload Records
+                </a>
+            </div>
+
+            <div class="navbar-section">
+                
+            </div>
+        </div>
+
+        <div id="content">
+            <div id="sidebar">
+                <div id="conversations-category-container">
+                    <div class="conversation-category-button selected-category" onclick="categoryButtonClick(this)">Unread</div>
+                    <div class="conversation-category-button" onclick="categoryButtonClick(this)">Leads</div>
+                    <div class="conversation-category-button" onclick="categoryButtonClick(this)">STELL</div>
+                    <div class="conversation-category-button" onclick="categoryButtonClick(this)">All</div>
+                </div>
+
+                <div id="search-conversations-container">
+                    <input type="text" placeholder="Search" onkeydown="searchKeyDown(event)">
+                </div>
+
+                <div id="conversation-list-container">
+
+                </div>
+            </div>
+
+            <div id="record-conversation-container">
+
+            </div>
+        </div>
+    </body>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/2.5.0/browser/overlayscrollbars.browser.es5.min.js" defer></script>
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js" integrity="sha384-Gr6Lu2Ajx28mzwyVR8CFkULdCU7kMlZ9UthllibdOSo6qAiN+yXNHqtgdTvFXMT4" crossorigin="anonymous"></script>
+    <script src="./script.js"></script>
+</html>

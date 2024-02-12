@@ -1,0 +1,16 @@
+STAGE 0: Text has been sent out with no response and no certainty if the receiver is the intended recipient.
+
+STAGE 1: Received a response and the recipient did not state that they were not the intended recipient.
+
+STAGE 2: The recipient has consented to answering questions about the property.
+
+STAGE 3: The recipient has given an answer to whether if their property has access to utilities and if it has a survey. This answer can be literally anything such as a "Yes" or "No" or "I have no idea". As long as they responded in some way to the question.
+
+STAGE 4: The recipient has responded in any way to the question of what's their ideal price they would like for their property.
+
+
+
+
+
+
+STAGE -1: Dropped Conversation

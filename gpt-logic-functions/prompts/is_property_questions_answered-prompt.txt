@@ -1,0 +1,25 @@
+Based on the conversation so far can you tell if the potential property seller [name] has clearly answered the question if their property has utility access and if it has a survey?
+
+Their answer to this question can be extremely vauge. By no means do you need to have a strict yes or no answer the goal is just to get any info that the potential property seller might have.
+
+So examples of a valid answer the potential property seller could give would be:
+"It does"
+"It does not"
+"I don't know."
+"I have to check."
+"You will have to check your self"
+
+The main thing you need to check for is just if they acknowledged the question and gave what infomation they may know about utilities and a survey.
+
+However it is important that your get a valid responses/answers to all the parts of your question.
+
+If the potential property seller gave a valid responses/answers then reply with your answer as 'true'
+
+If the potential property seller did not give a valid responses/answers then reply with your answer as 'false'
+
+Your response should be in this json format and all values must be strings:
+
+{
+    "answer": "true or false",
+    "reason": "example reason..."
+}
