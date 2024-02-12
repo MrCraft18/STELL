@@ -1,0 +1,32 @@
+{
+    "stage": 0,
+    "phoneNumber": "",
+    "name": "",
+    "address": "",
+    "info": [
+        "Whatever Elijah wants from list."
+    ]
+    textConversation: [
+        {
+            "sender": "",
+            "content": "",
+            "timestamp": ""
+        },
+        {
+            "sender": "",
+            "content": "",
+            "timestamp": ""
+        }
+    ],
+    gptMessages: [
+        {
+            "role": "assistant",
+            "content": "This is Jacob Walker is this still Caden?"
+        },
+        {
+            "role": "function",
+            "name": "",
+            "content": ""
+        }
+    ]
+}

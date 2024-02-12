@@ -1,0 +1,12 @@
+{
+    "type": "function",
+    "function": {
+        "name": "is_asking_price_too_high",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    "description": "Checks if the user (the recipient) has stated an asking price for their property and if its over $990,000"
+}

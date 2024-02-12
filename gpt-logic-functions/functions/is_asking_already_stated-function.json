@@ -1,0 +1,12 @@
+{
+    "type": "function",
+    "function": {
+        "name": "is_asking_already_stated",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    "description": "Checks if the user (the recipient) has already stated their asking price for their property"
+}
