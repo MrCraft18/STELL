@@ -30,7 +30,7 @@ app.listen(port, async () => {
     
         const unreadMessages = contactMessages.items.slice(0, contact.unread)
     
-        const combinedUnreadTexts = unreadMessages.map(obj => obj.text).join('\n\n')
+        const combinedUnreadTexts = unreadMessages.map(obj => obj.text).reverse().join('\n\n')
     
         await forwardSMS({message: combinedUnreadTexts, number: contact.phone.substring(2)})
         .then(() => salesGodCRM.markBulkChatMessageRead([contact.id]))

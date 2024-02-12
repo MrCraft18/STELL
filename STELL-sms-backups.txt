@@ -1,1 +1,8 @@
 {"message":"","number":"4096652774"}
+{"message":"Hi There, I'm Jacob Walker in Dallas, Is this still Barbara?\r","number":"6786623130"}
+{"message":"Hi There, I'm Jacob Walker from Dallas. Is this still Barbara?\r","number":"6786623130"}
+{"message":"I am aware. Your lot looks amazing and is worth way more than I can offer right now. If you’re not in a rush for cash I think it’s smarter if you list.","number":"4257616854"}
+{"message":"Great, Ronnie. I'm looking at 220 Anderson St and I'm interested in buying it if at all possible. Can I ask you a few questions about the property?","number":"4694416155"}
+{"message":"Hi There, I'm Jacob from Grand Prairie. Is this still Agatha?\r","number":"8177038652"}
+{"message":"Hi There, I'm Jacob in Grand Prairie. Is this still Agatha?\r","number":"8177038652"}
+{"message":"Hi, this is Jacob Walker in Fort Worth. Is this still Mary?\r","number":"8178008502"}

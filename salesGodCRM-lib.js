@@ -63,35 +63,79 @@ const salesGodCRM = {
     //     }
     // },
     onText: (callback) => {
-        const ws = new WebSocket('wss://salesgodcrm.net:3000/socket.io/?EIO=4&transport=websocket', {
-            headers: {
-                'Origin': 'https://salesgodcrm.net'
-            }
-        })
+        let ws
+        let heartbeatTimeoutTimer
+        const heartbeatTimeout = 20000
 
-        ws.on('open', ()  => {
-            ws.send(40)
-        })
-
-        ws.on('message', (data) => {
-            const message = data.toString()
-
-            if (message == 2) {
-                ws.send(3)
-            } else if (message.startsWith(40)) {
-                ws.send('42["userConnected",[25,"user"]]')
-            } else if (message.startsWith(42)) {
-                const arr = JSON.parse(message.substring(2))
-
-                if (arr[0] === 'message_received:user_25_message') {
-                    callback(arr[1].content)
+        function connectWebsocket() {
+            ws = new WebSocket('wss://salesgodcrm.net:3000/socket.io/?EIO=4&transport=websocket', {
+                headers: {
+                    'Origin': 'https://salesgodcrm.net'
                 }
-            }
-        })
+            })
 
-        ws.on('close', () => {
-            console.log('Websocket Closed')
-        })
+            ws.on('open', ()  => {
+                console.log('Websocket Connected')
+                ws.send(40)
+                resetHeartbeatTimeout()
+            })
+    
+            ws.on('message', (data) => {
+                const message = data.toString()
+    
+                if (message == 2) {
+                    ws.send(3)
+                    resetHeartbeatTimeout()
+                } else if (message.startsWith(40)) {
+                    ws.send('42["userConnected",[25,"user"]]')
+                } else if (message.startsWith(42)) {
+                    const arr = JSON.parse(message.substring(2))
+    
+                    if (arr[0] === 'message_received:user_25_message') {
+                        callback(arr[1].content)
+                    }
+                }
+            })
+    
+            ws.on('close', () => {
+                console.log('Websocket Closed')
+                clearTimeout(heartbeatTimeoutTimer)
+                reconnectWebsocket()
+            })
+        }
+
+        function resetHeartbeatTimeout() {
+            clearTimeout(heartbeatTimeoutTimer)
+            heartbeatTimeoutTimer = setTimeout(() => {
+                console.log('Heartbeat Timed Out')
+                ws.close()
+            }, heartbeatTimeout)
+        }
+
+        async function reconnectWebsocket() {
+            console.log('Reconnecting Websocket...')
+
+            connectWebsocket()
+
+            //Check for and send missed Messages
+            const messagingContacts = await salesGodCRM.getContactsForMessaging()
+    
+            for (const contact of messagingContacts.unread_contacts) {
+                console.log(contact)
+
+                const contactMessages = await salesGodCRM.fetchContactMessages(contact.id)
+            
+                const unreadMessages = contactMessages.items.slice(0, contact.unread)
+
+                unreadMessages.forEach(unreadMessage => {
+                    unreadMessage.contact = contact
+
+                    callback(unreadMessage)
+                })
+            }
+        }
+
+        connectWebsocket()
     },
     fetchPhoneNumbers: async () => {
         const cookies = await getCookies()
@@ -137,7 +181,7 @@ const salesGodCRM = {
             filterQuery = ''
         }
 
-        const response = await axios.get(`/contact/fetchContacts?limit=100&page=1${filterQuery}`, {
+        const response = await axios.get(`/contact/fetchContacts?limit=10000&page=1${filterQuery}`, {
             headers: {
                 ...cookies,
                 "Referer": "https://salesgodcrm.net/contacts",
@@ -160,7 +204,7 @@ const salesGodCRM = {
         if (response.tableData.last_page > 1) {
             for (i = 2; i <= response.tableData.last_page; i++) {
                 console.log(i)
-                const response = await axios.get(`/contact/fetchContacts?limit=100&page=${i}${filterQuery}`, {
+                const response = await axios.get(`/contact/fetchContacts?limit=10000&page=${i}${filterQuery}`, {
                     headers: {
                         ...cookies,
                         "Referer": "https://salesgodcrm.net/contacts",
@@ -242,9 +286,13 @@ const salesGodCRM = {
         .then(response => updateSession(response))
         .catch(error => {
             if (error.response && error.response.data) {
-                throw new Error(`Error Sending Message: ${JSON.stringify(error.response.data.message)}`)
+                if (error.response.data.message === "Unable to send message! Contact is blocked.") {
+                    console.log(`Contact ID ${contactID} was blocked.`)
+                } else {
+                    throw new Error(`Error Sending Message to Contact ID ${contactID}: ${JSON.stringify(error.response.data.message)}`)
+                }
             } else {
-                throw new Error(`Error Sending Message: ${error}`)
+                throw new Error(`Error Sending Message to Contact ID ${contactID}: ${error}`)
             }
         })
     },
