@@ -1,0 +1,12 @@
+{
+    "type": "function",
+    "function": {
+        "name": "is_already_listed_or_with_realtor",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    "description": "Checks if the user (the recipient) has stated they already have their property listed or they are working with a realtor."
+}

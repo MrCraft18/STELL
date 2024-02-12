@@ -1,0 +1,19 @@
+Based on the conversation so far can you tell if the potential property seller [name] has consented to answering questions about their property with absolute certainty?
+
+If they have respond then with 'true' and your reason for thinking so.
+
+OR a special case is if they have asked for your offer or they ask if you are making an offer then you can also respond with 'true' and your reason for thinking so.
+Another special case is if the they have implied an asking price for their property you can respond with 'true' and your reason for thinking so.
+
+If not then respond with 'false' and your reason for thinking so.
+However only respond with false if they have explicity stated their non consent. NOT if they simply haven't given consent yet.
+If they have stated the property is "not for sale" or "NFS" respond with 'false' and your reason for thinking so.
+
+Finally if there isn't enough information to determine such then respond with your answer as 'continue' and your reason for thinking so.
+
+Your response should be in this json format and all values must be strings:
+
+{
+    "answer": "true or false",
+    "reason": "example reason..."
+}

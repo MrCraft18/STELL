@@ -1,0 +1,12 @@
+Based on the messages so far can you tell if [name] has already stated an asking price for their property?
+
+If the answer is yes then reply with your asnwer as true and your reason for thinking so.
+
+If the answer is no then reply with your answer as false and your reason for thinking so.
+
+Your response should be in this json format and all values must be strings:
+
+{
+    "answer": "true or false",
+    "reason": "example reason..."
+}

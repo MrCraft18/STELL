@@ -1,0 +1,12 @@
+{
+    "type": "function",
+    "function": {
+        "name": "is_unintended_recipient",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    "description": "Checks if the current user (the recipient) has they themself stated that they are not the intended recipient."
+}
