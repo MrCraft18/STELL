@@ -1,0 +1,6 @@
+STELL: Hello is this still Jeff?
+USER: Yeah
+LOGIC QUESTION: (Did recipient state they are not the intended recipient?)
+LOGIC RESPONSE: {answer: "no", reason: "Because they said "Yeah""}
+(NEXT STAGE)
+STELL: Great I was wondering if I could ask questions about 1234 Cherry Ln?

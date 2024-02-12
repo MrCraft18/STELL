@@ -1,0 +1,12 @@
+{
+    "type": "function",
+    "function": {
+        "name": "is_consent_given",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    "description": "Checks if the user (the recipient) has given consent to answer questions about their property."
+}

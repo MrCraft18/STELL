@@ -1,0 +1,12 @@
+{
+    "type": "function",
+    "function": {
+        "name": "is_annoyed_frustrated_angry",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    "description": "Checks if the user (the recipient) is showing signs of annoyance, frustration, or anger."
+}

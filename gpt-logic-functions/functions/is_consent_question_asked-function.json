@@ -1,0 +1,12 @@
+{
+    "type": "function",
+    "function": {
+        "name": "is_consent_question_asked",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    "description": "Checks if assistant (the cold messenging wholesaler) has asked the user (the recipient) if they are willing to answer questions about their property"
+}

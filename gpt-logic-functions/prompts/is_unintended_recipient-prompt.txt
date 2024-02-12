@@ -1,0 +1,17 @@
+Based on the messages thus far can you tell if the recipient has explicitly stated that they are not the person you intended to contact?
+Or has the recipient identified themselves as someone other than the intended contact?
+
+Which in this case is [name]
+
+If the answer is yes to either then reply with your answer as true and your reason for thinking so.
+
+If the answer is no to both then reply with your answer as false and your reason for thinking so.
+
+However if the recipient is in close relation aka friend or family to the intended recipient then you can reply with false and your reason for thinking so.
+
+Your response should be in this json format and all values must be strings:
+
+{
+    "answer": "true or false",
+    "reason": "example reason..."
+}

@@ -1,0 +1,121 @@
+html, body {
+    margin: 0px;
+    padding: 0px;
+    background-color: rgb(46, 173, 109);
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#navbar {
+    height: 70px;
+    min-height: 70px;
+    width: 100%;
+    background-color: rgba(130, 167, 192);
+    display: flex;
+    justify-content: space-between;
+    font-size: 19px;
+}
+
+.navbar-section {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.navbar-item {
+    margin: 3px;
+    padding: 7px;
+    user-select: none;
+}
+
+a {
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-focus-ring-color: transparent;
+    color: black;
+}
+
+#content {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    max-height: calc(100vh - 70px);
+    justify-content: center;
+}
+
+#main-container {
+    width: 50%;
+    max-width: 900px;
+    background-color: rgb(34, 34, 114);
+}
+
+#send-texts-container {
+    height: 8%;
+    background: lightblue;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#html-is-dumb {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#amount-input {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    width: 55%;
+    text-align: center;
+}
+
+#amount-input:focus {
+    border: 1px solid black;
+    outline: none;
+}
+
+#send-button {
+    background-color: aquamarine;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    user-select: none;
+}
+
+#send-button:hover {
+    cursor: pointer;
+    background-color: rgb(98, 197, 164);
+}
+
+#available-records-count {
+    font-weight: 550;
+    text-align: center;
+}
+
+.record-container {
+    width: 100%;
+    height: 60px;
+    background-color: salmon;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.record-container:not(:last-child) {
+    border-bottom: 1px solid black;
+}
+
+#unsent-list-container {
+    overflow-y: scroll;
+    height: 92%;
+}
+
+#unsent-list-container::-webkit-scrollbar {
+    width: 0px;
+}

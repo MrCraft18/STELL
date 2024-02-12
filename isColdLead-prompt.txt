@@ -1,9 +1,0 @@
-The user has given you a conversation between you the cold caller wholesaler and a potential property seller, [name].
-
-Based on the conversation so far can you tell if the potential property seller has consented to answering questions about their property with absolute certainty?
-
-If they are respond then with "[TRUE]" and why you think this is the case, if not then respond with "[DROP]" and why you think this is the case. 
-
-Finally if there isn't enough information to determine such then respond with "[CONTINUE]" and why you think this is the case.
-
-Use "I" not "you" when referring to the wholesaler.
