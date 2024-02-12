@@ -174,7 +174,7 @@ discordClient.on('messageCreate', async (message) => {
                     if (i === sendNumber - 1) {
                         textChannel.send(`Sent all ${sendNumber} texts!~`)
                     } else {
-                        await new Promise(resolve =>setTimeout(resolve, 2000))
+                        await new Promise(resolve =>setTimeout(resolve, 3000))
                     }
                 } catch (err) {
                     textChannel.send('It seems there was an error sending the texts :(\nPlease let master know!!! ')
@@ -325,7 +325,7 @@ app.post('/msg', async (req, res) => {
 
 
         if (record.conversationLabel === 'noResponse') {
-            if (message.toLowerCase().match(/\b(nah|no|wrong|stop|nope|negative)\b|message blocking is active/)) {
+            if (message.toLowerCase().match(/\b(nah|no|wrong|stop|nope|negative|never)\b|message blocking is active/)) {
                 record.conversationLabel = "DNC"
 
                 await database.updateConversation(record)
@@ -483,8 +483,6 @@ app.post('/msg', async (req, res) => {
 
             channel.setParent(leadsCategory).then(() => { dualLog(`Moved ${record.phoneNumber} to leads category`) })
 
-            // channel.send('Yippee!!! <@1117500402766708898>')
-
             sendSMS(`Yipeee!!!\n\nI got you a lead:\n${record.name}`, '8176923635')
 
 
@@ -592,7 +590,7 @@ function timestamp() {
     const dateInCentralTimezone = new Date(now.toLocaleString('en-US', { timeZone: 'America/Chicago', timeZoneName: 'short' }))
     const formattedDate = dateInCentralTimezone.toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true, timeZoneName: 'short', timeZone: 'America/Chicago', newLine: '\n' })
     return formattedDate
-};
+}
 
 
 
