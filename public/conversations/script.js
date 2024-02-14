@@ -329,7 +329,8 @@ function searchKeyDown(event) {
 
 
 function archiveButtonClick() {
-    const number = document.querySelector('.selected-conversation').id
+    const selectedConversationElement = document.querySelector('.selected-conversation')
+    const number = selectedConversationElement.id
 
     axios.post(`${URLstring}/api/archiveConversation`, {
         number
@@ -338,6 +339,11 @@ function archiveButtonClick() {
     .then(() => {
         const conversationStageElement = document.getElementById('conversation-stage')
         conversationStageElement.innerText = 'Archived'
+
+        const selectedCategoryElement = document.querySelector('.selected-category')
+        if (selectedCategoryElement.innerText.toLowerCase() !== 'all') {
+            selectedConversationElement.remove()
+        }
     })
     .catch(error => {
         console.log(error)
