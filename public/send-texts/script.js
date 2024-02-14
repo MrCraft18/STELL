@@ -42,17 +42,20 @@ window.onload = () => {
     axios.get(`${URLstring}/api/unsentRecordsSendingStatus`)
     .then(response => response.data)
     .then(response => {
-
-    })
-    .catch(error => {
-        console.log(error)
-    })
-
-    axios.get(`${URLstring}/api/unsentRecordsAmount`)
-    .then(response => response.data)
-    .then(response => {
-        availableRecordsCountElement = document.getElementById('available-records-count')
-        availableRecordsCountElement.innerText = `Available Records: ${response.unsentRecordsAmount}`
+        if (response.currentlySending === false) {
+            axios.get(`${URLstring}/api/unsentRecordsAmount`)
+            .then(response => response.data)
+            .then(response => {
+                availableRecordsCountElement = document.getElementById('available-records-count')
+                availableRecordsCountElement.innerText = `Available Records: ${response.unsentRecordsAmount}`
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        } else {
+            availableRecordsCountElement = document.getElementById('available-records-count')
+            availableRecordsCountElement.innerText = `Sending Texts...`
+        }
     })
     .catch(error => {
         console.log(error)
@@ -70,17 +73,8 @@ function sendButtonClick() {
     axios.post(`${URLstring}/api/sendUnsentRecords`, {
         amount: parseInt(amountInputElement.value.trim())
     })
-    .then(response => response.data)
     .then(() => {
-        axios.get(`${URLstring}/api/unsentRecordsAmount`)
-        .then(response => response.data)
-        .then(response => {
-            availableRecordsCountElement = document.getElementById('available-records-count')
-            availableRecordsCountElement.innerText = `Available Records: ${response.unsentRecordsAmount}`
-        })
-        .catch(error => {
-            console.log(error)
-        })
+        console.log('')
     })
     .catch(error => {
         console.log(error)
@@ -100,4 +94,16 @@ const socket = io()
 
 socket.on('unsentRecordSent', (number) => {
     document.getElementById(number).remove()
+})
+
+socket.on('finishedSendingUnsentRecords', () => {
+    axios.get(`${URLstring}/api/unsentRecordsAmount`)
+    .then(response => response.data)
+    .then(response => {
+        availableRecordsCountElement = document.getElementById('available-records-count')
+        availableRecordsCountElement.innerText = `Available Records: ${response.unsentRecordsAmount}`
+    })
+    .catch(error => {
+        console.log(error)
+    })
 })
