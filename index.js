@@ -443,6 +443,8 @@ app.post('/api/markRead', async (req, res) => {
                     unread: false
                 }
             })
+        
+        res.status(200).send()
 
         console.log(`Client marked "${number}" as read`)
     } catch (error) {
