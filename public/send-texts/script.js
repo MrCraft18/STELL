@@ -15,8 +15,8 @@ window.onload = () => {
         }
     })
 
-    fetch(`${URLstring}/api/getUnsentRecords`)
-    .then(response => response.json())
+    axios.get(`${URLstring}/api/getUnsentRecords`)
+    .then(response => response.data)
     .then(response => {
         const containerElement = document.querySelector('[data-overlayscrollbars-viewport="scrollbarHidden"]')
         containerElement.innerHTML = response.unsentRecords.map(record => `
@@ -39,8 +39,17 @@ window.onload = () => {
         console.log(error)
     })
 
-    fetch(`${URLstring}/api/unsentRecordsAmount`)
-    .then(response => response.json())
+    axios.get(`${URLstring}/api/unsentRecordsSendingStatus`)
+    .then(response => response.data)
+    .then(response => {
+
+    })
+    .catch(error => {
+        console.log(error)
+    })
+
+    axios.get(`${URLstring}/api/unsentRecordsAmount`)
+    .then(response => response.data)
     .then(response => {
         availableRecordsCountElement = document.getElementById('available-records-count')
         availableRecordsCountElement.innerText = `Available Records: ${response.unsentRecordsAmount}`
@@ -58,20 +67,13 @@ function sendButtonClick() {
     availableRecordsCountElement = document.getElementById('available-records-count')
     availableRecordsCountElement.innerText = `Sending Texts...`
 
-    fetch(`${URLstring}/api/sendUnsentRecords`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            amount: parseInt(amountInputElement.value.trim())
-        })
+    axios.post(`${URLstring}/api/sendUnsentRecords`, {
+        amount: parseInt(amountInputElement.value.trim())
     })
-    .then(response => {
-        if (!response.ok) return response.json().then(error => {throw error})
-
-        fetch(`${URLstring}/api/unsentRecordsAmount`)
-        .then(response => response.json())
+    .then(response => response.data)
+    .then(() => {
+        axios.get(`${URLstring}/api/unsentRecordsAmount`)
+        .then(response => response.data)
         .then(response => {
             availableRecordsCountElement = document.getElementById('available-records-count')
             availableRecordsCountElement.innerText = `Available Records: ${response.unsentRecordsAmount}`
@@ -82,7 +84,6 @@ function sendButtonClick() {
     })
     .catch(error => {
         console.log(error)
-        console.log('hello from catch')
     })
 }
 

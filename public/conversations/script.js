@@ -18,11 +18,11 @@ window.onload = () => {
     })
 
     //Start page with unread conversations.
-    fetch(`${URLstring}/api/getConversationsForSidebar?${new URLSearchParams({
+    axios.get(`${URLstring}/api/getConversationsForSidebar?${new URLSearchParams({
         category: 'unread',
         limit: 50
     }).toString()}`)
-    .then(response => response.json())
+    .then(response => response.data)
     .then(response => {
         addConversationsToSidebar(response.conversations)
     })
@@ -45,11 +45,11 @@ function categoryButtonClick(element) {
     if (!element.classList.contains('selected-category')) {
         console.log(`Requesting conversations for "${element.innerText.toLowerCase()}" category.`)
 
-        fetch(`${URLstring}/api/getConversationsForSidebar?${new URLSearchParams({
+        axios.get(`${URLstring}/api/getConversationsForSidebar?${new URLSearchParams({
             category: element.innerText.toLowerCase(),
             limit: 50
         }).toString()}`)
-        .then(response => response.json())
+        .then(response => response.data)
         .then(response => {
             addConversationsToSidebar(response.conversations)
 
@@ -109,10 +109,10 @@ function addConversationsToSidebar(conversations) {
 function conversationItemClick(element) {
     const phoneNumber = element.id
 
-    fetch(`${URLstring}/api/getRecord?${new URLSearchParams({
+    axios.get(`${URLstring}/api/getRecord?${new URLSearchParams({
         phoneNumber: element.id,
     }).toString()}`)
-    .then(response => response.json())
+    .then(response => response.data)
     .then(response => {
         const recordContainerElement = document.getElementById('record-conversation-container')
         recordContainerElement.innerHTML = ''
@@ -246,16 +246,12 @@ function conversationItemClick(element) {
 function sendButtonClick() {
     const textAreaElement = document.getElementById('message-input')
 
+    textAreaElement.value = ''
+
     if (textAreaElement.value.trim() !== '') {
-        fetch(`${URLstring}/api/sendMessage`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                message: textAreaElement.value.trim(),
-                number: document.querySelector('.selected-conversation').id
-            })
+        axios.post(`${URLstring}/api/sendMessage`, {
+            message: textAreaElement.value.trim(),
+            number: document.querySelector('.selected-conversation').id
         })
         .then(() => {
             const chatWindowElement = document.getElementById('chat-window')
@@ -273,8 +269,6 @@ function sendButtonClick() {
                     </div>
                 </div>
             `
-
-            textAreaElement.value = ''
         })
         .catch(error => {
             console.log('Error Sending Message', error)
@@ -298,14 +292,8 @@ function markReadButtonClick(element, event) {
 
     const number = element.closest('.conversation-container').id
 
-    fetch(`${URLstring}/api/markRead`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            number
-        })
+    axios.post(`${URLstring}/api/markRead`, {
+        number
     })
     .then(() => {
         const conversationInfoContainerElement = element.closest('.conversation-info-container')
@@ -326,12 +314,12 @@ function searchKeyDown(event) {
     }
 
     searchTimer = setTimeout(() => {
-        fetch(`${URLstring}/api/searchConversationsForSidebar?${new URLSearchParams({
+        axios.get(`${URLstring}/api/searchConversationsForSidebar?${new URLSearchParams({
             searchQuery: event.target.value,
             category: document.querySelector('.selected-category').innerText.toLowerCase(),
             limit: 50
         }).toString()}`)
-        .then(response => response.json())
+        .then(response => response.data)
         .then(response => {
             addConversationsToSidebar(response.conversations)
         })
@@ -343,16 +331,10 @@ function searchKeyDown(event) {
 function archiveButtonClick() {
     const number = document.querySelector('.selected-conversation').id
 
-    fetch(`${URLstring}/api/archiveConversation`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            number
-        })
+    axios.post(`${URLstring}/api/archiveConversation`, {
+        number
     })
-    .then(response => {if (!response.ok) return response.json().then(error => {throw error})})
+    .then(response => response.data)
     .then(() => {
         const conversationStageElement = document.getElementById('conversation-stage')
         conversationStageElement.innerText = 'Archived'
