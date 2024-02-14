@@ -88,7 +88,6 @@ app.post('/msg', async (req, res) => {
 
             await database.updateConversation(record)
 
-            //TODO: Send websocket broadcast to clients of the message
             io.emit('newMessage', ({
                 conversation: record.phoneNumber,
                 message,
@@ -129,8 +128,6 @@ app.post('/msg', async (req, res) => {
                     })
                 }
             }
-
-            //TODO: Send websocket broadcast to clients of the message
 
             database.updateConversation(record)
         } else {
@@ -510,9 +507,17 @@ app.get('/api/unsentRecordsAmount', async (req, res) => {
 
 let currentlySending = false
 app.get('/api/unsentRecordsSendingStatus', async (req, res) => {
-    res.status(500).send({
-        currentlySending
-    })
+    try {
+        res.status(200).send({
+            currentlySending
+        })
+    } catch (error) {
+        console.log(error)
+
+        res.status(500).send({
+            error: "Internal Error (Caden Sucks...)"
+        })
+    }
 })
 
 app.post('/api/sendUnsentRecords', async (req, res) => {
