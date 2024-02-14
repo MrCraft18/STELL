@@ -576,6 +576,8 @@ app.post('/api/sendUnsentRecords', async (req, res) => {
         }
         currentlySending = false
 
+        io.emit('finishedSendingUnsentRecords', {})
+
         res.status(200).send()
 
         console.log(`Client sent out ${amount} Unsent Records`)
