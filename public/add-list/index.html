@@ -3,7 +3,6 @@
     <head>
         <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet", type="text/css" href="styles.css">
-        <link rel="stylesheet", type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/2.5.0/styles/overlayscrollbars.min.css">
     </head>
 
     <body>
@@ -32,24 +31,10 @@
         </div>
 
         <div id="content">
-            <div id="main-container">
-                <div id="send-texts-container">
-                    <div id="html-is-dumb">
-                        <input type="number" id="amount-input" placeholder="Amount to Send" onkeydown="amountKeyDown(event)">
 
-                        <div id="send-button" onclick="sendButtonClick()">Send</div>
-                    </div>
-
-                    <div id="available-records-count"></div>
-                </div>
-
-                <div id="unsent-list-container"></div>
-            </div>
         </div>
     </body>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/2.5.0/browser/overlayscrollbars.browser.es5.min.js"></script>
-    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js" integrity="sha384-Gr6Lu2Ajx28mzwyVR8CFkULdCU7kMlZ9UthllibdOSo6qAiN+yXNHqtgdTvFXMT4" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./script.js"></script>
 </html>

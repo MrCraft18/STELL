@@ -183,6 +183,10 @@ app.get('/send-texts', (req, res) => {
     res.sendFile(__dirname + '/public/send-texts/index.html')
 })
 
+app.get('/add-list', (req, res) => {
+    res.sendFile(__dirname + '/public/add-list/index.html')
+})
+
 
 
 //API
