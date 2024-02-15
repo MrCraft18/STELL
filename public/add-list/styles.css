@@ -43,3 +43,49 @@ a {
     flex-direction: row;
     max-height: calc(100vh - 70px);
 }
+
+#file-upload {
+    flex-grow: 1;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.file-not-dragging {
+    background-color: gray;
+    border: 2px dashed black;
+}
+
+.file-dragging {
+    background-color: rgb(82, 82, 82);
+    border: 2px dashed rgb(255, 255, 255);
+}
+
+#upload-button {
+    margin-top: 2%;
+    padding: 10px;
+    background-color: blueviolet;
+    border-radius: 5px;
+}
+
+#upload-button:hover {
+    cursor: pointer;
+    background-color: rgb(106, 31, 175);
+}
+
+#setup-container {
+    height: 100%;
+    width: 30%;
+    max-width: 600px;
+    background-color: blue;
+}
+
+#dynamic-container {
+    flex-grow: 1;
+    height: 100%;
+    background-color: beige;
+    display: grid;
+}

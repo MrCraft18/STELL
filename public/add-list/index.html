@@ -31,10 +31,30 @@
         </div>
 
         <div id="content">
+            <div id="file-upload" class="file-not-dragging"
+                ondragover="preventDefaults(event)"
+                ondragenter="dragEnter(this, event)"
+                ondragleave="dragLeave(this, event)"
+                ondrop="fileDrop(event)"
+                >
+                Drag File to Import or click Upload
+                <div id="upload-button" onclick="uploadClick()">
+                    Upload
+                    <input id="file-input" type="file" style="display: none;" onchange="inputChange(this)">
+                </div>
+            </div>
 
+            <div id="setup-container" style="display: none;">
+                
+            </div>
+
+            <div id="dynamic-container" style="display: none;">
+
+            </div>
         </div>
     </body>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" integrity="sha512-dfX5uYVXzyU8+KHqj8bjo7UkOdg18PaOtpa48djpNbZHwExddghZ+ZmzWT06R5v6NSk3ZUfsH6FNEDepLx9hPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="./script.js"></script>
 </html>
