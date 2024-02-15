@@ -1,0 +1,45 @@
+html, body {
+    margin: 0px;
+    padding: 0px;
+    background-color: rgb(46, 173, 109);
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#navbar {
+    height: 70px;
+    min-height: 70px;
+    width: 100%;
+    background-color: rgba(130, 167, 192);
+    display: flex;
+    justify-content: space-between;
+    font-size: 19px;
+}
+
+.navbar-section {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.navbar-item {
+    margin: 3px;
+    padding: 7px;
+    user-select: none;
+}
+
+a {
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-focus-ring-color: transparent;
+    color: black;
+}
+
+#content {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    max-height: calc(100vh - 70px);
+}
