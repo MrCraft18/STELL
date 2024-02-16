@@ -51,35 +51,41 @@ function inputChange(element) {
     handleFile(element.files[0])
 }
 
+let importedFile
+
 function handleFile(file) {
+    importedFile = file
+
     Papa.parse(file, {
-        header: true,
+        preview: 10,
         complete: (results) => {
+            console.log(results)
+
+            const headersArray = results.data.shift()
             const recordsArray = results.data
 
-            console.log(recordsArray.length)
-
-            const rowAmount = 8
+            fields = headersArray
 
             const csvGridElement = document.getElementById('csv-grid')
-            csvGridElement.style.gridTemplateColumns = `repeat(${Object.keys(recordsArray[0]).length}, 1fr)`
+            csvGridElement.style.gridTemplateColumns = `repeat(${headersArray.length}, 250px)`
 
-            Object.keys(recordsArray[0]).forEach(header => {
-                const headerCellElement = document.createElement('div')
-                headerCellElement.classList.add('grid-item')
-                headerCellElement.offsetHeight = `calc(${csvGridElement.offsetHeight}px / ${rowAmount})`
-                headerCellElement.innerText = header
-                csvGridElement.appendChild(headerCellElement)
-            })
+            const headersString = headersArray.map(header => `
+                <div class='grid-item'>${header}</div>
+            `).join('')
 
-            recordsArray.slice(0, rowAmount - 1).forEach(row => {
-                Object.values(row).forEach(value => {
-                    const cellElement = document.createElement('div')
-                    cellElement.classList.add('grid-item')
-                    cellElement.offsetHeight = `calc(${csvGridElement.offsetHeight}px / ${rowAmount})`
-                    cellElement.innerText = value
-                    csvGridElement.appendChild(cellElement)
-                })
+            const gridItemsString = recordsArray.map(row => {
+                return Object.values(row).map(value => `
+                    <div class='grid-item'>${value}</div>
+                `).join('')
+            }).join('')
+
+            csvGridElement.innerHTML = headersString + gridItemsString
+
+            const dropDownContainerElements = document.querySelectorAll('.dropdown-container')
+            dropDownContainerElements.forEach(dropDownContainerElement => {
+                dropDownContainerElement.innerHTML = fields.map(field => `
+                    <div class="dropdown-item">${field}</div>
+                `).join('')
             })
         }
     })
@@ -93,3 +99,6 @@ function getRandomElements(arr, numElements) {
 
     return arr.slice(0, numElements);
 }
+
+
+
