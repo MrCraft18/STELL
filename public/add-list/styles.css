@@ -76,6 +76,35 @@ a {
     background-color: rgb(106, 31, 175);
 }
 
+#dynamic-container {
+    flex-grow: 1;
+    flex-basis: 0;
+    height: 100%;
+    background-color: darkslategray;
+    overflow-x: auto;
+}
+
+#csv-grid {
+    height: 100%;
+    display: grid;
+}
+
+.grid-item {
+    color: white;
+    border: 1px solid black;
+    text-align: center;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header {
+    font-weight: 700;
+    font-size: larger;
+    background-color: rgb(21, 37, 37);
+}
+
 #setup-container {
     box-sizing: border-box;
     padding: 25px;
@@ -148,10 +177,6 @@ a {
     display: none;
 }
 
-.input:focus + .dropdown-container {
-    display: block;
-}
-
 .dropdown-item {
     box-sizing: border-box;
     padding: 5px;
@@ -202,25 +227,8 @@ a {
     border-radius: 5px;
 }
 
-#dynamic-container {
-    flex-grow: 1;
-    flex-basis: 0;
-    height: 100%;
-    background-color: beige;
-    overflow-x: auto;
+#add-list-button:hover {
+    cursor: pointer;
+    background-color: rgb(0, 185, 185);
 }
 
-#csv-grid {
-    height: 100%;
-    display: grid;
-}
-
-.grid-item {
-    border: 1px solid black;
-    text-align: center;
-    padding: 10px;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
