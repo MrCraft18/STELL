@@ -40,7 +40,7 @@
                 Drag File to Import or click Upload
                 <div id="upload-button" onclick="uploadClick()">
                     Upload
-                    <input id="file-input" type="file" style="display: none;" onchange="inputChange(this)">
+                    <input id="file-input" type="file" style="display: none;" onchange="fileInputChange(this)">
                 </div>
             </div>
 
@@ -51,7 +51,7 @@
                     <div class="field-row">
                         <div class="field-label">First Name:</div>
                         <div class="input-container">
-                            <input type="text" class="input" autocomplete="new-password">
+                            <input type="text" id="first-name" class="input" autocomplete="new-password" placeholder="Search Headers" oninput="inputChange(this)" onfocus="inputFocus(this)" onblur="inputBlur(this)">
                             <div class="dropdown-container"></div>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                     <div class="field-row">
                         <div class="field-label">Last Name:</div>
                         <div class="input-container">
-                            <input type="text" class="input" autocomplete="new-password">
+                            <input type="text" id="last-name" class="input" autocomplete="new-password" placeholder="Search Headers" oninput="inputChange(this)" onfocus="inputFocus(this)" onblur="inputBlur(this)">
                             <div class="dropdown-container"></div>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                     <div class="field-row">
                         <div class="field-label">Street Address:</div>
                         <div class="input-container">
-                            <input type="text" class="input" autocomplete="new-password">
+                            <input type="text" id="street-address" class="input" autocomplete="new-password" placeholder="Search Headers" oninput="inputChange(this)" onfocus="inputFocus(this)" onblur="inputBlur(this)">
                             <div class="dropdown-container"></div>
                         </div>
                     </div>
@@ -77,7 +77,7 @@
                     <div class="field-row">
                         <div class="field-label">City:</div>
                         <div class="input-container">
-                            <input type="text" class="input" autocomplete="new-password">
+                            <input type="text" id="city" class="input" autocomplete="new-password" placeholder="Search Headers" oninput="inputChange(this)" onfocus="inputFocus(this)" onblur="inputBlur(this)">
                             <div class="dropdown-container"></div>
                         </div>
                     </div>
@@ -85,7 +85,7 @@
                     <div class="field-row">
                         <div class="field-label">State:</div>
                         <div class="input-container">
-                            <input type="text" class="input" autocomplete="new-password">
+                            <input type="text" id="state" class="input" autocomplete="new-password" placeholder="Search Headers" oninput="inputChange(this)" onfocus="inputFocus(this)" onblur="inputBlur(this)">
                             <div class="dropdown-container"></div>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
                     <div class="field-row">
                         <div class="field-label">Zip:</div>
                         <div class="input-container">
-                            <input type="text" class="input" autocomplete="new-password">
+                            <input type="text" id="zip" class="input" autocomplete="new-password" placeholder="Search Headers" oninput="inputChange(this)" onfocus="inputFocus(this)" onblur="inputBlur(this)">
                             <div class="dropdown-container"></div>
                         </div>
                     </div>
@@ -103,14 +103,14 @@
                     <div class="field-row">
                         <div class="field-label">Phone Number:</div>
                         <div class="input-container">
-                            <input type="text" class="input" autocomplete="new-password">
+                            <input type="text" id="phone-number" class="input" autocomplete="new-password" placeholder="Search Headers" oninput="inputChange(this)" onfocus="inputFocus(this)" onblur="inputBlur(this)">
                             <div class="dropdown-container"></div>
                         </div>
                     </div>
                 </div>
 
                 <div id="extra-info-container">
-
+                    <div id="add-info-button"></div>
                 </div>
 
                 <div id="add-list-container">
