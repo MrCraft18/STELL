@@ -110,6 +110,7 @@ a {
     padding: 25px;
     height: 100%;
     width: 35%;
+    min-width: 300px;
     max-width: 550px;
     background-color: blue;
     display: flex;
@@ -170,7 +171,7 @@ a {
     top: 100%;
     left: 0;
     z-index: 100;
-    max-height: 700%;
+    max-height: 300px;
     width: 100%;
     background-color: white;
     overflow-y: auto;
@@ -192,10 +193,121 @@ a {
 }
 
 #extra-info-container {
+    box-sizing: border-box;
+    padding: 10px;
     width: 100%;
-    height: 20%;
+    height: 30%;
     background-color: rgb(0, 0, 184);
     border-radius: 5px;
+    overflow-y: auto;
+}
+
+#add-info-button {
+    box-sizing: border-box;
+    border-radius: 5px;
+    color: white;
+    font-weight: 600;
+    background-color: rgb(24, 24, 243);
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#add-info-button:hover {
+    background-color: rgb(20, 20, 202);
+    cursor: pointer;
+}
+
+.extra-info-input-container {
+    position: relative;
+}
+
+.extra-info-input {
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 5px;
+    width: 100%;
+    border: 1px solid transparent;
+    text-align: center;
+}
+
+.extra-info-input:focus {
+    border: 1px solid black;
+    outline: none;
+}
+
+.extra-info-input:not(:last-child) {
+    margin-bottom: 2%;
+}
+
+.extra-info-dropdown-container {
+    box-sizing: border-box;
+    border-right: 1px solid gray;
+    border-left: 1px solid gray;
+    border-bottom: 1px solid gray;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 200;
+    max-height: 700%;
+    width: 100%;
+    background-color: white;
+    overflow-y: auto;
+}
+
+.extra-info-dropdown-item {
+    text-align: center;
+    box-sizing: border-box;
+    padding: 5px;
+}
+
+.extra-info-dropdown-item:not(:last-child) {
+    border-bottom: 1px solid rgb(167, 167, 167);
+}
+
+.extra-info-dropdown-item:hover {
+    cursor: pointer;
+    background-color: rgb(167, 167, 167);
+}
+
+.added-info-container {
+    height: 12%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.added-info-container:not(:last-child) {
+    margin-bottom: 2%;
+}
+
+.added-info-header {
+    font-weight: 700;
+    flex-grow: 1;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 5px;
+    color: white;
+    background-color: rgb(53, 53, 235);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-added-info-button {
+    border-radius: 5px;
+    margin-left: 2%;
+    background-color: red;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+}
+
+.remove-added-info-button:hover {
+    cursor: pointer;
+    background-color: rgb(211, 0, 0);
 }
 
 #add-list-container {
