@@ -54,6 +54,16 @@ function fileInputChange(element) {
 let importedFile
 let exampleRecord
 
+let selectedHeaders = {
+    firstName: null,
+    lastName: null,
+    streetAddress: null,
+    city: null,
+    state: null,
+    zip: null,
+    phoneNumber: null
+}
+
 function handleFile(file) {
     importedFile = file
 
@@ -96,7 +106,6 @@ function handleFile(file) {
         header: true,
         complete: (results) => {
             exampleRecord = results.data[0]
-            console.log(exampleRecord)
         }
     })
 }
@@ -104,8 +113,6 @@ function handleFile(file) {
 
 
 function inputChange(element) {
-    console.log(element.value)
-
     const inputContainerElement = element.parentNode
 
     const dropDownItemElements = inputContainerElement.querySelectorAll('.dropdown-item')
@@ -120,6 +127,36 @@ function inputChange(element) {
 
 function inputFocus(element) {
     element.value = ''
+
+    switch (element.id) {
+        case 'record-first-name':
+            selectedHeaders.firstName = null
+            break
+
+        case 'record-last-name':
+            selectedHeaders.lastName = null
+            break
+
+        case 'record-street-address':
+            selectedHeaders.streetAddress = null
+            break
+
+        case 'record-city':
+            selectedHeaders.city = null
+            break
+
+        case 'record-state':
+            selectedHeaders.state = null
+            break
+
+        case 'record-zip':
+            selectedHeaders.zip = null
+            break
+
+        case 'record-phone-number':
+            selectedHeaders.phoneNumber = null
+            break
+    }
 
     const inputContainerElement = element.parentNode
 
@@ -143,56 +180,115 @@ function inputBlur(element) {
 
 
 
-let selectedHeaders = {
-    firstName: null,
-    lastName: null,
-    streetAddress: null,
-    city: null,
-    state: null,
-    zip: null,
-    phoneNumber: null
-}
-
 function dropDownItemClick(element) {
     const headerName = element.innerText
 
     const inputElement = element.parentNode.parentNode.querySelector('.input')
 
     switch (inputElement.id) {
-        case 'first-name':
+        case 'record-first-name':
             inputElement.value = exampleRecord[headerName].split(' ').map(word => word.slice(0, 1).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
             selectedHeaders.firstName = headerName
             break
 
-        case 'last-name':
+        case 'record-last-name':
             inputElement.value = exampleRecord[headerName].split(' ').map(word => word.slice(0, 1).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
             selectedHeaders.lastName = headerName
             break
 
-        case 'street-address':
+        case 'record-street-address':
             inputElement.value = exampleRecord[headerName].split(' ').map(word => word.slice(0, 1).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
             selectedHeaders.streetAddress = headerName
             break
 
-        case 'city':
+        case 'record-city':
             inputElement.value = exampleRecord[headerName].split(' ').map(word => word.slice(0, 1).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
             selectedHeaders.city = headerName
             break
 
-        case 'state':
+        case 'record-state':
             inputElement.value = exampleRecord[headerName].toUpperCase()
             selectedHeaders.state = headerName
             break
 
-        case 'zip':
+        case 'record-zip':
             inputElement.value = exampleRecord[headerName]
             selectedHeaders.zip = headerName
             break
 
-        case 'phone-number':
+        case 'record-phone-number':
             const numberDigits = exampleRecord[headerName].replace(/\D/g, '')
             inputElement.value = numberDigits.length > 10 ? numberDigits.slice(1) : numberDigits
             selectedHeaders.phoneNumber = headerName
             break
     }
+}
+
+
+
+let extraInfoContainerElementHTMLCache
+function addInfoClick() {
+    const extraInfoContainerElement = document.getElementById('extra-info-container')
+
+    extraInfoContainerElementHTMLCache = extraInfoContainerElement.innerHTML
+
+    extraInfoContainerElement.style.overflowY = 'hidden'
+
+    extraInfoContainerElement.innerHTML = `
+        <div class="extra-info-input-container">
+            <input type="text" class="extra-info-input" autocomplete="do-not-autofill" placeholder="Search Headers" oninput="extraInfoInputChange(this)" onblur="extraInfoInputBlur(event)">
+            <div class="extra-info-dropdown-container">
+                ${Array.from(document.querySelector('.dropdown-container').children).map(dropDownItemElement => `
+                    <div class="extra-info-dropdown-item" tabindex="0">${dropDownItemElement.innerText}</div>
+                `).join('')}
+            </div>
+        </div>
+    `
+    extraInfoContainerElement.querySelector('input').focus()
+}
+
+function extraInfoInputChange(element) {
+    const extraInfoInputContainerElement = document.getElementById('extra-info-container')
+
+    const extraInfoDropDownItemElements = extraInfoInputContainerElement.querySelectorAll('.extra-info-dropdown-item')
+    extraInfoDropDownItemElements.forEach(extraInfoDropDownItemElement => {
+        if (!extraInfoDropDownItemElement.innerText.toLowerCase().startsWith(element.value.toLowerCase())) {
+            extraInfoDropDownItemElement.style.display = 'none'
+        } else {
+            extraInfoDropDownItemElement.style.display = ''
+        }
+    })
+}
+
+function extraInfoInputBlur(event) {
+    console.log(event.relatedTarget)
+
+    let extraInfoContainerElement = document.getElementById('extra-info-container')
+
+    if (event.relatedTarget && event.relatedTarget.classList.contains('extra-info-dropdown-item')) {
+        const clickedElement = event.relatedTarget
+
+        extraInfoContainerElement.style.overflowY = 'auto'
+        
+        extraInfoContainerElement.innerHTML = extraInfoContainerElementHTMLCache
+
+        console.log('ayo2')
+        const addedInfoContainerElement = document.createElement('div')
+    
+        extraInfoContainerElement = document.getElementById('extra-info-container')
+        extraInfoContainerElement.insertBefore(addedInfoContainerElement, extraInfoContainerElement.firstChild)
+        
+        addedInfoContainerElement.outerHTML =  `
+            <div class="added-info-container">
+                <div class="added-info-header">${clickedElement.innerText}</div>
+                <div class="remove-added-info-button" onclick="removedAddedInfoClick(this)"></div>
+            </div>
+        `
+    } else {
+        extraInfoContainerElement.innerHTML = extraInfoContainerElementHTMLCache
+    }
+}
+
+function removedAddedInfoClick(element) {
+    element.parentNode.remove()
 }
