@@ -1,3 +1,5 @@
+const URLstring = window.location.origin
+
 function preventDefaults(event) {
     event.preventDefault()
     event.stopPropagation()
@@ -47,7 +49,7 @@ function fileDrop(event) {
     handleFile(event.dataTransfer.files[0])
 }
 
-function uploadClick() {
+function uploadFileClick() {
     document.getElementById('file-input').click()
 }
 
@@ -375,7 +377,7 @@ function checkRecordsClick() {
 
                 <div class="display-footer-box">
                     <input type="text" id="list-name-input" placeholder="List Name">
-                    <div id="upload-list-button">Upload</div>
+                    <div id="upload-list-button" onclick="uploadClick()">Upload</div>
                 </div>
             </div>
         `
@@ -385,4 +387,69 @@ function checkRecordsClick() {
 function backClick() {
     const dynamicContentElement = document.getElementById('dynamic-container')
     dynamicContentElement.innerHTML = csvGridElementCache
+}
+
+function uploadClick() {
+    const listName = document.getElementById('list-name-input').value
+
+    if (listName !== '') {
+        const extraInfoHeaders = Array.from(document.querySelectorAll('.added-info-header')).map(addedInfoHeaderElement => addedInfoHeaderElement.innerText)
+
+        PapaParse(importedFile, {
+            header: true
+        }).then(results => {
+            console.log(results.data.length)
+            const records = results.data
+            .filter(rawParse => {
+                return Object.values(selectedHeaders).every(header => rawParse[header] !== "")
+            })
+            .map(rawParse => {
+                const phoneNumber = rawParse[selectedHeaders.phoneNumber].replace(/\D/g, '').length > 10 ? rawParse[selectedHeaders.phoneNumber].replace(/\D/g, '').slice(1) : rawParse[selectedHeaders.phoneNumber].replace(/\D/g, '')
+                const firstName = rawParse[selectedHeaders.firstName].split(' ').map(word => word.slice(0, 1).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
+                const lastName = rawParse[selectedHeaders.lastName].split(' ').map(word => word.slice(0, 1).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
+                const streetAddress = rawParse[selectedHeaders.streetAddress].split(' ').map(word => word.slice(0, 1).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
+                const city = rawParse[selectedHeaders.city].split(' ').map(word => word.slice(0, 1).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
+                const state = rawParse[selectedHeaders.state].toUpperCase()
+                const zip = rawParse[selectedHeaders.zip]
+    
+                return {
+                    phoneNumber,
+                    name: `${firstName} ${lastName}`,
+                    address: `${streetAddress}, ${city}, ${state} ${zip}`,
+                    info: extraInfoHeaders.map(header => ({[header]: rawParse[header]}))
+                }
+            })
+
+            console.log(records.length)
+            
+            axios.post(`${URLstring}/api/addList`, {
+                listName,
+                records
+            })
+            .then(() => {
+                const contentElement = document.getElementById('content')
+
+                contentElement.innerHTML = `
+                    <div id="success">
+                        Uploaded:<br>"${listName}"<br>Successfully
+                    </div>
+                `
+            })
+            .catch((error) => {
+                console.log(error)
+
+                const uploadButtonElement = document.getElementById('upload-list-button')
+
+                const errorTextElement = document.createElement('divv')
+
+                uploadButtonElement.parentNode.replaceChild(errorTextElement, uploadButtonElement)
+
+                errorTextElement.outerHTML = `
+                    <div id="error-text">
+                        Error :(
+                    </div>
+                `
+            })
+        })
+    }
 }
