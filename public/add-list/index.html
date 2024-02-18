@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet", type="text/css" href="styles.css">
     </head>
 
@@ -113,19 +113,13 @@
                     <div id="add-info-button" onclick="addInfoClick(this)">+ Extra Info</div>
                 </div>
 
-                <div id="add-list-container">
-                    <input type="text" id="list-name-input" placeholder="List Name">
-
-                    <div id="add-list-button">
-                        Add List
-                    </div>
+                <div id="check-records-container">
+                    <div id="check-records-button" onclick="checkRecordsClick()">Check Records</div>
                 </div>
             </div>
 
             <div id="dynamic-container" style="display: none;">
-                <div id="csv-grid">
-
-                </div>
+                <div id="csv-grid"></div>
             </div>
         </div>
     </body>
