@@ -4,16 +4,20 @@ const axios = require('axios')
 const database = require('./mongodb.js')
 const fs = require('fs')
 const { stellLogic } = require('./stellLogic.js')
-const { MongoClient } = require('mongodb')
+const { MongoClient, ObjectId } = require('mongodb')
 require('dotenv').config()
 
 const client = new MongoClient(process.env.MONGODB_URI)
 const unsentRecordsCollection = client.db('STELL').collection('unsentRecords')
 const conversationsCollection = client.db('STELL').collection('conversations')
 
+const listsCollection = client.db('STELL').collection('lists')
+const recordsCollection = client.db('STELL').collection('records')
+
 const app = express()
-app.use(express.json())
 app.use(express.static(__dirname + '/public'))
+app.use(express.json({limit: '50mb'}))
+app.use(express.urlencoded({limit: '50mb', extended: true}))
 
 const port = 6102
 const server = app.listen(port, () => {
@@ -589,6 +593,10 @@ app.post('/api/sendUnsentRecords', async (req, res) => {
         console.log(`Client sent out ${amount} Unsent Records`)
     } catch (error) {
         console.log(error)
+
+        res.status(500).send({
+            error: "Internal Error (Caden Sucks...)"
+        })
     }
 
 
@@ -607,5 +615,43 @@ app.post('/api/sendUnsentRecords', async (req, res) => {
             .replace('[city]', city)
 
         return message
+    }
+})
+
+app.post('/api/addList', (req, res) => {
+    const listName = req.body.listName
+    const records = req.body.records
+
+    console.log(records.length)
+
+    const listId = new ObjectId()
+
+    try {
+        listsCollection.insertOne({
+            _id: listId,
+            listName,
+            uploadDate: new Date()
+        })
+
+        recordsCollection.insertMany(records.map(record => ({
+            stage: 'unsent',
+            ...record,
+            textConversation: [],
+            gptMessages: [],
+            lastMessage: null,
+            lastMessageTime: null,
+            unread: false,
+            listId
+        })))
+
+        res.sendStatus(200)
+
+        console.log(`Client Added list named ${listName} with ${records.length} records`)
+    } catch (error) {
+        console.log(error)
+
+        res.status(500).send({
+            error: "Internal Error (Caden Sucks...)"
+        })
     }
 })
