@@ -1,7 +1,16 @@
-//Drag and Drop functions
 function preventDefaults(event) {
     event.preventDefault()
     event.stopPropagation()
+}
+
+function PapaParse(file, options) {
+    return new Promise((resolve, reject) => {
+        Papa.parse(file, {
+            ...options,
+            complete: results => resolve(results),
+            error: error => reject(error)
+        })
+    })
 }
 
 function dragEnter(element, event) {
@@ -32,8 +41,8 @@ function fileDrop(event) {
 
     event.target.remove()
 
-    document.getElementById('setup-container').style.display = 'block'
-    document.getElementById('dynamic-container').style.display = 'block'
+    document.getElementById('setup-container').style.display = 'flex'
+    document.getElementById('dynamic-container').style.display = 'flex'
 
     handleFile(event.dataTransfer.files[0])
 }
@@ -46,7 +55,7 @@ function fileInputChange(element) {
     document.getElementById('file-upload').remove()
 
     document.getElementById('setup-container').style.display = 'flex'
-    document.getElementById('dynamic-container').style.display = 'block'
+    document.getElementById('dynamic-container').style.display = 'flex'
 
     handleFile(element.files[0])
 }
@@ -63,6 +72,8 @@ let selectedHeaders = {
     zip: null,
     phoneNumber: null
 }
+
+let csvGridElementCache
 
 function handleFile(file) {
     importedFile = file
@@ -91,6 +102,7 @@ function handleFile(file) {
             }).join('')
 
             csvGridElement.innerHTML = headersString + gridItemsString
+            csvGridElementCache = document.getElementById('csv-grid').outerHTML
 
             const dropDownContainerElements = document.querySelectorAll('.dropdown-container')
             dropDownContainerElements.forEach(dropDownContainerElement => {
@@ -261,8 +273,6 @@ function extraInfoInputChange(element) {
 }
 
 function extraInfoInputBlur(event) {
-    console.log(event.relatedTarget)
-
     let extraInfoContainerElement = document.getElementById('extra-info-container')
 
     if (event.relatedTarget && event.relatedTarget.classList.contains('extra-info-dropdown-item')) {
@@ -272,7 +282,6 @@ function extraInfoInputBlur(event) {
         
         extraInfoContainerElement.innerHTML = extraInfoContainerElementHTMLCache
 
-        console.log('ayo2')
         const addedInfoContainerElement = document.createElement('div')
     
         extraInfoContainerElement = document.getElementById('extra-info-container')
@@ -291,4 +300,89 @@ function extraInfoInputBlur(event) {
 
 function removedAddedInfoClick(element) {
     element.parentNode.remove()
+}
+
+
+
+function checkRecordsClick() {
+    const dynamicContentElement = document.getElementById('dynamic-container')
+
+    const extraInfoHeaders = Array.from(document.querySelectorAll('.added-info-header')).map(addedInfoHeaderElement => addedInfoHeaderElement.innerText)
+
+    PapaParse(importedFile, {
+        preview: 100,
+        header: true
+    }).then(results => {
+        const displayRecords = results.data
+        .filter(rawParse => {
+            return Object.values(selectedHeaders).every(header => rawParse[header] !== "")
+        })
+        .slice(0, 4)
+        .map(rawParse => {
+            const phoneNumber = rawParse[selectedHeaders.phoneNumber].replace(/\D/g, '').length > 10 ? rawParse[selectedHeaders.phoneNumber].replace(/\D/g, '').slice(1) : rawParse[selectedHeaders.phoneNumber].replace(/\D/g, '')
+            const firstName = rawParse[selectedHeaders.firstName].split(' ').map(word => word.slice(0, 1).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
+            const lastName = rawParse[selectedHeaders.lastName].split(' ').map(word => word.slice(0, 1).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
+            const streetAddress = rawParse[selectedHeaders.streetAddress].split(' ').map(word => word.slice(0, 1).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
+            const city = rawParse[selectedHeaders.city].split(' ').map(word => word.slice(0, 1).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
+            const state = rawParse[selectedHeaders.state].toUpperCase()
+            const zip = rawParse[selectedHeaders.zip]
+
+            return {
+                phoneNumber,
+                name: `${firstName} ${lastName}`,
+                address: `${streetAddress}, ${city}, ${state} ${zip}`,
+                info: extraInfoHeaders.map(header => ({[header]: rawParse[header]}))
+            }
+        })
+
+        console.log(displayRecords)
+
+        dynamicContentElement.innerHTML = `
+            <div id="record-display-grid">
+                ${displayRecords.map(record => `
+                    <div class="record-grid-item">
+                        <div class="record-fields-box">
+                            <div class="record-field-container">
+                                <div class="record-field-key">Name</div>
+                                <div class="record-field-value">${record.name}</div>
+                            </div>
+
+                            <div class="record-field-container">
+                                <div class="record-field-key">Address</div>
+                                <div class="record-field-value">${record.address}</div>
+                            </div>
+
+                            <div class="record-field-container">
+                                <div class="record-field-key">Phone Number</div>
+                                <div class="record-field-value">${record.phoneNumber}</div>
+                            </div>
+
+                            ${record.info.map(info => `
+                                <div class="record-field-container">
+                                    <div class="record-field-key">${Object.keys(info)[0]}</div>
+                                    <div class="record-field-value">${Object.values(info)[0]}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+            <div id="record-display-footer">
+                <div class="display-footer-box">
+                    <div id="footer-text">Does everything look good?</div>
+                    <div id="back-button" onclick="backClick()">Go Back</div>
+                </div>
+
+                <div class="display-footer-box">
+                    <input type="text" id="list-name-input" placeholder="List Name">
+                    <div id="upload-list-button">Upload</div>
+                </div>
+            </div>
+        `
+    })
+}
+
+function backClick() {
+    const dynamicContentElement = document.getElementById('dynamic-container')
+    dynamicContentElement.innerHTML = csvGridElementCache
 }
