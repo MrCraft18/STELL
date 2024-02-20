@@ -577,7 +577,7 @@ app.post('/api/sendUnsentRecords', async (req, res) => {
             recordsCollection.replaceOne({ phoneNumber: record.phoneNumber }, record)
 
             if (i !== unsentRecordsToSend.length - 1) {
-                await new Promise(resolve =>setTimeout(resolve, 1000))
+                await new Promise(resolve =>setTimeout(resolve, 1500))
             }
         }
         currentlySending = false
@@ -588,6 +588,8 @@ app.post('/api/sendUnsentRecords', async (req, res) => {
 
         console.log(`Client sent out ${unsentRecordsToSend.length} Unsent Records`)
     } catch (error) {
+        currentlySending = false
+
         console.log(error)
 
         res.status(500).send({
