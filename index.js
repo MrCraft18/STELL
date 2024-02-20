@@ -532,6 +532,8 @@ app.get('/api/unsentRecordsSendingStatus', async (req, res) => {
 app.post('/api/sendUnsentRecords', async (req, res) => {
     const amount = req.body.amount
 
+    console.log(`Client Requested to Send ${amount} Texts`)
+
     if (currentlySending) {
         res.status(500).send({
             error: 'Currently busy sending a batch of records.'
@@ -572,7 +574,7 @@ app.post('/api/sendUnsentRecords', async (req, res) => {
 
             io.emit('unsentRecordSent', record.phoneNumber)
 
-            recordsCollection.updateOne({ phoneNumber: record.phoneNumber }, record)
+            recordsCollection.replaceOne({ phoneNumber: record.phoneNumber }, record)
 
             if (i !== unsentRecordsToSend.length - 1) {
                 await new Promise(resolve =>setTimeout(resolve, 1000))
@@ -584,7 +586,7 @@ app.post('/api/sendUnsentRecords', async (req, res) => {
 
         res.status(200).send()
 
-        console.log(`Client sent out ${amount} Unsent Records`)
+        console.log(`Client sent out ${unsentRecordsToSend.length} Unsent Records`)
     } catch (error) {
         console.log(error)
 
