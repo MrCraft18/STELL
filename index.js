@@ -24,7 +24,7 @@ const io = socketIo(server)
 
 
 
-app.post('/master-conversation', async (req, res) => {
+app.post('/debugConversation', async (req, res) => {
     try {
         await recordsCollection.deleteOne({ phoneNumber: req.body.masterNumber })
 
