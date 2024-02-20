@@ -7,7 +7,7 @@ Another special case is if the they have implied an asking price for their prope
 
 If not then respond with 'false' and your reason for thinking so.
 However only respond with false if they have explicity stated their non consent. NOT if they simply haven't given consent yet.
-If they have stated the property is "not for sale" or "NFS" respond with 'false' and your reason for thinking so.
+If they have stated the property is "not for sale", "NFS" or they are not interested in selling respond with 'false' and your reason for thinking so.
 
 Finally if there isn't enough information to determine such then respond with your answer as 'continue' and your reason for thinking so.
 
