@@ -1,19 +1,19 @@
 const express = require('express')
 const socketIo = require('socket.io')
 const axios = require('axios')
-const database = require('./mongodb.js')
 const fs = require('fs')
 const { stellLogic } = require('./stellLogic.js')
-const { MongoClient } = require('mongodb')
+const { MongoClient, ObjectId } = require('mongodb')
 require('dotenv').config()
 
 const client = new MongoClient(process.env.MONGODB_URI)
-const unsentRecordsCollection = client.db('STELL').collection('unsentRecords')
-const conversationsCollection = client.db('STELL').collection('conversations')
+const listsCollection = client.db('STELL').collection('lists')
+const recordsCollection = client.db('STELL').collection('records')
 
 const app = express()
-app.use(express.json())
 app.use(express.static(__dirname + '/public'))
+app.use(express.json({limit: '50mb'}))
+app.use(express.urlencoded({limit: '50mb', extended: true}))
 
 const port = 6102
 const server = app.listen(port, () => {
@@ -26,11 +26,11 @@ const io = socketIo(server)
 
 app.post('/master-conversation', async (req, res) => {
     try {
-        await database.deleteConversation({ phoneNumber: req.body.masterNumber })
+        await recordsCollection.deleteOne({ phoneNumber: req.body.masterNumber })
 
         await sendSMS(req.body.content, req.body.masterNumber)
 
-        await database.addNewConversation({
+        await recordsCollection.insertOne({
             stage: 0,
             phoneNumber: req.body.masterNumber,
             name: req.body.masterName,
@@ -44,7 +44,10 @@ app.post('/master-conversation', async (req, res) => {
             gptMessages: [{
                 role: 'assistant',
                 content: req.body.content,
-            }]
+            }],
+            lastMessage: null,
+            lastMessageTime: null,
+            unread: false,
         })
 
         res.send({
@@ -68,7 +71,7 @@ app.post('/msg', async (req, res) => {
     console.log("Recieved new message: ", { message, number: number })
 
     try {
-        let record = await database.getConversation(number)
+        let record = await recordsCollection.findOne({ phoneNumber: number })
 
         if (record !== undefined) {
             record.textConversation.push({
@@ -86,7 +89,7 @@ app.post('/msg', async (req, res) => {
 
             record.lastMessageTime = new Date()
 
-            await database.updateConversation(record)
+            await recordsCollection.replaceOne({ phoneNumber: record.phoneNumber }, record)
 
             io.emit('newMessage', ({
                 conversation: record.phoneNumber,
@@ -129,7 +132,7 @@ app.post('/msg', async (req, res) => {
                 }
             }
 
-            database.updateConversation(record)
+            recordsCollection.replaceOne({ phoneNumber: record.phoneNumber }, record)
         } else {
             console.log('UNKNOWN NUMBER')
         }
@@ -183,6 +186,10 @@ app.get('/send-texts', (req, res) => {
     res.sendFile(__dirname + '/public/send-texts/index.html')
 })
 
+app.get('/add-list', (req, res) => {
+    res.sendFile(__dirname + '/public/add-list/index.html')
+})
+
 
 
 //API
@@ -194,7 +201,7 @@ app.get('/api/getConversationsForSidebar', async (req, res) => {
         switch (category) {
             case 'unread':
                 res.status(200).send({
-                    conversations: await conversationsCollection
+                    conversations: await recordsCollection
                         .find({ unread: true }, { projection: { _id: 0, name: true, phoneNumber: true, lastMessageTime: true, lastMessage: true, unread: true } })
                         .sort({ lastMessageTime: -1 })
                         .limit(limit)
@@ -204,7 +211,7 @@ app.get('/api/getConversationsForSidebar', async (req, res) => {
 
             case 'leads':
                 res.status(200).send({
-                    conversations: await conversationsCollection
+                    conversations: await recordsCollection
                         .find({ stage: 'lead' }, { projection: { _id: 0, name: true, phoneNumber: true, lastMessageTime: true, lastMessage: true, unread: true } })
                         .sort({ lastMessageTime: -1 })
                         .limit(limit)
@@ -214,7 +221,7 @@ app.get('/api/getConversationsForSidebar', async (req, res) => {
 
             case 'stell':
                 res.status(200).send({
-                    conversations: await conversationsCollection
+                    conversations: await recordsCollection
                         .find({ stage: { $gt: 0 } }, { projection: { _id: 0, name: true, phoneNumber: true, lastMessageTime: true, lastMessage: true, unread: true } })
                         .sort({ lastMessageTime: -1 })
                         .limit(limit)
@@ -224,7 +231,7 @@ app.get('/api/getConversationsForSidebar', async (req, res) => {
 
             case 'all':
                 res.status(200).send({
-                    conversations: await conversationsCollection
+                    conversations: await recordsCollection
                         .find({ stage: { $ne: 0 } }, { projection: { _id: 0, name: true, phoneNumber: true, lastMessageTime: true, lastMessage: true, unread: true } })
                         .sort({ lastMessageTime: -1 })
                         .limit(limit)
@@ -252,7 +259,7 @@ app.get('/api/searchConversationsForSidebar', async (req, res) => {
         switch (category) {
             case 'unread':
                 res.status(200).send({
-                    conversations: await conversationsCollection
+                    conversations: await recordsCollection
                         .find({
                             unread: true,
                             $or: [
@@ -281,7 +288,7 @@ app.get('/api/searchConversationsForSidebar', async (req, res) => {
 
             case 'leads':
                 res.status(200).send({
-                    conversations: await conversationsCollection
+                    conversations: await recordsCollection
                         .find({
                             stage: 'lead',
                             $or: [
@@ -310,7 +317,7 @@ app.get('/api/searchConversationsForSidebar', async (req, res) => {
 
             case 'stell':
                 res.status(200).send({
-                    conversations: await conversationsCollection
+                    conversations: await recordsCollection
                         .find({
                             stage: { $gt: 0 },
                             $or: [
@@ -339,7 +346,7 @@ app.get('/api/searchConversationsForSidebar', async (req, res) => {
 
             case 'all':
                 res.status(200).send({
-                    conversations: await conversationsCollection
+                    conversations: await recordsCollection
                         .find({
                             stage: { $ne: 0 },
                             $or: [
@@ -382,7 +389,7 @@ app.get('/api/getRecord', async (req, res) => {
         const phoneNumber = req.query.phoneNumber
 
         res.status(200).send({
-            record: await conversationsCollection
+            record: await recordsCollection
                 .findOne({ phoneNumber }, { projection: { _id: 0, stage: true, name: true, address: true, info: true, textConversation: true } })
         })
 
@@ -403,7 +410,7 @@ app.post('/api/sendMessage', async (req, res) => {
     try {
         await sendSMS(message, number)
 
-        await conversationsCollection
+        await recordsCollection
             .updateOne({ phoneNumber: number }, {
                 $push: {
                     textConversation: {
@@ -437,7 +444,7 @@ app.post('/api/markRead', async (req, res) => {
     number = req.body.number
 
     try {
-        await conversationsCollection
+        await recordsCollection
             .updateOne({ phoneNumber: number }, {
                 $set: {
                     unread: false
@@ -459,8 +466,8 @@ app.post('/api/markRead', async (req, res) => {
 app.get('/api/getUnsentRecords', async (req, res) => {
     try {
         res.status(200).send({
-            unsentRecords: await unsentRecordsCollection
-                .find({})
+            unsentRecords: await recordsCollection
+                .find({stage: 'unsent'})
                 .sort({_id: 1})
                 .limit(100)
                 .toArray()
@@ -478,7 +485,7 @@ app.post('/api/archiveConversation', async (req, res) => {
     const number = req.body.number
 
     try {
-        await conversationsCollection.updateOne({phoneNumber: number}, {$set: {stage: 'archived'}})
+        await recordsCollection.updateOne({phoneNumber: number}, {$set: {stage: 'archived'}})
 
         res.status(200).send()
 
@@ -495,8 +502,8 @@ app.post('/api/archiveConversation', async (req, res) => {
 app.get('/api/unsentRecordsAmount', async (req, res) => {
     try {
         res.status(200).send({
-            unsentRecordsAmount: await unsentRecordsCollection
-                .countDocuments({})
+            unsentRecordsAmount: await recordsCollection
+                .countDocuments({stage: 'unsent'})
         })
     } catch (error) {
         console.log(error)
@@ -525,6 +532,8 @@ app.get('/api/unsentRecordsSendingStatus', async (req, res) => {
 app.post('/api/sendUnsentRecords', async (req, res) => {
     const amount = req.body.amount
 
+    console.log(`Client Requested to Send ${amount} Texts`)
+
     if (currentlySending) {
         res.status(500).send({
             error: 'Currently busy sending a batch of records.'
@@ -536,8 +545,8 @@ app.post('/api/sendUnsentRecords', async (req, res) => {
     try {
         currentlySending = true
 
-        const unsentRecordsToSend = await unsentRecordsCollection
-            .find({})
+        const unsentRecordsToSend = await recordsCollection
+            .find({stage: 'unsent'})
             .sort({_id: 1})
             .limit(amount)
             .toArray()
@@ -547,33 +556,28 @@ app.post('/api/sendUnsentRecords', async (req, res) => {
 
             const openingText = getOpeningText(record)
 
-            const conversationRecord = {
-                stage: 0,
-                ...record,
-                textConversation: [{
-                    sender: "STELL",
-                    content: openingText,
-                    timestamp: new Date()
-                }],
-                gptMessages: [{
-                    role: 'assistant',
-                    content: openingText,
-                }],
-                lastMessage: openingText,
-                lastMessageTime: new Date(),
-                unread: false
-            }
+            record.stage = 0
+            record.textConversation.push({
+                sender: "STELL",
+                content: openingText,
+                timestamp: new Date()
+            })
+            record.gptMessages.push({
+                role: 'assistant',
+                content: openingText,
+            })
+            record.lastMessage = openingText
+            record.lastMessageTime = new Date()
+            record.unread = false
 
-            await sendSMS(openingText, conversationRecord.phoneNumber)
+            await sendSMS(openingText, record.phoneNumber)
 
-            io.emit('unsentRecordSent', conversationRecord.phoneNumber)
+            io.emit('unsentRecordSent', record.phoneNumber)
 
-            unsentRecordsCollection.deleteOne({ phoneNumber: record.phoneNumber })
-
-            conversationsCollection.insertOne(conversationRecord)
+            recordsCollection.replaceOne({ phoneNumber: record.phoneNumber }, record)
 
             if (i !== unsentRecordsToSend.length - 1) {
-                await new Promise(resolve =>setTimeout(resolve, 1000))
+                await new Promise(resolve =>setTimeout(resolve, 1500))
             }
         }
         currentlySending = false
@@ -582,9 +586,15 @@ app.post('/api/sendUnsentRecords', async (req, res) => {
 
         res.status(200).send()
 
-        console.log(`Client sent out ${amount} Unsent Records`)
+        console.log(`Client sent out ${unsentRecordsToSend.length} Unsent Records`)
     } catch (error) {
+        currentlySending = false
+
         console.log(error)
+
+        res.status(500).send({
+            error: "Internal Error (Caden Sucks...)"
+        })
     }
 
 
@@ -603,5 +613,43 @@ app.post('/api/sendUnsentRecords', async (req, res) => {
             .replace('[city]', city)
 
         return message
+    }
+})
+
+app.post('/api/addList', (req, res) => {
+    const listName = req.body.listName
+    const records = req.body.records
+
+    console.log(records.length)
+
+    const listId = new ObjectId()
+
+    try {
+        listsCollection.insertOne({
+            _id: listId,
+            listName,
+            uploadDate: new Date()
+        })
+
+        recordsCollection.insertMany(records.map(record => ({
+            stage: 'unsent',
+            ...record,
+            textConversation: [],
+            gptMessages: [],
+            lastMessage: null,
+            lastMessageTime: null,
+            unread: false,
+            listId
+        })))
+
+        res.sendStatus(200)
+
+        console.log(`Client Added list named ${listName} with ${records.length} records`)
+    } catch (error) {
+        console.log(error)
+
+        res.status(500).send({
+            error: "Internal Error (Caden Sucks...)"
+        })
     }
 })

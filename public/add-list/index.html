@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet", type="text/css" href="styles.css">
+    </head>
+
+    <body>
+        <div id="navbar">
+            <div class="navbar-section">
+
+            </div>
+
+            <div class="navbar-section">
+                <a class="navbar-item nav-button" href="/conversations">
+                    Conversations
+                </a>
+    
+                <a class="navbar-item nav-button" href="/send-texts">
+                    Send Texts
+                </a>
+    
+                <a class="navbar-item nav-button" href="/add-list">
+                    Add List
+                </a>
+            </div>
+
+            <div class="navbar-section">
+                
+            </div>
+        </div>
+
+        <div id="content">
+            <div id="file-upload" class="file-not-dragging"
+                ondragover="preventDefaults(event)"
+                ondragenter="dragEnter(this, event)"
+                ondragleave="dragLeave(this, event)"
+                ondrop="fileDrop(event)"
+                >
+                Drag File to Import or click Upload
+                <div id="upload-button" onclick="uploadFileClick()">
+                    Upload
+                    <input id="file-input" type="file" style="display: none;" onchange="fileInputChange(this)">
+                </div>
+            </div>
+
+            <!-- Disabled After File Import -->
+
+            <div id="setup-container" style="display: none;">
+                <div class="fields-container">
+                    <div class="field-row">
+                        <div class="field-label">First Name:</div>
+                        <div class="input-container">
+                            <input type="text" id="record-first-name" class="input" autocomplete="do-not-autofill" placeholder="Search Headers" oninput="inputChange(this)" onfocus="inputFocus(this)" onblur="inputBlur(this)">
+                            <div class="dropdown-container"></div>
+                        </div>
+                    </div>
+
+                    <div class="field-row">
+                        <div class="field-label">Last Name:</div>
+                        <div class="input-container">
+                            <input type="text" id="record-last-name" class="input" autocomplete="do-not-autofill" placeholder="Search Headers" oninput="inputChange(this)" onfocus="inputFocus(this)" onblur="inputBlur(this)">
+                            <div class="dropdown-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fields-container">
+                    <div class="field-row">
+                        <div class="field-label">Street Address:</div>
+                        <div class="input-container">
+                            <input type="text" id="record-street-address" class="input" autocomplete="do-not-autofill" placeholder="Search Headers" oninput="inputChange(this)" onfocus="inputFocus(this)" onblur="inputBlur(this)">
+                            <div class="dropdown-container"></div>
+                        </div>
+                    </div>
+
+                    <div class="field-row">
+                        <div class="field-label">City:</div>
+                        <div class="input-container">
+                            <input type="text" id="record-city" class="input" autocomplete="do-not-autofill" placeholder="Search Headers" oninput="inputChange(this)" onfocus="inputFocus(this)" onblur="inputBlur(this)">
+                            <div class="dropdown-container"></div>
+                        </div>
+                    </div>
+
+                    <div class="field-row">
+                        <div class="field-label">State:</div>
+                        <div class="input-container">
+                            <input type="text" id="record-state" class="input" autocomplete="do-not-autofill" placeholder="Search Headers" oninput="inputChange(this)" onfocus="inputFocus(this)" onblur="inputBlur(this)">
+                            <div class="dropdown-container"></div>
+                        </div>
+                    </div>
+
+                    <div class="field-row">
+                        <div class="field-label">Zip:</div>
+                        <div class="input-container">
+                            <input type="text" id="record-zip" class="input" autocomplete="do-not-autofill" placeholder="Search Headers" oninput="inputChange(this)" onfocus="inputFocus(this)" onblur="inputBlur(this)">
+                            <div class="dropdown-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fields-container">
+                    <div class="field-row">
+                        <div class="field-label">Phone Number:</div>
+                        <div class="input-container">
+                            <input type="text" id="record-phone-number" class="input" autocomplete="do-not-autofill" placeholder="Search Headers" oninput="inputChange(this)" onfocus="inputFocus(this)" onblur="inputBlur(this)">
+                            <div class="dropdown-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="extra-info-container">
+                    <div id="add-info-button" onclick="addInfoClick(this)">+ Extra Info</div>
+                </div>
+
+                <div id="check-records-container">
+                    <div id="check-records-button" onclick="checkRecordsClick()">Check Records</div>
+                </div>
+            </div>
+
+            <div id="dynamic-container" style="display: none;">
+                <div id="csv-grid"></div>
+            </div>
+        </div>
+    </body>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" integrity="sha512-dfX5uYVXzyU8+KHqj8bjo7UkOdg18PaOtpa48djpNbZHwExddghZ+ZmzWT06R5v6NSk3ZUfsH6FNEDepLx9hPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="./script.js"></script>
+</html>

@@ -74,7 +74,7 @@ async function logic(logicFunctionName, record) {
         ],
         tools,
         tool_choice: 'none',
-        temperature: 0.1,
+        temperature: 0,
         response_format: {
             type: 'json_object'
         }
