@@ -32,7 +32,7 @@ async function stellResponse(record) {
         messages,
         tools,
         tool_choice: 'none',
-        temperature: 0.1
+        temperature: 0
     })
 
     record.gptMessages.push(completion.choices[0].message)
