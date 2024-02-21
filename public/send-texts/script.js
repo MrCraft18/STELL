@@ -70,6 +70,8 @@ function sendButtonClick() {
     availableRecordsCountElement = document.getElementById('available-records-count')
     availableRecordsCountElement.innerText = `Sending Texts...`
 
+    amountInputElement.value = ''
+
     axios.post(`${URLstring}/api/sendUnsentRecords`, {
         amount: parseInt(amountInputElement.value.trim())
     })
