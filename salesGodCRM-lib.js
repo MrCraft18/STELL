@@ -39,7 +39,7 @@ const salesGodCRM = {
             for (const contact of messagingContacts.unread_contacts) {
                 const contactMessages = await salesGodCRM.fetchContactMessages(contact.id)
 
-                const unreadMessages = contactMessages.items.slice(0, contact.unread)
+                const unreadMessages = contactMessages.items.slice(0, contact.unread).reverse()
 
                 unreadMessages.forEach(unreadMessage => {
                     unreadMessage.contact = contact
